@@ -1,0 +1,41 @@
+﻿linux命令
+uname -a 查看主机信息
+rm 删除  mv剪切 cd 复制
+查找文件 find 文件路径 -name 文件名
+find / -name http.config
+pwd 查看当前目录
+
+ VIM命令
+:w 保存文件但不退出vi 
+  :w file 将修改另外保存到file中，不退出vi 
+  :w! 强制保存，不推出vi 
+  :wq 保存文件并退出vi 
+  :wq! 强制保存文件，并退出vi 
+  :q 不保存文件，退出vi 
+  :q! 不保存文件，强制退出vi 
+  :e! 放弃所有修改，从上次保存文件开始再编辑命令历史
+
+系统 日志文件（ 可以通过cat 或tail 命令来查看）
+
+/var/log/message 系统启动后的信息和错误日志，是Red Hat Linux中最常用的日志之一
+/var/log/secure 与安全相关的日志信息
+/var/log/maillog 与邮件相关的日志信息
+/var/log/cron 与定时任务相关的日志信息
+/var/log/spooler 与UUCP和news设备相关的日志信息
+/var/log/boot.log 守护进程启动和停止相关的日志消息
+
+查看root账户的日志记录
+grep -n 'root' /var/log/secure
+
+kill
+闭关进程  kill pid
+同时关闭子进程 kill -l pid
+-HUP 和缓关闭进程，让后重启，用户修改软件后重启
+查看进程   ps -ef| gren ""
+
+启动web
+本地访问 dotnet *.dll
+开启外部访问 dotnet WebApplication1.dll --server.urls "http://*:5000"
+
+netstat -anp| grep 端口
+ll /proc/{进程号}/cwd
