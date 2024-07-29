@@ -212,3 +212,5 @@ Vue 版前端技术栈 ：基于 vue2.x/vue3.x/uniapp、vuex、vue-router 、vue
 
 如果你觉得这个项目帮助到了你，你可以请作者喝杯咖啡表示鼓励 ☕️
 <img src="https://gitee.com/izory/ZrAdminNetCore/raw/master/document/images/pay.jpg"/>
+# Lux-IMES-Api
+Luxshare IMES Project
