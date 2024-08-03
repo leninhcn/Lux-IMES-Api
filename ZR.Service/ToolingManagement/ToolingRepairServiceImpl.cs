@@ -23,7 +23,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr =$@"SELECT A.EMP_NO FROM IMES.M_EMP A WHERE A.EMP_NO='{empNo}' and a.site = '{site}' AND A.ENABLED='Y'";
+                string sqlStr =$@"SELECT A.EMP_NO FROM SAJET.M_EMP A WHERE A.EMP_NO='{empNo}' and a.site = '{site}' AND A.ENABLED='Y'";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }
@@ -61,7 +61,7 @@ namespace ZR.Service.ToolingManagement
                                     b.tooling_type,
                                     TO_CHAR(f.LAST_MAINTAIN_TIME, 'yyyymmdd') AS dt,
                                    f.enabled
-                     FROM IMES.M_tooling_sn f, IMES.M_tooling b
+                     FROM SAJET.M_tooling_sn f, IMES.M_tooling b
                      WHERE f.TOOLING_ID = b.ID
                            AND(f.tooling_status = 'NG'
                                 OR f.tooling_status = 'D'
@@ -93,7 +93,7 @@ namespace ZR.Service.ToolingManagement
                                     WHERE     a.tooling_sn = '{toolingSn}'
                                         AND a.defect_code = b.defect_code
                                         AND a.rec_time >= (SELECT update_time1
-                                                            FROM IMES.M_tooling_sn
+                                                            FROM SAJET.M_tooling_sn
                                                             WHERE tooling_sn = '{toolingSn}' and site = '{site}')";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
@@ -112,7 +112,7 @@ namespace ZR.Service.ToolingManagement
             {
                 exeRes = new ExecuteResult();
                 string sqlStr = $@"SELECT defect_code,DEFECT_DESC2
-                                  FROM IMES.M_defect a
+                                  FROM SAJET.M_defect a
                                  WHERE defect_code = '{DefectCode}' and site = '{site}' AND enabled = 'Y'";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
@@ -166,7 +166,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = $@" Select REASON_CODE, Reason_Desc From IMES.M_REASON Where Enabled = 'Y'and REASON_CODE = '{reason}'  and site = '{site}' ";
+                string sqlStr = $@" Select REASON_CODE, Reason_Desc FROM SAJET.M_REASON Where Enabled = 'Y'and REASON_CODE = '{reason}'  and site = '{site}' ";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }
@@ -183,7 +183,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = $@"select TOOLING_SN from ismt.M_tooling_sn_repair where  tooling_sn='{toolingSn}' and reason_CODE = '{reason}' and site = '{site}' and repair_time>=(select update_time from IMES.M_tooling_sn where tooling_sn='{toolingSn}' and site = '{site}') ";
+                string sqlStr = $@"select TOOLING_SN from ismt.M_tooling_sn_repair where  tooling_sn='{toolingSn}' and reason_CODE = '{reason}' and site = '{site}' and repair_time>=(select update_time FROM SAJET.M_tooling_sn where tooling_sn='{toolingSn}' and site = '{site}') ";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }
@@ -289,7 +289,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = $@"SELECT A.TOOLING_SN FROM IMES.M_TOOLING_SN A WHERE A.TOOLING_SN = '{toolingSn}' AND A.TOOLING_STATUS = 'S' and site = '{site}' ";
+                string sqlStr = $@"SELECT A.TOOLING_SN FROM SAJET.M_TOOLING_SN A WHERE A.TOOLING_SN = '{toolingSn}' AND A.TOOLING_STATUS = 'S' and site = '{site}' ";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }

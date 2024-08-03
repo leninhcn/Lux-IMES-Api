@@ -31,7 +31,7 @@ namespace ZR.Service.ProdMnt
             int updateStation = Context.Updateable(stationTechInfo).UpdateColumns(it => new { it.updateEmpno, it.updateTime }).WhereColumns(it => new { it.id }).ExecuteCommand();
             if (updateStation > 0)
             {
-                string sqlStr = $"insert into  IMES.M_STATIONTECH_ht(select * from IMES.M_STATIONTECH   where id = " + stationTechInfo.id + ")";
+                string sqlStr = $"insert into  IMES.M_STATIONTECH_ht(select * FROM SAJET.M_STATIONTECH   where id = " + stationTechInfo.id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return Context.Deleteable<StationTechInfo>().Where(it => it.id == stationTechInfo.id).ExecuteCommand();
             }
@@ -44,7 +44,7 @@ namespace ZR.Service.ProdMnt
             int updateStation = Context.Updateable(stationTechInfo).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
             if (updateStation > 0)
             {
-                string sqlStr = $"insert into IMES.M_STATIONTECH_ht(select * from IMES.M_STATIONTECH  where id = '" + stationTechInfo.id + "')";
+                string sqlStr = $"insert INTO SAJET.M_STATIONTECH_ht(select * FROM SAJET.M_STATIONTECH  where id = '" + stationTechInfo.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -62,7 +62,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_STATIONTECH_ht (select * from IMES.M_STATIONTECH where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_STATIONTECH_ht (select * FROM SAJET.M_STATIONTECH where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -80,7 +80,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_STATIONTECH_ht (select * from IMES.M_STATIONTECH where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_STATIONTECH_ht (select * FROM SAJET.M_STATIONTECH where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -153,7 +153,7 @@ namespace ZR.Service.ProdMnt
                         int UpdateStage = Context.Updateable(x).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
                         up++;
                     }
-                    Context.Ado.SqlQuery<Object>($"insert into IMES.M_STATIONTECH_ht (select * from  IMES.M_STATIONTECH   where id = " + x.id + ")");
+                    Context.Ado.SqlQuery<Object>($"insert INTO SAJET.M_STATIONTECH_ht (select * from  IMES.M_STATIONTECH   where id = " + x.id + ")");
 
                 });
                 return ("数量：" + station.Count, " 添加;" + add, " 修改;" + up);
@@ -209,7 +209,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_LINE_TYPE_ht (select * from IMES.M_LINE_TYPE where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_LINE_TYPE_ht (select * FROM SAJET.M_LINE_TYPE where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -221,7 +221,7 @@ namespace ZR.Service.ProdMnt
             int UpdateLine = Context.Updateable(lineTypeInfo).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
             if (UpdateLine > 0)
             {
-                string sqlStr = $"insert into IMES.M_LINE_TYPE_ht(select * from IMES.M_LINE_TYPE   where id = '" + lineTypeInfo.id + "')";
+                string sqlStr = $"insert INTO SAJET.M_LINE_TYPE_ht(select * FROM SAJET.M_LINE_TYPE   where id = '" + lineTypeInfo.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -234,7 +234,7 @@ namespace ZR.Service.ProdMnt
                 int updateLine = Context.Updateable(lineTypeInfo).UpdateColumns(it => new { it.updateEmpno, it.updateTime }).WhereColumns(it => new { it.id }).ExecuteCommand();
                 if (updateLine > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_LINE_TYPE_ht(select * from IMES.M_LINE_TYPE   where id = " + lineTypeInfo.id + ")";
+                    string sqlStr = $"insert INTO SAJET.M_LINE_TYPE_ht(select * FROM SAJET.M_LINE_TYPE   where id = " + lineTypeInfo.id + ")";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return Context.Deleteable<LineTypeInfo>().Where(it => it.id == lineTypeInfo.id).ExecuteCommand();
                 }
@@ -272,7 +272,7 @@ namespace ZR.Service.ProdMnt
                         int UpdateStage = Context.Updateable(x).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
                         up++;
                     }
-                    Context.Ado.SqlQuery<Object>($"insert into IMES.M_LINE_TYPE_ht (select * from  IMES.M_LINE_TYPE   where id = " + x.id + ")");
+                    Context.Ado.SqlQuery<Object>($"insert INTO SAJET.M_LINE_TYPE_ht (select * from  IMES.M_LINE_TYPE   where id = " + x.id + ")");
 
                 });
                 return ("数量：" + stationTypes.Count, " 添加;" + add, " 修改;" + up);
@@ -310,7 +310,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_STAGE_ht (select * from IMES.M_STAGE where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_STAGE_ht (select * FROM SAJET.M_STAGE where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -322,7 +322,7 @@ namespace ZR.Service.ProdMnt
             int UpdateStage = Context.Updateable(stageInfo).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
             if (UpdateStage > 0)
             {
-                string sqlStr = $"insert into IMES.M_STAGE_ht(select * from  IMES.M_STAGE  where id = '" + stageInfo.id + "')";
+                string sqlStr = $"insert INTO SAJET.M_STAGE_ht(select * from  IMES.M_STAGE  where id = '" + stageInfo.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -335,7 +335,7 @@ namespace ZR.Service.ProdMnt
             int updateLine = Context.Updateable(stageInfo).UpdateColumns(it => new { it.updateEmpno, it.updateTime }).WhereColumns(it => new { it.id }).ExecuteCommand();
             if (updateLine > 0)
             {
-                string sqlStr = $"insert into IMES.M_STAGE_ht(select * from  IMES.M_STAGE   where id = " + stageInfo.id + ")";
+                string sqlStr = $"insert INTO SAJET.M_STAGE_ht(select * from  IMES.M_STAGE   where id = " + stageInfo.id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return Context.Deleteable<StageInfo>().Where(it => it.id == stageInfo.id).ExecuteCommand();
             }
@@ -345,7 +345,7 @@ namespace ZR.Service.ProdMnt
         }
         public List<StageInfo> StageHistory(string id)
         {
-            String sqlStr = $"select *  from IMES.M_STAGE_ht  b  where 1=1 ";
+            String sqlStr = $"select *  FROM SAJET.M_STAGE_ht  b  where 1=1 ";
 
             if (id != null && id != "")
             {
@@ -395,7 +395,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_STATION_TYPE_ht (select *  from  IMES.M_STATION_TYPE  where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_STATION_TYPE_ht (select *  from  IMES.M_STATION_TYPE  where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -407,7 +407,7 @@ namespace ZR.Service.ProdMnt
             int UpdateStage = Context.Updateable(stationTypeInfo).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
             if (UpdateStage > 0)
             {
-                string sqlStr = $"insert into IMES.M_STATION_TYPE_ht(select * from  IMES.M_STATION_TYPE  where id = '" + stationTypeInfo.id + "')";
+                string sqlStr = $"insert INTO SAJET.M_STATION_TYPE_ht(select * from  IMES.M_STATION_TYPE  where id = '" + stationTypeInfo.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -420,7 +420,7 @@ namespace ZR.Service.ProdMnt
                 int updateLine = Context.Updateable(stationTypeInfo).UpdateColumns(it => new { it.updateEmpno, it.updateTime }).WhereColumns(it => new { it.id }).ExecuteCommand();
                 if (updateLine > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_STATION_TYPE_ht(select * from IMES.M_STATION_TYPE   where id = " + stationTypeInfo.id + ")";
+                    string sqlStr = $"insert INTO SAJET.M_STATION_TYPE_ht(select * FROM SAJET.M_STATION_TYPE   where id = " + stationTypeInfo.id + ")";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return Context.Deleteable<StationTypeInfo>().Where(it => it.id == stationTypeInfo.id).ExecuteCommand();
                 }
@@ -430,7 +430,7 @@ namespace ZR.Service.ProdMnt
         }
         public List<StationTypeInfo> StationTypeHistory(string id)
         {
-            String sqlStr = $"select *  from IMES.M_STATION_TYPE_ht  b  where 1=1 ";
+            String sqlStr = $"select *  FROM SAJET.M_STATION_TYPE_ht  b  where 1=1 ";
 
             if (id != null && id != "")
             {
@@ -472,7 +472,7 @@ namespace ZR.Service.ProdMnt
                         int UpdateStage = Context.Updateable(x).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.id).ExecuteCommand();
                         up++;
                     }
-                    Context.Ado.SqlQuery<Object>($"insert into IMES.M_STATION_TYPE_ht (select * from  IMES.M_STATION_TYPE   where id = " + x.id + ")");
+                    Context.Ado.SqlQuery<Object>($"insert INTO SAJET.M_STATION_TYPE_ht (select * from  IMES.M_STATION_TYPE   where id = " + x.id + ")");
 
                 });
                 return ("数量：" + stationTypes.Count, " 添加;" + add, " 修改;" + up);
@@ -485,7 +485,7 @@ namespace ZR.Service.ProdMnt
 
         public List<string> GetStationType()
         {
-            String sqlStr = $"  Select SCAN_TYPE from IMES.M_OPERATE_TYPE order by SCAN_TYPE ";
+            String sqlStr = $"  Select SCAN_TYPE FROM SAJET.M_OPERATE_TYPE order by SCAN_TYPE ";
 
             List<string> list = Context.Ado.SqlQuery<string>(sqlStr);
 
@@ -579,7 +579,7 @@ namespace ZR.Service.ProdMnt
         }
         public List<string> CheckRouteWIP(string routeName, string site)
         {
-            String sqlStr = $"SELECT  work_order  FROM IMES.P_WO_BASE  where ROUTE_NAME = '" + routeName + "'   AND WO_STATUS IN ('2','3')";
+            String sqlStr = $"SELECT  work_order  FROM SAJET.P_WO_BASE  where ROUTE_NAME = '" + routeName + "'   AND WO_STATUS IN ('2','3')";
 
             List<string> list = Context.Ado.SqlQuery<string>(sqlStr);
 
@@ -593,7 +593,7 @@ namespace ZR.Service.ProdMnt
             int UpdateDisable = Context.Updateable(routeInfo).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => it.routeName).WhereColumns(it => it.enaBled == "Y").ExecuteCommand();
             if (UpdateDisable > 0)
             {
-                string sqlStr = $"insert into IMES.M_ROUTE_ht(select * from  IMES.M_ROUTE  where routeName = '" + routeInfo.routeName + "')";
+                string sqlStr = $"insert INTO SAJET.M_ROUTE_ht(select * from  IMES.M_ROUTE  where routeName = '" + routeInfo.routeName + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -605,7 +605,7 @@ namespace ZR.Service.ProdMnt
             int updateStation = Context.Updateable(routeDetailInfo).UpdateColumns(it => it.enaBled).WhereColumns(it => it.routeName).WhereColumns(it => it.stationType).WhereColumns(it => it.result == 1).ExecuteCommand();
             if (updateStation > 0)
             {
-                string sqlStr = $"insert into IMES.M_ROUTE_DETAIL_ht(select * from  IMES.M_ROUTE_DETAIL  where routeName = '" + routeDetailInfo.routeName + "' and stationType = '" + routeDetailInfo.stationType + "' and stationType = '" + 1 + "')";
+                string sqlStr = $"insert INTO SAJET.M_ROUTE_DETAIL_ht(select * from  IMES.M_ROUTE_DETAIL  where routeName = '" + routeDetailInfo.routeName + "' and stationType = '" + routeDetailInfo.stationType + "' and stationType = '" + 1 + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
 

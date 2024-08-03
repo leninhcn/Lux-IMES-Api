@@ -165,7 +165,7 @@ namespace ZR.Service.PordService
         public object PlanList(string site)
         {
 
-            string sql = @"Select SAMPLING_TYPE  From imes.m_QC_SAMPLING_PLAN Where ENABLED = 'Y' and site = '"+site+"'  Order By SAMPLING_TYPE";
+            string sql = @"Select SAMPLING_TYPE  FROM SAJET.m_QC_SAMPLING_PLAN Where ENABLED = 'Y' and site = '"+site+"'  Order By SAMPLING_TYPE";
             return Context.Ado.SqlQuery<Object>(sql);
         }
 
@@ -227,7 +227,7 @@ namespace ZR.Service.PordService
             if (insertMpart > 0)
             {
                 InsertPartSampling(ipn, mPartHt.samplingType, mPartHt.updateEmpno, mPartHt.site);
-                Context.Ado.SqlQuery<Object>(@"insert into IMES.M_PART_ht (select * from IMES.M_PART a where a.ID =" + id + ")");
+                Context.Ado.SqlQuery<Object>(@"insert INTO SAJET.M_PART_ht (select * FROM SAJET.M_PART a where a.ID =" + id + ")");
                 return "添加成功！";
             }
             else {
@@ -262,7 +262,7 @@ namespace ZR.Service.PordService
             //Console.WriteLine(updateMpart + "--id:" + id + "-ipn:" + ipn + "--site:" + site);
             if (updateMpart > 0)
             {
-                Context.Ado.SqlQuery<Object>(@"insert into IMES.M_PART_ht (select * from IMES.M_PART a where a.ID =" + id + ")");
+                Context.Ado.SqlQuery<Object>(@"insert INTO SAJET.M_PART_ht (select * FROM SAJET.M_PART a where a.ID =" + id + ")");
             }
             else { 
                 return "修改失败";
@@ -280,13 +280,13 @@ namespace ZR.Service.PordService
             mpart.updateTime = DateTime.Now;
             mpart.updateEmpno = updateEmpno;
             Context.Updateable(mpart).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.ipn, it.site }).ExecuteCommand();
-            Context.Ado.SqlQuery<Object>(@"insert into IMES.M_PART_ht (select * from IMES.M_PART a where a.ID =" + id + ")");
+            Context.Ado.SqlQuery<Object>(@"insert INTO SAJET.M_PART_ht (select * FROM SAJET.M_PART a where a.ID =" + id + ")");
             return Context.Deleteable<ImesMpart>().Where(it => it.id == id && it.site==site).ExecuteCommand();
         }
 
         public object PordPartHtlist(int id, string site)
         {
-           return Context.Ado.SqlQuery<Object>(@"SELECT * FROM IMES.M_PART_HT A WHERE A.ID = " + id + " and A.site = '" + site + "' ORDER BY A.UPDATE_TIME DESC");
+           return Context.Ado.SqlQuery<Object>(@"SELECT * FROM SAJET.M_PART_HT A WHERE A.ID = " + id + " and A.site = '" + site + "' ORDER BY A.UPDATE_TIME DESC");
         }
 
         public void InsertPartSampling(string ipn,string samplingPlan,string updateEmp,string site) {
@@ -299,7 +299,7 @@ namespace ZR.Service.PordService
                     return;
                 }
                 string samplingId = list[0].samplingId;
-                sSQL = " Insert Into imes.m_QC_SAMPLING_DEFAULT "
+                sSQL = " Insert INTO SAJET.m_QC_SAMPLING_DEFAULT "
                      + " (ipn,SAMPLING_ID,UPDATE_emp) "
                      + " Values ('" + ipn + "','" + samplingId + "','" + updateEmp + "') ";
 

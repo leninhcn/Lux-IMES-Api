@@ -104,7 +104,7 @@ namespace ZR.Service.PordService
                 return 0;// imesMsn.ipn + "料号存在，不能修改为该料号！";
             }
             int id = imesMsn.id;
-            string insertHt = $"insert into IMES.M_SN_FEATURE_HT(select * from IMES.M_SN_FEATURE  where ID = " + id;
+            string insertHt = $"insert INTO SAJET.M_SN_FEATURE_HT(select * FROM SAJET.M_SN_FEATURE  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -125,7 +125,7 @@ namespace ZR.Service.PordService
             string site = imesMsn.site;
             imesMsn.updateTime = new DateTime();
             Context.Updateable(imesMsn).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
-            string insertHt = $"insert into IMES.M_SN_FEATURE_HT(select * from IMES.M_SN_FEATURE  where ID = " + id;
+            string insertHt = $"insert INTO SAJET.M_SN_FEATURE_HT(select * FROM SAJET.M_SN_FEATURE  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -138,7 +138,7 @@ namespace ZR.Service.PordService
 
         public object MaterialsllistHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_SN_FEATURE_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_SN_FEATURE_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -169,7 +169,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imesMsn).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                string insertHt = $"insert into IMES.M_SN_FEATURE_HT(select * from IMES.M_SN_FEATURE  where ID = " + MaxId;
+                string insertHt = $"insert INTO SAJET.M_SN_FEATURE_HT(select * FROM SAJET.M_SN_FEATURE  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -186,7 +186,7 @@ namespace ZR.Service.PordService
         {
             if (dateIpn.Equals("Ipn"))
             {
-                string insert = $"SELECT * FROM IMES.M_PART A WHERE A.ENABLED = 'Y' AND A.IPN LIKE '%" + dateIpnText + "%'";
+                string insert = $"SELECT * FROM SAJET.M_PART A WHERE A.ENABLED = 'Y' AND A.IPN LIKE '%" + dateIpnText + "%'";
                 if (site != null && site != "")
                 {
                     insert = insert + " and site = '" + site + "'";
@@ -195,7 +195,7 @@ namespace ZR.Service.PordService
             }
             else
             {
-                string insert = $"SELECT * FROM IMES.M_DERIVE_ITEM A WHERE A.DERIVE_IPN LIKE  '%" + dateIpnText + "%'";
+                string insert = $"SELECT * FROM SAJET.M_DERIVE_ITEM A WHERE A.DERIVE_IPN LIKE  '%" + dateIpnText + "%'";
                 /*if (site != null && site != "")
                 {
                     insert = insert + " and site = '" + site + "'";
@@ -210,11 +210,11 @@ namespace ZR.Service.PordService
 
             if (dateIpn.Equals("Ipn"))
             {
-                 sqlStr = @"  SELECT B.MES_SPEC FROM IMES.M_PART A, IMES.M_PART_SPEC_ERP_MES_MAPPING B WHERE A.SPEC1 = B.ERP_SPEC AND A.site = b.site  and A.IPN = '" + dateIpnText + "' AND ROWNUM = 1 ";
+                 sqlStr = @"  SELECT B.MES_SPEC FROM SAJET.M_PART A, IMES.M_PART_SPEC_ERP_MES_MAPPING B WHERE A.SPEC1 = B.ERP_SPEC AND A.site = b.site  and A.IPN = '" + dateIpnText + "' AND ROWNUM = 1 ";
             }
             else
             {
-                 sqlStr = @"  SELECT B.MES_SPEC FROM IMES.M_DERIVE_ITEM A, IMES.M_PART_SPEC_ERP_MES_MAPPING B  WHERE A.DERIVE_SPEC1 = B.ERP_SPEC AND A.DERIVE_IPN = '" + dateIpnText + "' AND ROWNUM = 1 ";
+                 sqlStr = @"  SELECT B.MES_SPEC FROM SAJET.M_DERIVE_ITEM A, IMES.M_PART_SPEC_ERP_MES_MAPPING B  WHERE A.DERIVE_SPEC1 = B.ERP_SPEC AND A.DERIVE_IPN = '" + dateIpnText + "' AND ROWNUM = 1 ";
             }
 
             if (site != null && site != "")
@@ -305,7 +305,7 @@ namespace ZR.Service.PordService
 
         public int MntnPartRouteUpdate(ImesMpartRoute imesMsn)
         {
-            string insertHt = $"insert into IMES.M_PART_ROUTE_HT(select * from IMES.M_PART_ROUTE  where ID = " + imesMsn.id + " and site = '" + imesMsn.site + "')";
+            string insertHt = $"insert INTO SAJET.M_PART_ROUTE_HT(select * FROM SAJET.M_PART_ROUTE  where ID = " + imesMsn.id + " and site = '" + imesMsn.site + "')";
             Context.Ado.SqlQuery<Object>(insertHt );
             imesMsn.updateTime = DateTime.Now;
             int Updateable = Context.Updateable(imesMsn).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
@@ -322,20 +322,20 @@ namespace ZR.Service.PordService
             string site = imesMsn.site;
             imesMsn.updateTime = new DateTime();
             Context.Updateable(imesMsn).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
-            string insertHt = $"insert into IMES.M_PART_ROUTE_HT(select * from IMES.M_PART_ROUTE  where ID = " + id+ " and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.M_PART_ROUTE_HT(select * FROM SAJET.M_PART_ROUTE  where ID = " + id+ " and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMpartRoute>().Where(it => it.id == id && it.site == site).ExecuteCommand();
         }
 
         public object MntnPartRoutelistHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_PART_ROUTE_HT  where ID = " + Id+ " and site = '" + site + "'";
+            string listHt = $"select * FROM SAJET.M_PART_ROUTE_HT  where ID = " + Id+ " and site = '" + site + "'";
             return Context.Ado.SqlQuery<Object>(listHt);
         }
 
         public object MntnPartRouteIpnlist(string ipn, string site)
         {
-            string listIpn = $"SELECT IPN,APN,SPEC1,SPEC2,MODEL FROM IMES.M_PART WHERE  1=1 AND TYPE IN ('HALB','FERT') and site = '" + site + "'";
+            string listIpn = $"SELECT IPN,APN,SPEC1,SPEC2,MODEL FROM SAJET.M_PART WHERE  1=1 AND TYPE IN ('HALB','FERT') and site = '" + site + "'";
             if (ipn != null) 
             {
                 listIpn = listIpn + "AND IPN LIKE '%" + ipn + "%'";
@@ -346,7 +346,7 @@ namespace ZR.Service.PordService
 
         public object MntnPartRouteRoadNamelist(string routeName, string site)
         {
-            string listRoadName = $"SELECT * FROM IMES.M_ROUTE where 1=1 and enabled='Y' and site = '" + site + "'";
+            string listRoadName = $"SELECT * FROM SAJET.M_ROUTE where 1=1 and enabled='Y' and site = '" + site + "'";
             if (routeName != null)
             {
                 listRoadName = listRoadName + "AND ROUTE_NAME LIKE '%" + routeName + "%'";
@@ -356,7 +356,7 @@ namespace ZR.Service.PordService
 
         public object MntnPartRuleSetNameRulelist(string ruleSetName, string site)
         {
-            string listRuleSetName = $"select * from imes.M_RULE_SET WHERE 1=1 AND ENABLED='Y' and site = '" + site + "'";
+            string listRuleSetName = $"select * FROM SAJET.M_RULE_SET WHERE 1=1 AND ENABLED='Y' and site = '" + site + "'";
             if (ruleSetName != null)
             {
                 listRuleSetName = listRuleSetName + "AND RULE_SET_NAME LIKE '%" + ruleSetName + "%'";
@@ -366,7 +366,7 @@ namespace ZR.Service.PordService
 
         public object MntnPartPkspecNamelist(string pkspecName, string site)
         {
-            string listRuleSetName = $"SELECT * FROM IMES.M_PKSPEC where  site = '" + site + "'";
+            string listRuleSetName = $"SELECT * FROM SAJET.M_PKSPEC where  site = '" + site + "'";
             if (pkspecName != null)
             {
                 listRuleSetName = listRuleSetName + "AND PKSPEC_NAME LIKE '%" + pkspecName + "%'";
@@ -396,7 +396,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                string insertHt = $"insert into IMES.M_PART_ROUTE_HT(select * from IMES.M_PART_ROUTE  where ID = " + MaxId;
+                string insertHt = $"insert INTO SAJET.M_PART_ROUTE_HT(select * FROM SAJET.M_PART_ROUTE  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";

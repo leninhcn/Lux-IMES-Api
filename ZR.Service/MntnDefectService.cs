@@ -72,8 +72,8 @@ namespace ZR.Service
         /// <returns></returns>
         public DataTable GetModel()
         {
-          DataTable dt= SqlQuery("select MODEL from imes.M_MODEL ");
-            //Context.SqlQueryable("select MODEL from imes.M_MODEL");
+          DataTable dt= SqlQuery("select MODEL FROM SAJET.M_MODEL ");
+            //Context.SqlQueryable("select MODEL FROM SAJET.M_MODEL");
             //暂停，不返回model
             //if (dt.Rows.Count > 0)
             //{
@@ -147,7 +147,7 @@ namespace ZR.Service
             }
            int i=  Add(defect);
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_DEFECT_HT select * from IMES.M_DEFECT where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", defect.Id ) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_DEFECT_HT select * FROM SAJET.M_DEFECT where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", defect.Id ) });
             return i==1?"OK":"插入失败";
             }
             catch(Exception ex)
@@ -165,7 +165,7 @@ namespace ZR.Service
             defect.UpdateTime = DateTime.Now;
             int result = Context.Updateable(defect).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_DEFECT_HT select * from IMES.M_DEFECT where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", defect.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_DEFECT_HT select * FROM SAJET.M_DEFECT where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", defect.Id) });
             return "OK";
         }
         /// <summary>
@@ -177,10 +177,10 @@ namespace ZR.Service
         {
             
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_DEFECT set ENABLED=@enabled,UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {defect.Id}", new List<SugarParameter> {new SugarParameter("@enabled",defect.Enabled), new SugarParameter("@EMPNO", defect.UpdateEmpno) }
+            Context.Ado.ExecuteCommand($" update SAJET.M_DEFECT set ENABLED=@enabled,UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {defect.Id}", new List<SugarParameter> {new SugarParameter("@enabled",defect.Enabled), new SugarParameter("@EMPNO", defect.UpdateEmpno) }
             );
             //备份
-            Context.Ado.ExecuteCommand($"insert into IMES.M_DEFECT_HT select * from IMES.M_DEFECT where ID in {defect.Id}");
+            Context.Ado.ExecuteCommand($"insert INTO SAJET.M_DEFECT_HT select * FROM SAJET.M_DEFECT where ID in {defect.Id}");
           
             return "OK";
         }
@@ -198,10 +198,10 @@ namespace ZR.Service
             }
             ids = "(" + ids + ")";
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_DEFECT set UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO",defect.UpdateEmpno)}
+            Context.Ado.ExecuteCommand($" update SAJET.M_DEFECT set UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO",defect.UpdateEmpno)}
             );
             //备份
-            Context.Ado.ExecuteCommand($"insert into IMES.M_DEFECT_HT select * from IMES.M_DEFECT where ID in {ids}" );
+            Context.Ado.ExecuteCommand($"insert INTO SAJET.M_DEFECT_HT select * FROM SAJET.M_DEFECT where ID in {ids}" );
             //删除
             Context.Ado.ExecuteCommand($"delete IMES.M_DEFECT where ID in {ids}");
             return "OK";

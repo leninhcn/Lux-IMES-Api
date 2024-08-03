@@ -117,7 +117,7 @@ namespace ZR.Service
             }
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_REASON_HT select * from IMES.M_REASON where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_REASON_HT select * FROM SAJET.M_REASON where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
                 STPE += "3";
                 resultinfo.Errcode = STPE;
                 resultinfo.Result = i == 1 ? "OK" : "插入失败";
@@ -143,7 +143,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_REASON_HT select * from IMES.M_REASON where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_REASON_HT select * FROM SAJET.M_REASON where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
             return "OK";
         }
 
@@ -157,7 +157,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).UpdateColumns(it => new { it.Enabled, it.UpdateEmpno, it.UpdateTime }).WhereColumns(it => new {it.Id}).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_REASON_HT select * from IMES.M_REASON where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_REASON_HT select * FROM SAJET.M_REASON where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
             return "OK";
         }
         /// <summary>
@@ -175,10 +175,10 @@ namespace ZR.Service
             }
             ids = "(" + ids + ")";
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_REASON set UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {ids}", new List<SugarParameter> {  new SugarParameter("@EMPNO",model.UpdateEmpno)}
+            Context.Ado.ExecuteCommand($" update SAJET.M_REASON set UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE ID in {ids}", new List<SugarParameter> {  new SugarParameter("@EMPNO",model.UpdateEmpno)}
             );
             //备份
-            Context.Ado.ExecuteCommand($"insert into IMES.M_REASON_HT select * from IMES.M_REASON where ID in {ids}");
+            Context.Ado.ExecuteCommand($"insert INTO SAJET.M_REASON_HT select * FROM SAJET.M_REASON where ID in {ids}");
             //删除
             Context.Ado.ExecuteCommand($"delete IMES.M_REASON  where ID in {ids}");
             return "OK";

@@ -51,7 +51,7 @@ namespace ZR.Service.PordService
         {
             string site = imes.site;
             int id = imes.id;
-            /*string insertHt = $"insert into IMES.M_VENDOR_HT(select * from IMES.M_VENDOR  where ID = " + id;
+            /*string insertHt = $"insert INTO SAJET.M_VENDOR_HT(select * FROM SAJET.M_VENDOR  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -86,7 +86,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                /*string insertHt = $"insert into IMES.M_ROLE_HT(select * from IMES.M_ROLE  where ID = " + MaxId;
+                /*string insertHt = $"insert INTO SAJET.M_ROLE_HT(select * FROM SAJET.M_ROLE  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -132,19 +132,19 @@ namespace ZR.Service.PordService
                     string insertsql = string.Format(
                         @"DECLARE  T_ID NUMBER; 
                             BEGIN FOR T IN (
-                                SELECT {0} roleId, '{1}' ROLE_NAME, '{2}' AUTHORITYS, PROGRAM, FUNCTION, '{3}' CREATE_EMPNO FROM IMES.S_PROGRAM_FUN_NAME WHERE 
+                                SELECT {0} roleId, '{1}' ROLE_NAME, '{2}' AUTHORITYS, PROGRAM, FUNCTION, '{3}' CREATE_EMPNO FROM SAJET.S_PROGRAM_FUN_NAME WHERE 
                                 ID IN ({4}) AND ENABLED ='Y' 
                             ) LOOP  
                             SELECT 
                                 CASE WHEN MAX(ID) IS NULL THEN 0 
-                                ELSE MAX(ID) + 1 END INTO T_ID FROM IMES.M_ROLE_PRIVILEGE;
-                                INSERT INTO IMES.M_ROLE_PRIVILEGE (ID,ROLE_ID,ROLE_NAME,AUTHORITYS,PROGRAM,FUN,CREATE_EMPNO)
+                                ELSE MAX(ID) + 1 END INTO T_ID FROM SAJET.M_ROLE_PRIVILEGE;
+                                INSERT INTO SAJET.M_ROLE_PRIVILEGE (ID,ROLE_ID,ROLE_NAME,AUTHORITYS,PROGRAM,FUN,CREATE_EMPNO)
                                 VALUES(T_ID,T.roleId,T.ROLE_NAME,T.AUTHORITYS,T.PROGRAM,T.FUNCTION,T.CREATE_EMPNO); 
                             END LOOP; 
                             COMMIT; 
                            END;",id, roleName, authoritys, updateUserNo, idStr);
                     Context.Ado.SqlQuery<Object>(insertsql);
-                    string sqlHt = @"INSERT INTO IMES.M_ROLE_PRIVILEGE_HT (SELECT * FROM IMES.M_ROLE_PRIVILEGE WHERE ROLE_ID =" + id;
+                    string sqlHt = @"INSERT INTO SAJET.M_ROLE_PRIVILEGE_HT (SELECT * FROM SAJET.M_ROLE_PRIVILEGE WHERE ROLE_ID =" + id;
                     Context.Ado.SqlQuery<Object>(sqlHt+")");//历史插入
                 }
                 return 1;
@@ -156,7 +156,7 @@ namespace ZR.Service.PordService
 
         public object RolePrivilegeBindingPermissionHt(int id, string function)
         {
-            string sqlHt = @"select * from IMES.M_ROLE_PRIVILEGE_HT where role_id=" + id+ " and FUN = '"+ function+ "' order by CREATE_TIME desc";
+            string sqlHt = @"select * FROM SAJET.M_ROLE_PRIVILEGE_HT where role_id=" + id+ " and FUN = '"+ function+ "' order by CREATE_TIME desc";
            return Context.Ado.SqlQuery<Object>(sqlHt);
         }
 
@@ -184,14 +184,14 @@ namespace ZR.Service.PordService
         public object RolePrivilegeBindingInsertReportPermission(int roleId, string roleName,string op, string idStr)
         {
             try {
-                string sqlHtInsert = @"INSERT INTO  IMES.M_ROLE_REPORT_HT SELECT * FROM IMES.M_ROLE_REPORT WHERE ROLE_ID =" + roleId;
+                string sqlHtInsert = @"INSERT INTO  IMES.M_ROLE_REPORT_HT SELECT * FROM SAJET.M_ROLE_REPORT WHERE ROLE_ID =" + roleId;
                 Context.Ado.SqlQuery<int>(sqlHtInsert);
 
                 Context.Deleteable<ImesMroleReport>().Where(it => it.roleId == roleId).ExecuteCommand();
                 if (!"".Equals(idStr)) { 
-                    string sqlInset = string.Format(@"declare  t_id number; begin for t in (select '{0}' role_id,'{1}' role_name,'{2}' authoritys,TTEXT,TKEY,'{3}' update_empno from imes.M_DIYReport where 
-                                TKEY in ({4}) and TKEY not in (select fun from IMES.M_ROLE_REPORT where role_id = {5})) loop  select case when max(id) is null then 0 
-                                else max(id) + 1 end into t_id from imes.M_ROLE_REPORT;insert into imes.M_ROLE_REPORT(id,role_id,role_name,authoritys,program,fun,update_empno)
+                    string sqlInset = string.Format(@"declare  t_id number; begin for t in (select '{0}' role_id,'{1}' role_name,'{2}' authoritys,TTEXT,TKEY,'{3}' update_empno FROM SAJET.M_DIYReport where 
+                                TKEY in ({4}) and TKEY not in (select fun FROM SAJET.M_ROLE_REPORT where role_id = {5})) loop  select case when max(id) is null then 0 
+                                else max(id) + 1 end into t_id FROM SAJET.M_ROLE_REPORT;insert INTO SAJET.M_ROLE_REPORT(id,role_id,role_name,authoritys,program,fun,update_empno)
                                 values (t_id,t.role_id,t.role_name,t.authoritys,t.TTEXT,t.TKEY,t.update_empno); end loop; commit; end;", roleId, roleName, op, op, idStr, roleId);
                     Context.Ado.SqlQuery<int>(sqlInset);
                 }
@@ -241,7 +241,7 @@ namespace ZR.Service.PordService
             imes.id = Context.Queryable<ImesMemp>().Max(it => it.id) + 1;
             imes.passwd = passWordByEmpNo(imes.empNo);
             int insertErp = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
-            string insertHt = $"insert into imes.m_emp_ht(select * from imes.m_emp where id= " + imes.id;
+            string insertHt = $"insert INTO SAJET.m_emp_ht(select * FROM SAJET.m_emp where id= " + imes.id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -254,7 +254,7 @@ namespace ZR.Service.PordService
         {
             var id = imes.id;
             string site = imes.site;
-            string insertHt = $"insert into imes.m_emp_ht(select * from imes.m_emp where id= " + imes.id;
+            string insertHt = $"insert INTO SAJET.m_emp_ht(select * FROM SAJET.m_emp where id= " + imes.id;
             {
                 insertHt = insertHt + " and site = '" + site + "'";
             }
@@ -271,7 +271,7 @@ namespace ZR.Service.PordService
         {
             string site = imes.site;
             imes.updateTime = DateTime.Now;
-            string insertHt = $"insert into imes.m_emp_ht(select * from imes.m_emp where id= " + imes.id;
+            string insertHt = $"insert INTO SAJET.m_emp_ht(select * FROM SAJET.m_emp where id= " + imes.id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -285,12 +285,12 @@ namespace ZR.Service.PordService
 
         public object ImesMemplistFactory()
         {
-            return Context.Ado.SqlQuery<object>($"SELECT SITE FROM IMES.M_SITE WHERE ENABLED='Y'");
+            return Context.Ado.SqlQuery<object>($"SELECT SITE FROM SAJET.M_SITE WHERE ENABLED='Y'");
         }
 
         public object ImesMemplistBranch(string site)
         {
-            return Context.Ado.SqlQuery<object>(string.Format(@"SELECT DEPT_NAME FROM IMES.M_DEPT WHERE SITE = '{0}'", site));
+            return Context.Ado.SqlQuery<object>(string.Format(@"SELECT DEPT_NAME FROM SAJET.M_DEPT WHERE SITE = '{0}'", site));
         }
 
         public List<ImesMrole> ImesMemplistRole(int id, string textData, string site)
@@ -327,7 +327,7 @@ namespace ZR.Service.PordService
 
         public object ImesMemplistHt(string empNo, string site)
         {
-            return Context.Ado.SqlQuery<object>($"select * from imes.m_emp_ht where EMP_NO ='" + empNo + "' and SITE ='" + site + "'");
+            return Context.Ado.SqlQuery<object>($"select * FROM SAJET.m_emp_ht where EMP_NO ='" + empNo + "' and SITE ='" + site + "'");
         }
 
         public object ImesMemplistRoleInsert(int empId, string empNo, string authoritys, string updateNo)
@@ -335,9 +335,9 @@ namespace ZR.Service.PordService
             try {
                 int det = Context.Deleteable<ImesMroleEmp>().Where(it => it.empId == empId).ExecuteCommand();
 
-                string sql = string.Format(@"DECLARE  T_ID NUMBER; BEGIN FOR T IN (SELECT ID,ROLE_NAME,'{0}' EMP_ID,'{1}'EMP_NO,'{2}'UPDATE_EMPNO FROM IMES.M_ROLE WHERE 
-                            ID IN ({3}) AND ID NOT IN (SELECT ID FROM IMES.M_ROLE_EMP WHERE EMP_ID = {4})) LOOP  SELECT CASE WHEN MAX(ID) IS NULL THEN 0 
-                            ELSE MAX(ID) + 1 END INTO T_ID FROM IMES.M_ROLE_EMP;INSERT INTO IMES.M_ROLE_EMP (ID,ROLE_ID,ROLE_NAME,EMP_ID,EMP_NO,UPDATE_EMPNO)
+                string sql = string.Format(@"DECLARE  T_ID NUMBER; BEGIN FOR T IN (SELECT ID,ROLE_NAME,'{0}' EMP_ID,'{1}'EMP_NO,'{2}'UPDATE_EMPNO FROM SAJET.M_ROLE WHERE 
+                            ID IN ({3}) AND ID NOT IN (SELECT ID FROM SAJET.M_ROLE_EMP WHERE EMP_ID = {4})) LOOP  SELECT CASE WHEN MAX(ID) IS NULL THEN 0 
+                            ELSE MAX(ID) + 1 END INTO T_ID FROM SAJET.M_ROLE_EMP;INSERT INTO SAJET.M_ROLE_EMP (ID,ROLE_ID,ROLE_NAME,EMP_ID,EMP_NO,UPDATE_EMPNO)
                             VALUES(T_ID,T.ID,T.ROLE_NAME,T.EMP_ID,T.EMP_NO,T.UPDATE_EMPNO); END LOOP; COMMIT; END;"
                             , empId, empNo, updateNo, authoritys, empId);
 
@@ -362,13 +362,13 @@ namespace ZR.Service.PordService
 
         public object ImesMemplistCopy(int empId, string empNo, string op)
         {
-            /*string sql = @"select ID from IMES.M_EMP where emp_no ='" + empNo + "'";
+            /*string sql = @"select ID FROM SAJET.M_EMP where emp_no ='" + empNo + "'";
             var id = Context.Ado.SqlQuery<int>(sql);//拿到开通员工的id*/
             List<ImesMemp> listImpIp = Context.Queryable<ImesMemp>().Where(it => it.empNo == empNo).ToList();
             int id = (int)listImpIp[0].id;
             List<ImesMroleEmp> listImp = Context.Queryable<ImesMroleEmp>().Where(it => it.empId == empId).ToList();//
             for (int i = 0; i < listImp.Count; i++) {
-                var maxid = Context.Ado.SqlQuery<int>($"select max(id)+1 from IMES.M_ROLE_EMP");
+                var maxid = Context.Ado.SqlQuery<int>($"select max(id)+1 FROM SAJET.M_ROLE_EMP");
                 listImp[i].empId = id;
                 listImp[i].updateEmpno = op;
                 listImp[i].createEmpno = op;

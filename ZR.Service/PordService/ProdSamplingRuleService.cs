@@ -70,7 +70,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(iMesMqcSamplingRule).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.m_QC_SAMPLING_RULE_HT(select * from imes.m_QC_SAMPLING_RULE where sampling_rule_id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.m_QC_SAMPLING_RULE_HT(select * FROM SAJET.m_QC_SAMPLING_RULE where sampling_rule_id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -78,7 +78,7 @@ namespace ZR.Service.PordService
         }
         public int InsertSamplingRuleDetait(IMesMqcSamplingRuleDetail iMesMqcSamplingRuleDetait, string site, string updateEmp)
         {
-            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM IMES.M_WEIGHT_FAI";
+            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM SAJET.M_WEIGHT_FAI";
             int MaxId = Context.Queryable<IMesMqcSamplingRuleDetail>().Max(it => it.detailId) + 1;
             iMesMqcSamplingRuleDetait.detailId = MaxId;
             //iMesMqcSamplingRuleDetait.site = site;
@@ -88,7 +88,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(iMesMqcSamplingRuleDetait).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.m_QC_SAMPLING_RULE_DETAIL_HT(select * from imes.m_QC_SAMPLING_RULE_DETAIL where detail_id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.m_QC_SAMPLING_RULE_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_RULE_DETAIL where detail_id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -96,11 +96,11 @@ namespace ZR.Service.PordService
         }
         public int SamplingRulePreset(string samplingRuleid, long updateEmp, string site)
         {
-            string sql = string.Format(@" update imes.m_QC_SAMPLING_RULE set DEFAULT_FLAG ='N',UPDATE_emp ='" + updateEmp + "',UPDATE_TIME = SYSDATE WHERE DEFAULT_FLAG ='Y'");
+            string sql = string.Format(@" update SAJET.m_QC_SAMPLING_RULE set DEFAULT_FLAG ='N',UPDATE_emp ='" + updateEmp + "',UPDATE_TIME = SYSDATE WHERE DEFAULT_FLAG ='Y'");
             Context.Ado.SqlQuery<Object>(sql);
             if (samplingRuleid != "")
             {
-                string sql1 = $" update imes.m_QC_SAMPLING_RULE set DEFAULT_FLAG ='Y'Where SAMPLING_RULE_ID  = '" + samplingRuleid + "'";
+                string sql1 = $" update SAJET.m_QC_SAMPLING_RULE set DEFAULT_FLAG ='Y'Where SAMPLING_RULE_ID  = '" + samplingRuleid + "'";
                 Context.Ado.SqlQuery<string>(sql1);
                 return 1;
             }
@@ -111,7 +111,7 @@ namespace ZR.Service.PordService
             int updateSamplingDefault = Context.Updateable(iMesMqcSamplingRuleDetait).UpdateColumns(it => new { it.samplingLevel, it.continueCnt, it.passCnt, it.rejectCnt, it.nextSamplinglevel }).WhereColumns(it => new { it.detailId, site }).ExecuteCommand();
             if (updateSamplingDefault > 0)
             {
-                string sqlStr = $"insert into IMES.m_QC_SAMPLING_RULE_DETAIL_HT(select * from IMES.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + iMesMqcSamplingRuleDetait.detailId + ")";
+                string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_RULE_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + iMesMqcSamplingRuleDetait.detailId + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -122,7 +122,7 @@ namespace ZR.Service.PordService
             int UpdateSamplingRule = Context.Updateable(iMesMqcSamplingRule).UpdateColumns(it => new { it.samplingRulename, it.samplingRuledesc }).WhereColumns(it => new { it.samplingRuleid, site }).ExecuteCommand();
             if (UpdateSamplingRule > 0)
             {
-                string sqlStr = $"insert into IMES.m_QC_SAMPLING_RULE_HT(select * from IMES.m_QC_SAMPLING_RULE  where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
+                string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_RULE_HT(select * FROM SAJET.m_QC_SAMPLING_RULE  where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -135,7 +135,7 @@ namespace ZR.Service.PordService
                 int updateStation = Context.Updateable(iMesMqcSamplingRule).UpdateColumns(it => it.enabled == "N").WhereColumns(it => it.samplingRuleid).ExecuteCommand();
                 if (updateStation > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_QC_SAMPLING_RULE_ht(select * from IMES.m_QC_SAMPLING_RULE  where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
+                    string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_RULE_ht(select * FROM SAJET.m_QC_SAMPLING_RULE  where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -145,7 +145,7 @@ namespace ZR.Service.PordService
                 int updateStation = Context.Updateable(iMesMqcSamplingRule).UpdateColumns(it => it.enabled == "Y").WhereColumns(it => it.samplingRuleid).ExecuteCommand();
                 if (updateStation > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_QC_SAMPLING_RULE_ht(select * from IMES.m_QC_SAMPLING_RULE   where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
+                    string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_RULE_ht(select * FROM SAJET.m_QC_SAMPLING_RULE   where sampling_rule_id = '" + iMesMqcSamplingRule.samplingRuleid + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -156,21 +156,21 @@ namespace ZR.Service.PordService
         {
             int id = iMesMqcSamplingRuleDetail.detailId;
             string site = iMesMqcSamplingRuleDetail.site;
-            string insertHt = $"insert into IMES.m_QC_SAMPLING_RULE_DETAIL_HT(select * from IMES.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + id + " ";
+            string insertHt = $"insert INTO SAJET.m_QC_SAMPLING_RULE_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + id + " ";
             if (site != null && site != "")
             {
                 insertHt = insertHt + "and site ='" + site + "'";
             }
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<IMesMqcSamplingRuleDetail>().Where(it => it.detailId == id && it.site == site).ExecuteCommand();
-            //Context.Ado.SqlQuery<Object>("insert into IMES.m_QC_SAMPLING_RULE_DETAIL_HT(select * from IMES.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + detailId + ")");
+            //Context.Ado.SqlQuery<Object>("insert INTO SAJET.m_QC_SAMPLING_RULE_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_RULE_DETAIL  where detail_id = " + detailId + ")");
             //return Context.Deleteable<IMesMqcSamplingRuleDetail>().Where(it => it.detailId == detailId && it.site == site).ExecuteCommand();
         }
         public int DeleteSamplingRule(IMesMqcSamplingRule iMesMqcSamplingRule)
         {
             int id = iMesMqcSamplingRule.samplingRuleid;
             string site = iMesMqcSamplingRule.site;
-            string insertHt = $"insert into IMES.m_QC_SAMPLING_RULE_ht(select * from IMES.m_QC_SAMPLING_RULE  where sampling_rule_id = " + id + " ";
+            string insertHt = $"insert INTO SAJET.m_QC_SAMPLING_RULE_ht(select * FROM SAJET.m_QC_SAMPLING_RULE  where sampling_rule_id = " + id + " ";
             if (site != null && site != "")
             {
                 insertHt = insertHt + "and site ='" + site + "'";

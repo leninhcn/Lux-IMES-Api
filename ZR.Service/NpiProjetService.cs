@@ -255,7 +255,7 @@ namespace ZR.Service.Business
         public DataTable GetStepById(int id)
         {
             DataTable dt = new DataTable();
-            string sql = @"select B.SEQ,B.STEP,B.UPDATE_TIME time,B.STATUS,decode(B.STATUS,'已完成','true','false') done , B.COLOR,B.ADVICE,c.NICKNAME||'/'||B.UPDATE_EMPNO emp,B.URL  from IMES.P_NPI_PROJET a,IMES.P_NPI_FLOWSTEP b,IMES.M_ZR_USER c
+            string sql = @"select B.SEQ,B.STEP,B.UPDATE_TIME time,B.STATUS,decode(B.STATUS,'已完成','true','false') done , B.COLOR,B.ADVICE,c.NICKNAME||'/'||B.UPDATE_EMPNO emp,B.URL  FROM SAJET.P_NPI_PROJET a,IMES.P_NPI_FLOWSTEP b,IMES.M_ZR_USER c
                 where A.ID=B.ID(+) and A.ID='" + id + "' and b.UPDATE_EMPNO=c.USERNAME(+) order by to_number(seq) asc";
             //var seqs = GetSugarDbContext(dbName).Ado.SqlQuery<OracleSeq>(sql);
 
@@ -266,7 +266,7 @@ namespace ZR.Service.Business
         public DataTable GetApprovalLogById(int id)
         {
             DataTable dt = new DataTable();
-            string sql = @"SELECT A.STEP,A.STATUS,c.NICKNAME||'/'||A.UPDATE_EMPNO UPDATE_EMPNO,A.UPDATE_TIME,A.ADVICE  FROM IMES.P_NPI_FLOWSTEP A  ,IMES.M_ZR_USER c
+            string sql = @"SELECT A.STEP,A.STATUS,c.NICKNAME||'/'||A.UPDATE_EMPNO UPDATE_EMPNO,A.UPDATE_TIME,A.ADVICE  FROM SAJET.P_NPI_FLOWSTEP A  ,IMES.M_ZR_USER c
                        WHERE A.ID='" + id + "' and a.UPDATE_EMPNO=c.USERNAME(+) order by to_number(seq) asc";
             //var seqs = GetSugarDbContext(dbName).Ado.SqlQuery<OracleSeq>(sql);
 
@@ -281,11 +281,11 @@ namespace ZR.Service.Business
                               DECODE(a.STATUS ,'进行中','true','已完成','true','false' ) STATUS,
                             DECODE(a.STATUS ,'进行中','false','true' ) COMMIT,a.URL,a.URL,a.NICKNAME||'/'||a.UPDATE_EMPNO UPDATE_EMPNO,a.update_time,
                             e.REMARKS,e.RESULT, e.DICTSORT ,e.DICTLABEL  name from (
-                           select a.*,b.nickname   from IMES.P_NPI_FLOWSTEP a,IMES.M_ZR_USER b  where 
+                           select a.*,b.nickname   FROM SAJET.P_NPI_FLOWSTEP a,IMES.M_ZR_USER b  where 
                               a.STEP=@STEP and a.id=@ID and a.UPDATE_EMPNO=b.username(+) ) a
                                left join                              
                               (select b.ID,a.DICTNAME, b.REMARKS,b.RESULT, a.DICTSORT ,a.DICTLABEL from (
-                            select c.*,d.DICTNAME from IMES.M_ZR_DICT_DATA c,IMES.M_ZR_DICT_TYPE d
+                            select c.*,d.DICTNAME FROM SAJET.M_ZR_DICT_DATA c,IMES.M_ZR_DICT_TYPE d
                             where d.DICTNAME=@STEP
                               and c.DICTTYPE=d.DICTTYPE) a,
                               (select * from  imes.P_NPI_STEPINFO where step= @STEP and id=@ID )b
@@ -309,7 +309,7 @@ namespace ZR.Service.Business
             DataTable dt=new DataTable();
             string sql = @"select distinct rownum seq, a.*,B.NPI_NO, b.ADVICE ,DECODE(b.STATUS ,'进行中','true','已完成','true','false' ) STATUS,
                             DECODE(b.STATUS ,'进行中','false','true' ) COMMIT,b.URL,c.NICKNAME||'/'||b.UPDATE_EMPNO UPDATE_EMPNO,b.update_time
-                             from imes.p_npi_order a,IMES.P_NPI_FLOWSTEP b,IMES.M_ZR_USER c
+                             FROM SAJET.p_npi_order a,IMES.P_NPI_FLOWSTEP b,IMES.M_ZR_USER c
                         where a.id(+)=B.ID
                           and b.UPDATE_EMPNO=c.USERNAME(+)
                         and b.id= @ID
@@ -328,7 +328,7 @@ namespace ZR.Service.Business
         public DataTable GetStationType()
         {
             DataTable dt = new DataTable();
-            string sql = @"select id KEY,station_type label from IMES.M_STATION_TYPE ";
+            string sql = @"select id KEY,station_type label FROM SAJET.M_STATION_TYPE ";
 
 
             dt = db.GetSugarDbContext().Ado.GetDataTable(sql);
@@ -339,7 +339,7 @@ namespace ZR.Service.Business
         {
             DataTable dt = new DataTable();
             string sql = @"select  distinct  b.CONFIG_NAME  key 
-                  from IMES.M_BLOCK_CONFIG_TYPE a,IMES.M_BLOCK_CONFIG_VALUE b
+                  FROM SAJET.M_BLOCK_CONFIG_TYPE a,IMES.M_BLOCK_CONFIG_VALUE b
                     where a.CONFIG_TYPE_NAME='WIP_SEQ'
                     and a.CONFIG_TYPE_ID = b.CONFIG_TYPE_ID ";
 
@@ -355,7 +355,7 @@ namespace ZR.Service.Business
            
             for (int i = 0; i < modal.subItems.Count; i++)
             {
-                string sql= @"INSERT INTO IMES.P_NPI_STEPINFO
+                string sql= @"INSERT INTO SAJET.P_NPI_STEPINFO
                             (ID, STEP, SORT, RESULT, REMARKS, UPDATE_EMPNO,OPTION1)
                             VALUES(@ID, @STEP, @SORT, @RESULT, @REMARKS, @UPDATE_EMPNO,@OPTION1 )";
                 var parameters = new SugarParameter[]
@@ -370,7 +370,7 @@ namespace ZR.Service.Business
                  };
                 db.GetSugarDbContext().Ado.ExecuteCommand(sql, parameters);
             }
-            string  sql1 = @"update IMES.P_NPI_FLOWSTEP set status='已完成' ,ADVICE=@ADVICE ,color='bule',update_time=@update_time ,update_empno=@update_empno where id=@id and step=@step";
+            string  sql1 = @"update SAJET.P_NPI_FLOWSTEP set status='已完成' ,ADVICE=@ADVICE ,color='bule',update_time=@update_time ,update_empno=@update_empno where id=@id and step=@step";
             var parameters1 = new SugarParameter[]
            {
             new SugarParameter("@update_time", DateTime.Now),
@@ -381,8 +381,8 @@ namespace ZR.Service.Business
            };
             db.GetSugarDbContext().Ado.ExecuteCommand(sql1, parameters1);
 
-            sql1 = @"update IMES.P_NPI_FLOWSTEP set status='进行中', color='#50f637'   where  id=@id
-                      and seq in (select seq+1 from IMES.P_NPI_FLOWSTEP where id=@id and step=@step )";
+            sql1 = @"update SAJET.P_NPI_FLOWSTEP set status='进行中', color='#50f637'   where  id=@id
+                      and seq in (select seq+1 FROM SAJET.P_NPI_FLOWSTEP where id=@id and step=@step )";
             parameters1 = new SugarParameter[]
           {
             new SugarParameter("@id", modal.id),
@@ -467,7 +467,7 @@ namespace ZR.Service.Business
             {
                 for (int i = 0; i < modal.orders.Count; i++)
                 {
-                    string sql = @"INSERT INTO IMES.P_NPI_ORDER (ID,IPN,PLAN_QTY,LOT,WORK_ORDER,PO,ACTUAL_QTY,CREATE_EMPNO)
+                    string sql = @"INSERT INTO SAJET.P_NPI_ORDER (ID,IPN,PLAN_QTY,LOT,WORK_ORDER,PO,ACTUAL_QTY,CREATE_EMPNO)
                                VALUES (@ID, @IPN, @PLAN_QTY, @LOT, @WORK_ORDER, @PO, @ACTUAL_QTY, @CREATE_EMPNO)";
                     var parameters = new SugarParameter[]
                     {
@@ -483,7 +483,7 @@ namespace ZR.Service.Business
                     db.GetSugarDbContext().Ado.ExecuteCommand(sql, parameters);
                 }
             }
-            string sql1 = @"update IMES.P_NPI_FLOWSTEP set status='已完成' ,ADVICE=@ADVICE ,color='bule',update_time=@update_time ,update_empno=@update_empno where id=@id and step=@step";
+            string sql1 = @"update SAJET.P_NPI_FLOWSTEP set status='已完成' ,ADVICE=@ADVICE ,color='bule',update_time=@update_time ,update_empno=@update_empno where id=@id and step=@step";
             var parameters1 = new SugarParameter[]
            {
             new SugarParameter("@update_time", DateTime.Now),
@@ -494,8 +494,8 @@ namespace ZR.Service.Business
            };
             db.GetSugarDbContext().Ado.ExecuteCommand(sql1, parameters1);
 
-            sql1 = @"update IMES.P_NPI_FLOWSTEP set status='进行中', color='#50f637'   where  id=@id
-                      and seq in (select seq+1 from IMES.P_NPI_FLOWSTEP where id=@id and step=@step )";
+            sql1 = @"update SAJET.P_NPI_FLOWSTEP set status='进行中', color='#50f637'   where  id=@id
+                      and seq in (select seq+1 FROM SAJET.P_NPI_FLOWSTEP where id=@id and step=@step )";
             parameters1 = new SugarParameter[]
           {
             new SugarParameter("@id", modal.id),
@@ -548,7 +548,7 @@ namespace ZR.Service.Business
             string uploadUrl = OptionsSetting.Upload.UploadUrl;
             string accessPath = string.Concat(uploadUrl, "/", filePath.Replace("\\", "/"), "/", fileName);
 
-            string sql = @"update IMES.P_NPI_FLOWSTEP set url=url||@accessPath||';' where id=@id and step=@step ";
+            string sql = @"update SAJET.P_NPI_FLOWSTEP set url=url||@accessPath||';' where id=@id and step=@step ";
             var parameters = new SugarParameter[]
             {
             new SugarParameter("@accessPath", accessPath),
@@ -578,7 +578,7 @@ namespace ZR.Service.Business
         {
             DataTable dt = new DataTable();
             //表调整
-            /*string sql = @"select distinct  a.EMAIL from imes.SYS_USER a,
+            /*string sql = @"select distinct  a.EMAIL FROM SAJET.SYS_USER a,
                             imes.SYS_USER_ROLE b,imes.SYS_ROLE c
                             where a.USERID=b.USER_ID
                             and b.ROLE_ID=c.ROLEID
@@ -591,7 +591,7 @@ namespace ZR.Service.Business
                             '上传试制报告',
                             '工厂试制准备ME','工厂试制准备IE',
                             'NPI-查询') order by a.EMAIL";*/
-            string sql = @"select distinct  a.EMAIL from imes.M_ZR_USER a,
+            string sql = @"select distinct  a.EMAIL FROM SAJET.M_ZR_USER a,
                             imes.M_ZR_USER_ROLE b,imes.M_ZR_ROLE c
                             where a.MAIN_ID=b.USER_ID
                             and b.ROLE_ID=c.ROLEID

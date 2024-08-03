@@ -75,7 +75,7 @@ namespace ZR.Service.PordService
         }
         public List<ImesMpartInscription> History(string id, string site)
         {
-            String sqlStr = $"select *  from imes.m_part_Inscription_ht b  where 1=1 ";
+            String sqlStr = $"select *  FROM SAJET.m_part_Inscription_ht b  where 1=1 ";
 
             if (id != null && id != "")
             {
@@ -92,36 +92,36 @@ namespace ZR.Service.PordService
 
         public object Maintenancepart(string ipn, string site)
         {
-            string sql = string.Format(@"select id,ipn,apn,spec1,spec2 from imes.m_part where  SITE = '" + site + "'");
+            string sql = string.Format(@"select id,ipn,apn,spec1,spec2 FROM SAJET.m_part where  SITE = '" + site + "'");
             if (!string.IsNullOrWhiteSpace(ipn))
                 sql = sql + " AND ipn LIKE '%" + ipn + "%'";
             return Context.Ado.SqlQuery<Object>(sql);
         }
         public object Verification(string reelNo, string site)
         {
-            string sql = string.Format(@"select IPN from imes.p_material where site = '" + site + "'");
+            string sql = string.Format(@"select IPN FROM SAJET.p_material where site = '" + site + "'");
             if (!string.IsNullOrWhiteSpace(reelNo))
                 sql = sql + " AND REEL_NO = '" + reelNo + "'";
             return Context.Ado.SqlQuery<Object>(sql);
         }
         public int Validate(string ipn, string reelNo, string inscription, string site, long updateUserid)
         {
-            string sql = string.Format(@"select * from imes.m_part_Inscription where site = '" + site + "' and  inscription = '" + inscription + "'and IPN= '" + ipn + "'");
+            string sql = string.Format(@"select * FROM SAJET.m_part_Inscription where site = '" + site + "' and  inscription = '" + inscription + "'and IPN= '" + ipn + "'");
             int count = Context.Ado.SqlQuery<Object>(sql).Count;
-            string insertHt = $"Insert into imes.p_material_HT (Select * from imes.p_material  where REEL_NO='" + reelNo + "')";
+            string insertHt = $"Insert INTO SAJET.p_material_HT (Select * FROM SAJET.p_material  where REEL_NO='" + reelNo + "')";
             Context.Ado.SqlQuery<Object>(insertHt);
             string inscriptionVerification;
             if (count >= 1)
             {
                 inscriptionVerification = "P";
-                string sql1 = string.Format(@"update imes.p_material set INSCRIPTION_VERIFICATION ='" + inscriptionVerification + "',update_time = sysdate,UPDATE_USERID ='" + updateUserid + "'  where REEL_NO='" + reelNo + "'");
+                string sql1 = string.Format(@"update SAJET.p_material set INSCRIPTION_VERIFICATION ='" + inscriptionVerification + "',update_time = sysdate,UPDATE_USERID ='" + updateUserid + "'  where REEL_NO='" + reelNo + "'");
                 Context.Ado.SqlQuery<object>(sql1);
                 return 1;
             }
             else
             {
                 inscriptionVerification = "F";
-                string sql1 = string.Format(@"update imes.p_material set INSCRIPTION_VERIFICATION ='" + inscriptionVerification + "',update_time = sysdate,UPDATE_USERID ='" + updateUserid + "'  where REEL_NO='" + reelNo + "'");
+                string sql1 = string.Format(@"update SAJET.p_material set INSCRIPTION_VERIFICATION ='" + inscriptionVerification + "',update_time = sysdate,UPDATE_USERID ='" + updateUserid + "'  where REEL_NO='" + reelNo + "'");
                 Context.Ado.SqlQuery<object>(sql1);
                 return 2;
             }
@@ -149,7 +149,7 @@ namespace ZR.Service.PordService
             imesMpartInscription.id = id;
             imesMpartInscription.createTime = DateTime.Now;
             int insertErp = Context.Insertable(imesMpartInscription).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
-            string insertHt = $"Insert into imes.m_part_Inscription_HT (Select * from imes.m_part_Inscription where id = " + id + ")";
+            string insertHt = $"Insert INTO SAJET.m_part_Inscription_HT (Select * FROM SAJET.m_part_Inscription where id = " + id + ")";
             Context.Ado.SqlQuery<Object>(insertHt);
             return insertErp;
         }
@@ -158,7 +158,7 @@ namespace ZR.Service.PordService
         {
             int id = imesMpartInscription.id;
             int Updateable = Context.Updateable(imesMpartInscription).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { id }).ExecuteCommand();
-            string insertHt = $"Insert into imes.m_part_Inscription_HT (Select * from imes.m_part_Inscription where id = " + id + ")";
+            string insertHt = $"Insert INTO SAJET.m_part_Inscription_HT (Select * FROM SAJET.m_part_Inscription where id = " + id + ")";
             Context.Ado.SqlQuery<Object>(insertHt);
             return Updateable;
         }
@@ -167,7 +167,7 @@ namespace ZR.Service.PordService
         {
             int id = imesMpartInscription.id;
             int updateStation = Context.Deleteable<ImesMpartInscription>().In(it => it.id, id).ExecuteCommand();
-            string insertHt = $"Insert into imes.m_part_Inscription_HT (Select * from imes.m_part_Inscription where id = " + id + ")";
+            string insertHt = $"Insert INTO SAJET.m_part_Inscription_HT (Select * FROM SAJET.m_part_Inscription where id = " + id + ")";
             Context.Ado.SqlQuery<string>(insertHt);
             return 1;
         }

@@ -91,7 +91,7 @@ namespace ZR.Service
                 model.Id = Guid.NewGuid().ToString("D");
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份
-                Context.Ado.ExecuteCommand("insert into imes.P_TICKET_TRAVEL select * from imes.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
+                Context.Ado.ExecuteCommand("insert INTO SAJET.P_TICKET_TRAVEL select * FROM SAJET.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
                 return i == 1 ? "OK" : "插入失败";
             }
             catch (Exception ex)
@@ -142,7 +142,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).UpdateColumns(it => new {it.Status,it.Mark,it.UpdateTime,it.UpdateEmpno,it.ErrorType,it.AssignEmp}).WhereColumns(it => new {it.Id}).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into imes.P_TICKET_TRAVEL select * from imes.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_TICKET_TRAVEL select * FROM SAJET.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
             // return "OK";
             if (result == 0)
             {
@@ -162,7 +162,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).UpdateColumns(it => new { it.Status,  it.UpdateTime, it.UpdateEmpno, it.ErrorType, it.AssignEmp }).WhereColumns(it => new { it.Id }).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into imes.P_TICKET_TRAVEL select * from imes.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_TICKET_TRAVEL select * FROM SAJET.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
             //return "OK";
             if (result == 0)
             {
@@ -183,7 +183,7 @@ namespace ZR.Service
             model.Status = 3;
             int result = Context.Updateable(model).UpdateColumns(it => new { it.Status, it.UpdateTime, it.UpdateEmpno, it.AssignEmp }).WhereColumns(it => new { it.Id }).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into imes.P_TICKET_TRAVEL select * from imes.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_TICKET_TRAVEL select * FROM SAJET.P_TICKET_STATUS where ID=@id", new List<SugarParameter> { new SugarParameter("@id", model.Id) });
             //return "OK";
             if (result == 0)
             {
@@ -225,14 +225,14 @@ namespace ZR.Service
             { sqltype = "yyyyMM"; }
 
             if(param.Type.ToUpper() == "ReportQty".ToUpper())
-            { //select to_char(sysdate,'yyyyMMIW') time, status,count(status) qty from imes.P_TICKET_STATUS where to_char(CREATE_TIME,'yyyyMMIW')=to_char(sysdate,'yyyyMMIW') group by status order by status
-                var qtylist = Context.Ado.SqlQuery<PTicketReportRes>($"select to_char(sysdate,'{sqltype}') time, status name,count(status) qty from imes.P_TICKET_STATUS where to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site group by status order by status", new List<SugarParameter> { new SugarParameter("site", param.Site) }).ToList();
+            { //select to_char(sysdate,'yyyyMMIW') time, status,count(status) qty FROM SAJET.P_TICKET_STATUS where to_char(CREATE_TIME,'yyyyMMIW')=to_char(sysdate,'yyyyMMIW') group by status order by status
+                var qtylist = Context.Ado.SqlQuery<PTicketReportRes>($"select to_char(sysdate,'{sqltype}') time, status name,count(status) qty FROM SAJET.P_TICKET_STATUS where to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site group by status order by status", new List<SugarParameter> { new SugarParameter("site", param.Site) }).ToList();
                 resutinfo.Data = qtylist;
             }
             else if( param.Type.ToUpper()== "ReportIMESErrorTop".ToUpper())
             {
-                //select * from (select to_char(sysdate,'yyyyMMIW') time,RES_ERRCODE,count(RES_ERRCODE) qty from imes.P_COLLECTERROR_LOG  where to_char(CREATE_TIME,'yyyyMMIW')= to_char(sysdate, 'yyyyMMIW') - 1 and site = 'DEF' group by RES_ERRCODE order by qty desc) where rownum <= 10
-                var qtylist = Context.Ado.SqlQuery<PTicketReportRes>($"select * from (select to_char(sysdate,'{sqltype}') time,RES_ERRCODE name,count(RES_ERRCODE) qty from imes.P_COLLECTERROR_LOG  where to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site group by RES_ERRCODE order by qty desc) where rownum <=10 ", new List<SugarParameter> { new SugarParameter("site", param.Site) }).ToList();
+                //select * from (select to_char(sysdate,'yyyyMMIW') time,RES_ERRCODE,count(RES_ERRCODE) qty FROM SAJET.P_COLLECTERROR_LOG  where to_char(CREATE_TIME,'yyyyMMIW')= to_char(sysdate, 'yyyyMMIW') - 1 and site = 'DEF' group by RES_ERRCODE order by qty desc) where rownum <= 10
+                var qtylist = Context.Ado.SqlQuery<PTicketReportRes>($"select * from (select to_char(sysdate,'{sqltype}') time,RES_ERRCODE name,count(RES_ERRCODE) qty FROM SAJET.P_COLLECTERROR_LOG  where to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site group by RES_ERRCODE order by qty desc) where rownum <=10 ", new List<SugarParameter> { new SugarParameter("site", param.Site) }).ToList();
                 resutinfo.Data = qtylist;
             }
             else if(param.Type.ToUpper()== "ReportTimeTop".ToUpper())
@@ -242,13 +242,13 @@ namespace ZR.Service
                 //        WHEN 20 >= trunc((SYSDATE - a.CREATE_TIME) * 24 * 60) and trunc((SYSDATE -a.CREATE_TIME)*24 * 60) >= 10 THEN 'Between 10 and 20 minutes'
                 //        ELSE 'More than 30 minutes'
                 //    END AS name,to_char(CREATE_TIME, 'yyyyMMIW') time
-                //FROM (select ID, CREATE_TIME from imes.P_TICKET_STATUS where to_char(CREATE_TIME, 'yyyyMMIW') = to_char(sysdate, 'yyyyMMIW') and site = 'DEF') A) select time, name, count(name) from b group by name,time;
+                //FROM (select ID, CREATE_TIME FROM SAJET.P_TICKET_STATUS where to_char(CREATE_TIME, 'yyyyMMIW') = to_char(sysdate, 'yyyyMMIW') and site = 'DEF') A) select time, name, count(name) from b group by name,time;
                 var qtylist = Context.Ado.SqlQuery<PTicketReportRes>($@"with b as( SELECT   CASE
         WHEN 10 >= trunc((SYSDATE - a.CREATE_TIME)*24*60)  THEN 'Less than 10 minutes'
         WHEN 20 >= trunc((SYSDATE - a.CREATE_TIME)*24*60) and trunc((SYSDATE - a.CREATE_TIME)*24*60) >10 THEN 'Between 10 and 20 minutes'
         ELSE 'More than 30 minutes'
     END AS name,to_char(CREATE_TIME,'{sqltype}') time  FROM
-    (select ID, CREATE_TIME from imes.P_TICKET_STATUS where status NOT IN (1,2) and to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site ) A)
+    (select ID, CREATE_TIME FROM SAJET.P_TICKET_STATUS where status NOT IN (1,2) and to_char(CREATE_TIME,'{sqltype}')=to_char(sysdate,'{sqltype}') and site=@site ) A)
     select time,name,count(name) qty from b group by name,time", new List<SugarParameter> { new SugarParameter("site", param.Site) }).ToList();
                 resutinfo.Data = qtylist;
             }

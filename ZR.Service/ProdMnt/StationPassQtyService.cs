@@ -24,7 +24,7 @@ namespace ZR.Service.ProdMnt
         public List<string> GetLineInfo(string site)
         {
 
-            String sqlStr = $"select distinct b.line from imes.m_line a, imes.m_station b  where a.LINE = b.LINE ";
+            String sqlStr = $"select distinct b.line FROM SAJET.m_line a, imes.m_station b  where a.LINE = b.LINE ";
 
             if (site != null && site != "")
             {
@@ -37,7 +37,7 @@ namespace ZR.Service.ProdMnt
         public List<string>  GetStationTypeInfo(string line,string site)
         {
             Console.WriteLine(line, site);
-            String sqlStr = $"SELECT DISTINCT b.STATION_TYPE FROM imes.m_station b WHERE 1=1  ";
+            String sqlStr = $"SELECT DISTINCT b.STATION_TYPE FROM SAJET.m_station b WHERE 1=1  ";
 
             if (site != null && site != "")
             {
@@ -93,7 +93,7 @@ namespace ZR.Service.ProdMnt
            int updateStation =  Context.Updateable(stationInfos).UpdateColumns(it => new { it.maxQty, it.fallQty, it.passQty,it.updateEmpno,it.updateTime }).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
             if (updateStation>0) 
             {
-                string sqlStr = $"insert into imes.m_station_ht(select * from imes.m_station  where id = '" + stationInfos.id + "')";
+                string sqlStr = $"insert INTO SAJET.m_station_ht(select * FROM SAJET.m_station  where id = '" + stationInfos.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -132,7 +132,7 @@ namespace ZR.Service.ProdMnt
 
             if (insertErp > 0)
             {
-                string sqlStr = $"insert into IMES.M_WEIGHT_FAI_ht(select * from IMES.M_WEIGHT_FAI where id = " + MaxId;
+                string sqlStr = $"insert INTO SAJET.M_WEIGHT_FAI_ht(select * FROM SAJET.M_WEIGHT_FAI where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -140,7 +140,7 @@ namespace ZR.Service.ProdMnt
         }
         public int ExistIPN(string ipn)
         {
-            String sqlStr = $"select IPN from IMES.m_part  where 1=1 ";
+            String sqlStr = $"select IPN FROM SAJET.m_part  where 1=1 ";
 
             if (ipn != null && ipn != "")
             {
@@ -154,7 +154,7 @@ namespace ZR.Service.ProdMnt
             int updateStation = Context.Updateable(weightFaiInfo).UpdateColumns(it => new { it.type, it.mpn, it.ipn,it.faiValue,it.unit }).WhereColumns(it => new { it.id,site}).ExecuteCommand();
             if (updateStation > 0)
             {
-                string sqlStr = $"insert into IMES.M_WEIGHT_FAI_ht(select * from IMES.M_WEIGHT_FAI  where id = '" + weightFaiInfo.id + "')";
+                string sqlStr = $"insert INTO SAJET.M_WEIGHT_FAI_ht(select * FROM SAJET.M_WEIGHT_FAI  where id = '" + weightFaiInfo.id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -168,7 +168,7 @@ namespace ZR.Service.ProdMnt
                 int updateStation = Context.Updateable(weightFaiInfo).UpdateColumns(it => it.enabled == "N").WhereColumns(it =>it.id).ExecuteCommand();
                 if (updateStation > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_WEIGHT_FAI_ht(select * from IMES.M_WEIGHT_FAI  where id = '" + weightFaiInfo.id + "')";
+                    string sqlStr = $"insert INTO SAJET.M_WEIGHT_FAI_ht(select * FROM SAJET.M_WEIGHT_FAI  where id = '" + weightFaiInfo.id + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -178,7 +178,7 @@ namespace ZR.Service.ProdMnt
                 int updateStation = Context.Updateable(weightFaiInfo).UpdateColumns(it => it.enabled == "Y").WhereColumns(it => it.id).ExecuteCommand();
                 if (updateStation > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_WEIGHT_FAI_ht(select * from IMES.M_WEIGHT_FAI   where id = '" + weightFaiInfo.id + "')";
+                    string sqlStr = $"insert INTO SAJET.M_WEIGHT_FAI_ht(select * FROM SAJET.M_WEIGHT_FAI   where id = '" + weightFaiInfo.id + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -189,7 +189,7 @@ namespace ZR.Service.ProdMnt
         public List<WeightFaiInfo> History(string id, string site)
 
         {
-            String sqlStr = $"select *  from IMES.M_WEIGHT_FAI_ht b  where 1=1 ";
+            String sqlStr = $"select *  FROM SAJET.M_WEIGHT_FAI_ht b  where 1=1 ";
 
             if (id != null && id != "")
             {
@@ -206,7 +206,7 @@ namespace ZR.Service.ProdMnt
 
         public int DeleteWeightFai(int id, string site)
         {
-            string sqlStr = $"insert into IMES.M_WEIGHT_FAI_ht(select * from IMES.M_WEIGHT_FAI  where id = " + id + ")";
+            string sqlStr = $"insert INTO SAJET.M_WEIGHT_FAI_ht(select * FROM SAJET.M_WEIGHT_FAI  where id = " + id + ")";
             Context.Ado.SqlQuery<string>(sqlStr);            
             Console.WriteLine("id:"+id);
            return Context.Deleteable<WeightFaiInfo>().Where(it => it.id == id && it.site == site).ExecuteCommand();

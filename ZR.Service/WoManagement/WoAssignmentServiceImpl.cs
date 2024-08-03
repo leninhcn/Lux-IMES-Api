@@ -107,7 +107,7 @@ namespace ZR.Service.WoManagement
 
         public bool ExistedWorkproc(string StationType)
         {
-            string sqlStr = " SELECT ID,NAME FROM IMES.M_MACHINE_GROUP "
+            string sqlStr = " SELECT ID,NAME FROM SAJET.M_MACHINE_GROUP "
                      + $" WHERE ENABLED='Y' AND STATION_TYPE = '{StationType}' ";
            DataTable dt =  Context.Ado.GetDataTable(sqlStr);
             if (dt.Rows.Count > 0 )
@@ -159,7 +159,7 @@ namespace ZR.Service.WoManagement
             var dtTemp = new DataTable();
             try
             {
-                sSQL = $"select WORK_ORDER,IPN,DRAWNUM,DRAWNUM_VERSION,TOP_WORK_ORDER  from imes.p_wo_base where WORK_ORDER='{wo}'";
+                sSQL = $"select WORK_ORDER,IPN,DRAWNUM,DRAWNUM_VERSION,TOP_WORK_ORDER  FROM SAJET.p_wo_base where WORK_ORDER='{wo}'";
                 dtTemp = Context.Ado.GetDataTable(sSQL);
                 var exists = dtTemp.Rows[0]["DRAWNUM_VERSION"] != null
                 && dtTemp.Rows[0]["DRAWNUM_VERSION"] != DBNull.Value
@@ -171,7 +171,7 @@ namespace ZR.Service.WoManagement
                 }
 
                 //改为从视图中获取
-                sSQL = $"select DR.DRAWNUM,DR.DRAW_VER,DR.TOP_WORK_ORDER from IMES.V_WORKORDER_DRAWCARD DR" +
+                sSQL = $"select DR.DRAWNUM,DR.DRAW_VER,DR.TOP_WORK_ORDER FROM SAJET.V_WORKORDER_DRAWCARD DR" +
                     $" where WORK_ORDER='{wo}' and DRAWNUM is not null and DRAW_VER is not null";
                 dtTemp = Context.Ado.GetDataTable(sSQL);
                 if (dtTemp.Rows.Count > 0)
@@ -181,11 +181,11 @@ namespace ZR.Service.WoManagement
                     var top_wo = $"{dtTemp.Rows[0]["TOP_WORK_ORDER"]}";
                     if (!string.IsNullOrEmpty(top_wo))
                     {
-                        sSQL = $"update imes.p_wo_base set DRAWNUM_VERSION='{drawnumver}',DRAWNUM='{drawnum}' where TOP_WORK_ORDER='{top_wo}'";
+                        sSQL = $"update SAJET.p_wo_base set DRAWNUM_VERSION='{drawnumver}',DRAWNUM='{drawnum}' where TOP_WORK_ORDER='{top_wo}'";
                     }
                     else
                     {
-                        sSQL = $"update imes.p_wo_base set DRAWNUM_VERSION='{drawnumver}',DRAWNUM='{drawnum}' where WORK_ORDER='{wo}'";
+                        sSQL = $"update SAJET.p_wo_base set DRAWNUM_VERSION='{drawnumver}',DRAWNUM='{drawnum}' where WORK_ORDER='{wo}'";
                     }
                     dtTemp = Context.Ado.GetDataTable(sSQL);
 
@@ -199,15 +199,15 @@ nvl(nvl(w.DRAWNUM_VERSION,g.DRAW_VER),i.DRAW_VER) as DRAW_VER,
 w.TOP_WORK_ORDER,w.IPN,w.ASSIGNSTATUS
 ,nvl(g.ENABLED,i.ENABLED) as ENABLED
 ,nvl(g.STATUS1,i.STATUS1) as STATUS1
-from IMES.P_WO_BASE w 
+FROM SAJET.P_WO_BASE w 
 left join IMES.P_WO_BASE wt on w.TOP_WORK_ORDER = wt.WORK_ORDER
 left join (
     select ANCESTOR,DRAWNUM,DRAW_VER,row_number() over(partition by ANCESTOR order by DRAW_VER desc) as RID ,ENABLED, STATUS1
-    from IMES.M_DRAWCARD where  DR='0' and ANCESTOR like '%-XXXX'
+    FROM SAJET.M_DRAWCARD where  DR='0' and ANCESTOR like '%-XXXX'
 ) g on w.DRAWNUM =g.DRAWNUM and g.RID=1
 left join (
     select ANCESTOR,DRAWNUM,DRAW_VER,row_number() over(partition by ANCESTOR order by DRAW_VER desc) as RID ,ENABLED, STATUS1
-    from IMES.M_DRAWCARD where DR='0' and ANCESTOR like '%-XXXX'
+    FROM SAJET.M_DRAWCARD where DR='0' and ANCESTOR like '%-XXXX'
 ) i on nvl(wt.IPN,w.IPN) like replace(i.ANCESTOR,'-XXXX','-')||'%' and i.RID=1
 where w.WORK_ORDER='{wo}'";
                     dtTemp = Context.Ado.GetDataTable(sSQL);
@@ -268,7 +268,7 @@ where w.WORK_ORDER='{wo}'";
 
                 if (isDaoZhou(wk.StationType))
                 {
-                    string sql = "select * from IMES.V_WO_ROLLINFO WHERE WORK_ORDER='" + wo + "'";
+                    string sql = "select * FROM SAJET.V_WO_ROLLINFO WHERE WORK_ORDER='" + wo + "'";
                     DataTable dt = Context.Ado.GetDataTable(sql);
                     if (dt.Rows.Count == 0)
                     { // 未设置包装规格
@@ -285,7 +285,7 @@ where w.WORK_ORDER='{wo}'";
                     {
                         var length = dt.Rows[0]["LENGTH"].ToString();
                         var unit = dt.Rows[0]["UNIT"].ToString();
-                        var sSQL = $"update imes.p_wo_base set FIXED_LENGTH='{length}',FIXED_UNIT='{unit}' where WORK_ORDER='{wo}'  and site = '{site}'";
+                        var sSQL = $"update SAJET.p_wo_base set FIXED_LENGTH='{length}',FIXED_UNIT='{unit}' where WORK_ORDER='{wo}'  and site = '{site}'";
                         Context.Ado.SqlQuery<string>(sSQL);
                     }
                 }
@@ -309,10 +309,10 @@ where w.WORK_ORDER='{wo}'";
 
         public void ModifyAssignDate(int type, string wo, string machine, string empno, string assingStartDate, string assignEndDate)
         {
-            //var sSQL = $"update IMES.M_WOASSIGNMENT SET "
+            //var sSQL = $"update SAJET.M_WOASSIGNMENT SET "
             //    + (type == 0 ? $" WO_ASSING_START_DATE=TO_DATE('{assingStartDate}','yyyy/mm/dd')" : $" WO_ASSING_END_DATE=TO_DATE('{assignEndDate}','yyyy/mm/dd')")
             //    + $" where WORK_ORDER='{wo}' and MACHINE='{machine}' and LASTUPDATE= SYSDATE AND LASTUPDATEUSER = '{empno}'";
-            var sSQL = $"update IMES.M_WOASSIGNMENT SET "
+            var sSQL = $"update SAJET.M_WOASSIGNMENT SET "
                 + (type == 0 ? $" WO_ASSING_START_DATE=TO_DATE('{assingStartDate}','YYYY-MM-DD HH24:MI:SS')" : $" WO_ASSING_END_DATE=TO_DATE('{assignEndDate}','YYYY-MM-DD HH24:MI:SS')")
                 + $", LASTUPDATE= SYSDATE  where WORK_ORDER='{wo}' and MACHINE='{machine}' ";
             var line = Context.Ado.SqlQuery<string>(sSQL);
@@ -321,8 +321,8 @@ where w.WORK_ORDER='{wo}'";
         public void ModifyWoBaseAssignDate(string wo,string site)
         {
             //派工/增派关闭画面更新wo的派工日期
-            var sSQL = $"update IMES.P_WO_BASE  "
-                + $" SET(WO_ASSING_START_DATE, WO_ASSING_END_DATE) = (SELECT MIN(WO_ASSING_START_DATE) AS STARTDATE, MAX(WO_ASSING_END_DATE) AS ENDDATE FROM IMES.M_WOASSIGNMENT WHERE WORK_ORDER = '{wo}')"
+            var sSQL = $"update SAJET.P_WO_BASE  "
+                + $" SET(WO_ASSING_START_DATE, WO_ASSING_END_DATE) = (SELECT MIN(WO_ASSING_START_DATE) AS STARTDATE, MAX(WO_ASSING_END_DATE) AS ENDDATE FROM SAJET.M_WOASSIGNMENT WHERE WORK_ORDER = '{wo}')"
                 + $" where WORK_ORDER='{wo}' and site = '{site}'";
             var line = Context.Ado.SqlQuery<string>(sSQL);
         }
@@ -370,7 +370,7 @@ where w.WORK_ORDER='{wo}'";
 
         public DataTable GetWoInfo(string wo, string site)
         {
-            string sqlStr = $@"  SELECT A.*,B.STATION_TYPE_DESC FROM IMES.P_WO_BASE A left join IMES.M_STATION_TYPE B ON A.STATION_TYPE=B.STATION_TYPE WHERE A.WORK_ORDER = '{wo}' and a.site = '{site}'";
+            string sqlStr = $@"  SELECT A.*,B.STATION_TYPE_DESC FROM SAJET.P_WO_BASE A left join IMES.M_STATION_TYPE B ON A.STATION_TYPE=B.STATION_TYPE WHERE A.WORK_ORDER = '{wo}' and a.site = '{site}'";
             return Context.Ado.GetDataTable(sqlStr);
         }
 
@@ -465,7 +465,7 @@ where w.WORK_ORDER='{wo}'";
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sql = $"select * from IMES.M_APICONFIG WHERE API_CODE='{apicode}'";
+                string sql = $"select * FROM SAJET.M_APICONFIG WHERE API_CODE='{apicode}'";
                 DataTable dataTable = Context.Ado.GetDataTable(sql);
                 if (dataTable.Rows.Count > 0)
                 {
@@ -503,7 +503,7 @@ where w.WORK_ORDER='{wo}'";
 
                     long id = (long)Math.Floor((new Random()).NextDouble() * 100000000000000D);
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.Append("insert into IMES.M_DATASYNC_LOG(API_URL,BRES,ID,JSON,OTYPE,RESULT,SEND_TIME,TABLE_NAME)").Append
+                    stringBuilder.Append("insert INTO SAJET.M_DATASYNC_LOG(API_URL,BRES,ID,JSON,OTYPE,RESULT,SEND_TIME,TABLE_NAME)").Append
                         (" values('").Append(url).Append("','").Append(BRES).Append("',").Append(id).Append(",'").Append(data).Append("','PROOUTTOQMS").Append("','")
                         .Append(result.Replace("'", "''")).Append("',CURRENT_DATE,'").Append(apicode).Append("')");
                     long sqlresult = Context.Ado.SqlQuery<string>(stringBuilder.ToString()).Count();
@@ -570,7 +570,7 @@ where w.WORK_ORDER='{wo}'";
 
         public DataTable GetWoAssignment(string wo)
         {
-            string sqlStr = " SELECT * FROM IMES.M_WOASSIGNMENT "
+            string sqlStr = " SELECT * FROM SAJET.M_WOASSIGNMENT "
                      + $" WHERE WORK_ORDER='{wo}' ";
             return Context.Ado.GetDataTable(sqlStr);
         }
@@ -581,7 +581,7 @@ where w.WORK_ORDER='{wo}'";
             var dtTemp = new DataTable();
             try
             {
-                sSQL = " SELECT B.ID,B.NAME,B.DESCRIPTION,MACHINE_CODE MACHINE,C.CREATETIME OPTIME,C.WO_ASSING_START_DATE,C.WO_ASSING_END_DATE,C.WORK_ORDER  FROM IMES.M_MACHINE A  "
+                sSQL = " SELECT B.ID,B.NAME,B.DESCRIPTION,MACHINE_CODE MACHINE,C.CREATETIME OPTIME,C.WO_ASSING_START_DATE,C.WO_ASSING_END_DATE,C.WORK_ORDER  FROM SAJET.M_MACHINE A  "
                      + " LEFT JOIN IMES.M_MACHINE_GROUP B ON A.GROUP_ID=B.ID "
                      + " LEFT JOIN IMES.M_WOASSIGNMENT C ON A.MACHINE_CODE=C.MACHINE"
                      + $" WHERE A.ENABLED='Y' AND B.NAME IN({string.Join(",", groups.Select(g => "'" + g + "'").ToArray())})";
@@ -604,7 +604,7 @@ where w.WORK_ORDER='{wo}'";
             var dtTemp = new DataTable();
             try
             {
-                sSQL = " SELECT B.ID,B.NAME,B.DESCRIPTION,MACHINE_CODE MACHINE,C.CREATETIME OPTIME ,C.WO_ASSING_START_DATE,C.WO_ASSING_END_DATE,C.WORK_ORDER FROM IMES.M_MACHINE A  "
+                sSQL = " SELECT B.ID,B.NAME,B.DESCRIPTION,MACHINE_CODE MACHINE,C.CREATETIME OPTIME ,C.WO_ASSING_START_DATE,C.WO_ASSING_END_DATE,C.WORK_ORDER FROM SAJET.M_MACHINE A  "
                      + " LEFT JOIN IMES.M_MACHINE_GROUP B ON A.GROUP_ID=B.ID "
                      + " LEFT JOIN IMES.M_WOASSIGNMENT C ON A.MACHINE_CODE=C.MACHINE"
                      + $" WHERE A.ENABLED='Y' AND A.MACHINE_CODE IN({string.Join(",", machines.Select(m => "'" + m + "'").ToArray())})";
@@ -628,7 +628,7 @@ where w.WORK_ORDER='{wo}'";
         public DataTable getAssignment(string wo)
         {
             var dt = new DataTable();
-            var sSQL = " SELECT * FROM IMES.M_WOASSIGNMENT "
+            var sSQL = " SELECT * FROM SAJET.M_WOASSIGNMENT "
                      + $" WHERE WORK_ORDER='{wo}' ";
             try
             {

@@ -171,7 +171,7 @@ namespace ZR.Service
         {
             //WMSInWarehouseCheck
             string url = "";
-            string sSql = @"SELECT b.CONFIG_VALUE FROM imes.m_BLOCK_CONFIG_TYPE A, imes.m_BLOCK_CONFIG_VALUE B
+            string sSql = @"SELECT b.CONFIG_VALUE FROM SAJET.m_BLOCK_CONFIG_TYPE A, imes.m_BLOCK_CONFIG_VALUE B
                     WHERE A.CONFIG_TYPE_ID = B.CONFIG_TYPE_ID
                             AND A.ENABLED = 'Y'
                             AND B.ENABLED = 'Y'
@@ -204,7 +204,7 @@ namespace ZR.Service
             List<HData> HDatas = new List<HData>();
             HDatas.Clear();
             string sReJson = string.Empty;
-           string  sSql = $"SELECT * FROM IMES.P_WO_STOCK_IN_WMS_HEAD WHERE SITE ='{site}' AND ID='{id}'";
+           string  sSql = $"SELECT * FROM SAJET.P_WO_STOCK_IN_WMS_HEAD WHERE SITE ='{site}' AND ID='{id}'";
            DataTable  sDt = await Context.Ado.GetDataTableAsync(sSql);
             foreach (DataRow R in sDt.Rows)
             {
@@ -221,7 +221,7 @@ namespace ZR.Service
                 sHead.WAREHOUSE_CODE = R["WAREHOUSE_CODE"].ToString();
                 sHead.STATUS = R["STATUS"].ToString();
                 sHead.FULL_QTY = R["FULL_QTY"].ToString();
-                sSql = $"SELECT * FROM IMES.P_WO_STOCK_IN_WMS_DATA  WHERE SITE='{site}' AND CARTON_ID='{sHead.CARTON_ID}' AND ID='{id}'";
+                sSql = $"SELECT * FROM SAJET.P_WO_STOCK_IN_WMS_DATA  WHERE SITE='{site}' AND CARTON_ID='{sHead.CARTON_ID}' AND ID='{id}'";
                 sDt = await Context.Ado.GetDataTableAsync(sSql);
                 foreach (DataRow R1 in sDt.Rows)
                 {
@@ -260,7 +260,7 @@ namespace ZR.Service
                 {
                     if (S.MSGTY == "S")
                     {
-                        sSql = $@"UPDATE IMES.P_WO_STOCK_IN_WMS_DATA 
+                        sSql = $@"update SAJET.P_WO_STOCK_IN_WMS_DATA 
                                           SET WMS_FLAG = 1 
                                           WHERE
 	                                        ID = '{id}' AND SITE = '{site}'
@@ -307,8 +307,8 @@ namespace ZR.Service
             }
             if (parm.Inputtype != "3")//WO
             {
-                //string sSQL = $"SELECT MAX(A.WORK_ORDER) WORK_ORDER,MAX(B.IPN) PART_NO,MAX(A.PALLET_NO) PALLET_NO,MAX(A.CARTON_NO) CARTON_NO,MAX(A.SERIAL_NUMBER) SERIAL_NUMBER,MAX(A.CUSTOMER_SN) CUSTOMER_SN,COUNT(*) QTY,MAX(A.FIXED_QTY) FIXED_QTY,MAX(C.BASE_UNIT_MEASURE) SN_UNIT FROM IMES.P_SN_STATUS A, IMES.M_PART B,IMES.P_WO_BASE C WHERE A.IPN = B.IPN AND A.WORK_ORDER = C.WORK_ORDER AND  (a.carton_no='{parm.Inputdata}' or a.serial_number='{parm.Inputdata}' or a.pallet_no='{parm.Inputdata}')";
-                string sSQL = $"select MAX(mo) WORK_ORDER,MAX(B.IPN) PART_NO,MAX(C.PALLET_NO) PALLET_NO, MAX(C.CARTON_NO) CARTON_NO, MAX(C.SERIAL_NUMBER) SERIAL_NUMBER, MAX(C.CUSTOMER_SN) CUSTOMER_SN, COUNT(*) QTY,MAX(B.BASE_UNIT_MEASURE) SN_UNIT from imes.P_WO_STOCK_IN_WMS_DATA A, IMES.P_WO_BASE B, IMES.P_SN_STATUS C where A.MO = B.WORK_ORDER AND A.USN = C.SERIAL_NUMBER AND A.SITE = B.SITE AND B.SITE = C.SITE AND A.SITE = '{parm.Site}' AND id = '{id}'";
+                //string sSQL = $"SELECT MAX(A.WORK_ORDER) WORK_ORDER,MAX(B.IPN) PART_NO,MAX(A.PALLET_NO) PALLET_NO,MAX(A.CARTON_NO) CARTON_NO,MAX(A.SERIAL_NUMBER) SERIAL_NUMBER,MAX(A.CUSTOMER_SN) CUSTOMER_SN,COUNT(*) QTY,MAX(A.FIXED_QTY) FIXED_QTY,MAX(C.BASE_UNIT_MEASURE) SN_UNIT FROM SAJET.P_SN_STATUS A, IMES.M_PART B,IMES.P_WO_BASE C WHERE A.IPN = B.IPN AND A.WORK_ORDER = C.WORK_ORDER AND  (a.carton_no='{parm.Inputdata}' or a.serial_number='{parm.Inputdata}' or a.pallet_no='{parm.Inputdata}')";
+                string sSQL = $"select MAX(mo) WORK_ORDER,MAX(B.IPN) PART_NO,MAX(C.PALLET_NO) PALLET_NO, MAX(C.CARTON_NO) CARTON_NO, MAX(C.SERIAL_NUMBER) SERIAL_NUMBER, MAX(C.CUSTOMER_SN) CUSTOMER_SN, COUNT(*) QTY,MAX(B.BASE_UNIT_MEASURE) SN_UNIT FROM SAJET.P_WO_STOCK_IN_WMS_DATA A, IMES.P_WO_BASE B, IMES.P_SN_STATUS C where A.MO = B.WORK_ORDER AND A.USN = C.SERIAL_NUMBER AND A.SITE = B.SITE AND B.SITE = C.SITE AND A.SITE = '{parm.Site}' AND id = '{id}'";
                 var resulelist = await Context.Ado.SqlQueryAsync<WareHousingResultDto>(sSQL);
                 return (true,msg, resulelist);
             }
@@ -323,7 +323,7 @@ namespace ZR.Service
                              B.TARGET_QTY,
                              SUM (QTY) AS QTY,
                              B.BASE_UNIT_MEASURE SN_UNIT
-                        FROM IMES.P_WO_STOCK_IN_WMS_DATA A, IMES.P_WO_BASE B
+                        FROM SAJET.P_WO_STOCK_IN_WMS_DATA A, IMES.P_WO_BASE B
                        WHERE  B.WORK_ORDER = A.MO
                              AND a.DATA_TYPE = 3
                              AND A.SITE = B.SITE
@@ -427,7 +427,7 @@ namespace ZR.Service
 	                                    OUT_FLAG IN (0,1)
                                         AND SITE = '{param.Site}'
 	                                    AND WMS_FLAG = 1
-	                                    AND CARTON_ID IN ( SELECT CARTON_ID FROM IMES.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' )";
+	                                    AND CARTON_ID IN ( SELECT CARTON_ID FROM SAJET.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' )";
                     DataTable sDt = await Context.Ado.GetDataTableAsync(sSql);
                     if (sDt.Rows.Count > 0)
                     {
@@ -505,7 +505,7 @@ namespace ZR.Service
                             //箱号
                             if (sdata == "0")
                             {
-                                sSql = $@"UPDATE IMES.P_WO_STOCK_IN_WMS_DATA 
+                                sSql = $@"update SAJET.P_WO_STOCK_IN_WMS_DATA 
                                           SET OUT_FLAG = 3 
                                           WHERE
 	                                        CARTON_ID = '{sdata}' 
@@ -524,12 +524,12 @@ namespace ZR.Service
                                             OUT_FLAG IN (0,1)
                                             AND SITE = '{param.Site}'
                                             AND WMS_FLAG = 1
-                                            AND CARTON_ID IN ( SELECT CARTON_ID FROM IMES.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' AND SITE = '{param.Site}' )";
+                                            AND CARTON_ID IN ( SELECT CARTON_ID FROM SAJET.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' AND SITE = '{param.Site}' )";
                             }
                             //sn
                             else if (stype == 2)
                             {
-                                sSql = $@"UPDATE IMES.P_WO_STOCK_IN_WMS_DATA 
+                                sSql = $@"update SAJET.P_WO_STOCK_IN_WMS_DATA 
                                           SET OUT_FLAG = 3 
                                           WHERE
 	                                        USN = '{sdata}' 
@@ -619,7 +619,7 @@ namespace ZR.Service
 	                                    OUT_FLAG IN (0,1)
                                         AND SITE = '{param.Site}'
 	                                    AND WMS_FLAG = 1
-	                                    AND CARTON_ID IN ( SELECT CARTON_ID FROM IMES.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' AND SITE = '{param.Site}' )";
+	                                    AND CARTON_ID IN ( SELECT CARTON_ID FROM SAJET.P_WO_STOCK_IN_WMS_HEAD WHERE PALLET_ID = '{sdata}' AND SITE = '{param.Site}' )";
                     DataTable sDt = await Context.Ado.GetDataTableAsync(sSql);
                     if (sDt.Rows.Count > 0)
                     {
@@ -702,7 +702,7 @@ namespace ZR.Service
                             //箱号
                             if (stype == 0)
                             {
-                                sSql = $@"UPDATE IMES.P_WO_STOCK_IN_WMS_DATA 
+                                sSql = $@"update SAJET.P_WO_STOCK_IN_WMS_DATA 
                                           SET HOLD_FLAG = '{holdflag}' 
                                           WHERE
 	                                        CARTON_ID = '{S.sn}' 
@@ -726,7 +726,7 @@ namespace ZR.Service
                             //sn
                             else if (stype == 2)
                             {
-                                sSql = $@"UPDATE IMES.P_WO_STOCK_IN_WMS_DATA 
+                                sSql = $@"update SAJET.P_WO_STOCK_IN_WMS_DATA 
                                           SET HOLD_FLAG = '{holdflag}' 
                                           WHERE
 	                                        USN = '{S.sn}' 

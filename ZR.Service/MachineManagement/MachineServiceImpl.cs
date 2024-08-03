@@ -20,7 +20,7 @@ namespace ZR.Service.MachineManagement
 
             if (insertErp > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_MACHINE_HT(SELECT * FROM IMES.M_MACHINE WHERE ID = " + MaxId;
+                string sqlStr = $"INSERT INTO SAJET.M_MACHINE_HT(SELECT * FROM SAJET.M_MACHINE WHERE ID = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -84,7 +84,7 @@ namespace ZR.Service.MachineManagement
 
         public List<string> GetMachineTypeList(string site)
         {
-            string sqlStr = $"SELECT MACHINE_TYPE_NAME FROM IMES.M_MACHINE_TYPE mmt  WHERE ENABLED = 'Y' AND SITE = '" + site + "'";
+            string sqlStr = $"SELECT MACHINE_TYPE_NAME FROM SAJET.M_MACHINE_TYPE mmt  WHERE ENABLED = 'Y' AND SITE = '" + site + "'";
             sqlStr = sqlStr + "  order by MACHINE_TYPE_NAME ";
             List<string> list = Context.Ado.SqlQuery<string>(sqlStr);
             return list;
@@ -104,7 +104,7 @@ namespace ZR.Service.MachineManagement
 
             if (updateMachine > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_MACHINE_HT(SELECT * FROM IMES.M_MACHINE WHERE ID =  " + machine.Id + ")";
+                string sqlStr = $"INSERT INTO SAJET.M_MACHINE_HT(SELECT * FROM SAJET.M_MACHINE WHERE ID =  " + machine.Id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }

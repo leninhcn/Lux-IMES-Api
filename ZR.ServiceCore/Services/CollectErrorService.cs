@@ -88,7 +88,7 @@ namespace ZR.Service.System
                         CreateEmpno=model.EmpNo
                     };
                     Context.Insertable(stp).IgnoreColumns(ignoreNullColumn:true).ExecuteCommand();
-                    Context.Ado.ExecuteCommand("insert into imes.P_TICKET_TRAVEL select * from imes.P_TICKET_STATUS where ID=@id",new List<SugarParameter> { new SugarParameter("@id",stp.Id)});
+                    Context.Ado.ExecuteCommand("insert INTO SAJET.P_TICKET_TRAVEL select * FROM SAJET.P_TICKET_STATUS where ID=@id",new List<SugarParameter> { new SugarParameter("@id",stp.Id)});
                     model.TicketId=stp.Id;
                 }
                else

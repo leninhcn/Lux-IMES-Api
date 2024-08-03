@@ -77,7 +77,7 @@ namespace ZR.Service.Business
             var MACHINE = Context.Ado.SqlQuerySingle<dynamic>(
                   @"
                    SELECT M.MACHINE_CODE,M.MACHINE_DESC,M.MACHINE_TYPE,
-                   G.STATION_TYPE,M.STAGE,M.LINE FROM IMES.M_MACHINE M
+                   G.STATION_TYPE,M.STAGE,M.LINE FROM SAJET.M_MACHINE M
                    LEFT JOIN IMES.M_MACHINE_GROUP G ON (M.GROUP_ID=G.ID)
                    WHERE ROWNUM= 1 AND M.MACHINE_CODE =@MACHINE_CODE
                    AND M.SITE=@SITE AND M.ENABLED =@ENABLED",
@@ -102,7 +102,7 @@ namespace ZR.Service.Business
             model.Stage = MACHINE.STAGE;
 
             //通过扫描的批次号查询查询发料记录表
-            string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  From IMES.P_MATERIAL WHERE 
+            string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  FROM SAJET.P_MATERIAL WHERE 
             REEL_NO= '" + Tools.FormatStr(model.Batchno) + "'  AND SITE = '" + model.Site + "' ";
             var MATERIAL = Context.Ado.SqlQuerySingle<dynamic>(sSQL);
 

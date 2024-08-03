@@ -97,7 +97,7 @@ namespace ZR.Service
                 }           
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_WAREHOUSE_HT SELECT * FROM IMES.M_WAREHOUSE WHERE WAREHOUSE_CODE = @code AND SITE=@site", new List<SugarParameter>{ new SugarParameter("@code", model.WarehouseCode ),new SugarParameter("@site",model.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_WAREHOUSE_HT SELECT * FROM SAJET.M_WAREHOUSE WHERE WAREHOUSE_CODE = @code AND SITE=@site", new List<SugarParameter>{ new SugarParameter("@code", model.WarehouseCode ),new SugarParameter("@site",model.Site) });
                 if (i == 0)
                 {
                     resultinfo.Result = "IMESERR004";
@@ -123,7 +123,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).UpdateColumns(it=>new { it.WarehouseName, it.WarehouseType,it.Enabled,it.UpdateTime, it.UpdateEmp }).WhereColumns(it => new {it.WarehouseCode,it.Site}).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_WAREHOUSE_HT SELECT * FROM IMES.M_WAREHOUSE WHERE WAREHOUSE_CODE = @code AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode), new SugarParameter("@site", model.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_WAREHOUSE_HT SELECT * FROM SAJET.M_WAREHOUSE WHERE WAREHOUSE_CODE = @code AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode), new SugarParameter("@site", model.Site) });
             if(result==0)
             {
                 resultinfo.Result = "IMESERR004";
@@ -190,7 +190,7 @@ namespace ZR.Service
                 }
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份
-                Context.Ado.ExecuteCommand("insert into IMES.M_LOCATION_HT SELECT * FROM IMES.M_LOCATION WHERE WAREHOUSE_CODE = @code and LOCATION_CODE =@lcode AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode),new SugarParameter("@lcode",model.LocationCode), new SugarParameter("@site", model.Site) });
+                Context.Ado.ExecuteCommand("insert INTO SAJET.M_LOCATION_HT SELECT * FROM SAJET.M_LOCATION WHERE WAREHOUSE_CODE = @code and LOCATION_CODE =@lcode AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode),new SugarParameter("@lcode",model.LocationCode), new SugarParameter("@site", model.Site) });
                 if (i == 0)
                 {
                     //return i == 1 ? "OK" : "插入失败";
@@ -218,7 +218,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).UpdateColumns(it => new { it.LocationCode, it.LocationName,it.LocationType, it.Enabled,it.UpdateTime, it.UpdateEmp }).WhereColumns(it => new { it.WarehouseCode,it.LocationCode, it.Site }).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_LOCATION_HT SELECT * FROM IMES.M_LOCATION WHERE WAREHOUSE_CODE = @code AND LOCATION_CODE =@lcode AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode), new SugarParameter("@lcode", model.LocationCode), new SugarParameter("@site", model.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_LOCATION_HT SELECT * FROM SAJET.M_LOCATION WHERE WAREHOUSE_CODE = @code AND LOCATION_CODE =@lcode AND SITE=@site", new List<SugarParameter> { new SugarParameter("@code", model.WarehouseCode), new SugarParameter("@lcode", model.LocationCode), new SugarParameter("@site", model.Site) });
             //return "OK";
             if (result == 0)
             {

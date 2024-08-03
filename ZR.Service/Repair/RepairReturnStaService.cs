@@ -27,7 +27,7 @@ namespace ZR.Service.Repair
             string sName = string.Empty;
             try
             {
-               string sSQL = "Select * from IMES.M_RETURNSTATION_HEADER " ;
+               string sSQL = "Select * FROM SAJET.M_RETURNSTATION_HEADER " ;
                 if (retData.Enabled == 0)
                     sSQL = sSQL + " where Enabled = 'Y' ";
                 else if (retData.Enabled == 1)
@@ -63,7 +63,7 @@ namespace ZR.Service.Repair
             string sName = "";
             try
             {
-               string sSQL = "Select a.* from IMES.M_RETURNSTATION_DETAIL a, IMES.M_RETURNSTATION_HEADER b " 
+               string sSQL = "Select a.* FROM SAJET.M_RETURNSTATION_DETAIL a, IMES.M_RETURNSTATION_HEADER b " 
                + "where a.MODEL = b.MODEL(+) and a.CATEGORY=b.CATEGORY(+) and a.KOLKATA=b.KOLKATA(+) "
                + "and B.id = '" + detailData.sId + "' ";
                 if (detailData.Enabled == 0)
@@ -90,14 +90,14 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getModel()
         {
-            string sSQL = " SELECT MODEL  FROM IMES.M_MODEL WHERE ENABLED='Y'   ORDER BY MODEL";
+            string sSQL = " SELECT MODEL  FROM SAJET.M_MODEL WHERE ENABLED='Y'   ORDER BY MODEL";
             DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
             return dt;
         }
 
         public async Task<DataTable> getDt(ModelInfo modelInfo)
         {
-            string sSQL = @" Select * from IMES.M_RETURNSTATION_HEADER  Where model = '" + modelInfo.MODEL + "' and CATEGORY='" + modelInfo.CATEGORY + "' and KOLKATA=" + modelInfo.KOLKATA + " ";
+            string sSQL = @" Select * FROM SAJET.M_RETURNSTATION_HEADER  Where model = '" + modelInfo.MODEL + "' and CATEGORY='" + modelInfo.CATEGORY + "' and KOLKATA=" + modelInfo.KOLKATA + " ";
 
             if (modelInfo.Type == "MODIFY")
             {
@@ -121,7 +121,7 @@ namespace ZR.Service.Repair
 
             try
             {
-               string sSQL = @" Insert into IMES.M_RETURNSTATION_HEADER (id,MODEL,CATEGORY,TOTAL_MATERIAL,KOLKATA,ENABLED,UPDATE_EMPNO,UPDATE_TIME,CREATE_EMPNO) 
+               string sSQL = @" Insert INTO SAJET.M_RETURNSTATION_HEADER (id,MODEL,CATEGORY,TOTAL_MATERIAL,KOLKATA,ENABLED,UPDATE_EMPNO,UPDATE_TIME,CREATE_EMPNO) 
                     Values  (@id,@MODEL,@CATEGORY,@TOTAL_MATERIAL,@KOLKATA,'Y',@UPDATE_EMPNO,SYSDATE,@CREATE_EMPNO) ";
                
                 var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
@@ -159,7 +159,7 @@ namespace ZR.Service.Repair
             string sMaxID = (string)exeRes.Anything;
             try
             {
-               string sSQL = @" Insert into IMES.M_RETURNSTATION_DETAIL  
+               string sSQL = @" Insert INTO SAJET.M_RETURNSTATION_DETAIL  
                (id,MODEL,CATEGORY,RETURNSTATION_TYPE,UNLINKEDMATERIAL,AREA ,KOLKATA,ENABLED,UPDATE_EMPNO,UPDATE_TIME,CREATE_EMPNO)  
                 Values    (@id,@MODEL,@CATEGORY,@RETURNSTATION_TYPE,@UNLINKEDMATERIAL,@AREA,@KOLKATA,'Y',@UPDATE_EMPNO,SYSDATE,@CREATE_EMPNO) ";
 
@@ -192,8 +192,8 @@ namespace ZR.Service.Repair
 
         public async Task<bool> CopyToHistory(string sId)
         {
-            string sSQL = @" Insert into IMES.M_RETURNSTATION_HEADER_HT
-                         Select * from IMES.M_RETURNSTATION_HEADER  where ID  = '" + sId + "' ";
+            string sSQL = @" Insert INTO SAJET.M_RETURNSTATION_HEADER_HT
+                         Select * FROM SAJET.M_RETURNSTATION_HEADER  where ID  = '" + sId + "' ";
        
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
 
@@ -202,8 +202,8 @@ namespace ZR.Service.Repair
 
         public async Task<bool> CopyToDetailHistory(string sId)
         {
-            string sSQL = $@" Insert into IMES.M_RETURNSTATION_DETAIL_HT 
-                         Select * from IMES.M_RETURNSTATION_DETAIL
+            string sSQL = $@" Insert INTO SAJET.M_RETURNSTATION_DETAIL_HT 
+                         Select * FROM SAJET.M_RETURNSTATION_DETAIL
                          where id = '{sId}'";
 
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
@@ -256,7 +256,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-               string  sSQL = @" Update IMES.M_RETURNSTATION_HEADER     
+               string  sSQL = @" update SAJET.M_RETURNSTATION_HEADER     
                       set MODEL = @MODEL,CATEGORY = @CATEGORY,TOTAL_MATERIAL = @TOTAL_MATERIAL,KOLKATA = @KOLKATA ,
                        UPDATE_EMPNO = @UPDATE_EMPNO ,UPDATE_TIME = SYSDATE  where id = @id ";
 
@@ -286,7 +286,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = @" Update IMES.M_RETURNSTATION_DETAIL set set MODEL = @MODEL,CATEGORY = @CATEGORY
+                string sSQL = @" update SAJET.M_RETURNSTATION_DETAIL set set MODEL = @MODEL,CATEGORY = @CATEGORY
                                ,RETURNSTATION_TYPE = @RETURNSTATION_TYPE
                                ,UNLINKEDMATERIAL = @UNLINKEDMATERIAL 
                                ,UPDATE_EMPNO = @UPDATE_USERID 
@@ -323,7 +323,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = @" Update IMES.M_RETURNSTATION_HEADER set Enabled = '" + modelInfo.Enabled + "' ,UPDATE_EMPNO = '" + userNo + "' ,UPDATE_TIME = SYSDATE where  ID = '" + modelInfo.ID + "'";
+                string sSQL = @" update SAJET.M_RETURNSTATION_HEADER set Enabled = '" + modelInfo.Enabled + "' ,UPDATE_EMPNO = '" + userNo + "' ,UPDATE_TIME = SYSDATE where  ID = '" + modelInfo.ID + "'";
 
                 var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
 
@@ -345,7 +345,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = @" Update IMES.M_RETURNSTATION_DETAIL set Enabled = '" + modelInfo.Enabled + "' ,UPDATE_EMPNO = '" + userNo + "' ,UPDATE_TIME = SYSDATE where  ID = '" + modelInfo.ID + "'";
+                string sSQL = @" update SAJET.M_RETURNSTATION_DETAIL set Enabled = '" + modelInfo.Enabled + "' ,UPDATE_EMPNO = '" + userNo + "' ,UPDATE_TIME = SYSDATE where  ID = '" + modelInfo.ID + "'";
 
                 var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
 
@@ -364,7 +364,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getStage(string sName)
         {
-            string sSQL = " Select * from IMES.M_RETURNSTATION_DETAIL "
+            string sSQL = " Select * FROM SAJET.M_RETURNSTATION_DETAIL "
                     + " where CATEGORY = '" + sName + "'";
             DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
 
@@ -373,7 +373,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getStage(detailPartStation stations)
         {
-            string sSQL = $@"Select * from IMES.M_RETURNSTATION_DETAIL  Where RETURNSTATION_TYPE = '{stations.returnStationType}' and CATEGORY='{stations.category}'
+            string sSQL = $@"Select * FROM SAJET.M_RETURNSTATION_DETAIL  Where RETURNSTATION_TYPE = '{stations.returnStationType}' and CATEGORY='{stations.category}'
                                 and UNLINKEDMATERIAL='{stations.unLinkmaterial}' and KOLKATA= {Int32.Parse(stations.kolkata)} and model='{stations.model}' and area='{stations.area}' ";
 
             DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
@@ -386,7 +386,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = string.Format(@" Update IMES.M_RETURNSTATION_HEADER set Enabled = 'D'  ,UPDATE_EMPNO ='{0}',,UPDATE_TIME = SYSDATE ,where ID = '{1}' ", userNo, sId);
+                string sSQL = string.Format(@" update SAJET.M_RETURNSTATION_HEADER set Enabled = 'D'  ,UPDATE_EMPNO ='{0}',,UPDATE_TIME = SYSDATE ,where ID = '{1}' ", userNo, sId);
 
                 var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
 
@@ -412,7 +412,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = string.Format(@" Update IMES.M_RETURNSTATION_DETAIL set Enabled = 'D'  ,UPDATE_EMPNO ='{0}',,UPDATE_TIME = SYSDATE ,where ID = '{1}' ", userNo, sId);
+                string sSQL = string.Format(@" update SAJET.M_RETURNSTATION_DETAIL set Enabled = 'D'  ,UPDATE_EMPNO ='{0}',,UPDATE_TIME = SYSDATE ,where ID = '{1}' ", userNo, sId);
 
                 var affected = await Context.Ado.ExecuteCommandAsync(sSQL);
 
@@ -435,7 +435,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> HistoryData(string sName)
         {
-          string sSQL = string.Format(@"Select a.Stage,a.Stage_Desc,a.ENABLED,b.emp_name,a.UPDATE_TIME from IMES.M_RETURNSTATION_HEADER_HT a,IMES.M_EMP b 
+          string sSQL = string.Format(@"Select a.Stage,a.Stage_Desc,a.ENABLED,b.emp_name,a.UPDATE_TIME FROM SAJET.M_RETURNSTATION_HEADER_HT a,IMES.M_EMP b 
                          Where a.ID='{0}' and a.UPDATE_EMPNO = b.emp_no(+) Order By a.Update_Time ",sName);
            
           DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
@@ -446,7 +446,7 @@ namespace ZR.Service.Repair
         public async Task<DataTable> DetailHistoryData(string sName)
         {
            string sSQL = string.Format($@" Select a.STATION_TYPE,a.STATIONTYPE_CUSTOMER,a.OPERATE_TYPE,a.CLIENT_TYPE,c.Stage,a.ENABLED,b.emp_name,a.UPDATE_TIME 
-                                          from IMES.M_RETURNSTATION_DETAIL_HT a,IMES.M_EMP b ,IMES.M_RETURNSTATION_HEADER c
+                                          FROM SAJET.M_RETURNSTATION_DETAIL_HT a,IMES.M_EMP b ,IMES.M_RETURNSTATION_HEADER c
                                           Where a.ID = '{sName}'  and a.UPDATE_EMPNO = b.emp_no(+) and a.STAGE = c.STAGE(+) 
                                            Order By a.Update_Time ");
             DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
@@ -465,7 +465,7 @@ namespace ZR.Service.Repair
             string sMaxID = (string)exeRes.Anything;
             try
             {
-                string sSQL = @"MERGE INTO IMES.M_RETURNSTATION_DETAIL T1
+                string sSQL = @"MERGE INTO SAJET.M_RETURNSTATION_DETAIL T1
                               USING (SELECT  @ID             AS ID,
                                              @MODEL    AS MODEL,
                                              @CATEGORY    AS CATEGORY,

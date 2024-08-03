@@ -28,7 +28,7 @@ namespace ZR.Service.Repair
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = @" select  a.*  from imes.M_REPAIR_FAE_TRANSFER_USERS a where 1=1 ";
+                string sqlStr = @" select  a.*  FROM SAJET.M_REPAIR_FAE_TRANSFER_USERS a where 1=1 ";
 
                 if (!string.IsNullOrEmpty(retData.sFieldName) && !string.IsNullOrEmpty(retData.sFieldText))
                 {
@@ -63,7 +63,7 @@ namespace ZR.Service.Repair
             try
             {
                 string sqlStr = @" select A.*
-                                     from IMES.M_REPAIR_FAE_TRANSFER_USERS A
+                                     FROM SAJET.M_REPAIR_FAE_TRANSFER_USERS A
                                      WHERE EMP_NO=@EMP_NO
                                            and a.enabled= 'Y'";
                 
@@ -122,7 +122,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = @" Insert into IMES.M_REPAIR_FAE_TRANSFER_USERS 
+                string sSQL = @" Insert INTO SAJET.M_REPAIR_FAE_TRANSFER_USERS 
                    (ID, EMP_NO,EMP_NAME,LAB,PHONE_NO,ENABLED,UPDATE_empno,CREATE_EMPNO) 
                    Values (@ID,@EMP_NO,@EMP_NAME,@LAB,@PHONE_NO ,'Y',@UPDATE_empno,@CREATE_EMPNO) ";
 
@@ -152,8 +152,8 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @" insert into IMES.M_REPAIR_FAE_TRANSFER_USERS_HT 
-                                    ( select * from IMES.M_REPAIR_FAE_TRANSFER_USERS a where a.ID =@ID )";
+                string sqlStr = @" insert INTO SAJET.M_REPAIR_FAE_TRANSFER_USERS_HT 
+                                    ( select * FROM SAJET.M_REPAIR_FAE_TRANSFER_USERS a where a.ID =@ID )";
                
                 var affected = await Context.Ado.ExecuteCommandAsync(sqlStr, new List<SugarParameter>
               {
@@ -175,7 +175,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-              string  sSQL = @" Update IMES.M_REPAIR_FAE_TRANSFER_USERS 
+              string  sSQL = @" update SAJET.M_REPAIR_FAE_TRANSFER_USERS 
                        set EMP_NO = @EMP_NO 
                           ,EMP_NAME = @EMP_NAME 
                           ,LAB = @LAB 
@@ -231,7 +231,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @" update IMES.M_REPAIR_FAE_TRANSFER_USERS a set a.enabled='Y' where a.ID = @ID  ";
+                string sqlStr = @" update SAJET.M_REPAIR_FAE_TRANSFER_USERS a set a.enabled='Y' where a.ID = @ID  ";
                 var affected = await Context.Ado.ExecuteCommandAsync(sqlStr, new List<SugarParameter>
               {
                 new SugarParameter("@ID", ID)
@@ -252,7 +252,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @" update IMES.M_REPAIR_FAE_TRANSFER_USERS a set a.enabled='N' where a.ID = @ID  ";
+                string sqlStr = @" update SAJET.M_REPAIR_FAE_TRANSFER_USERS a set a.enabled='N' where a.ID = @ID  ";
                 var affected = await Context.Ado.ExecuteCommandAsync(sqlStr, new List<SugarParameter>
                 {
                   new SugarParameter("@ID", ID)
@@ -362,7 +362,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @" SELECT * FROM IMES.M_REPAIR_FAE_TRANSFER_USERS_HT A WHERE A.ID = @V_ID ORDER BY A.UPDATE_TIME DESC ";
+                string sqlStr = @" SELECT * FROM SAJET.M_REPAIR_FAE_TRANSFER_USERS_HT A WHERE A.ID = @V_ID ORDER BY A.UPDATE_TIME DESC ";
 
                 DataTable tempDt = await Context.Ado.GetDataTableAsync(sqlStr, new List<SugarParameter>
                 {

@@ -63,7 +63,7 @@ namespace ZR.Service.WoManagement
         public int UpdatePWoBom(WoBom model)
         {
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
             var response = Context.Updateable(model).UpdateColumns(it => new { it.ItemGroup, it.ItemCount, it.StationType,it.UpdateEmpno,it.UpdateTime }).WhereColumns(a => new { a.Id}).ExecuteCommand();
             return response;
         }
@@ -101,7 +101,7 @@ namespace ZR.Service.WoManagement
                     var response = sqlfrist;
                 if (sqlfrist[0].ItemGroup == "0")
                 {
-                    sitemgroup = Context.Ado.SqlQuery<string>(@"Select NVL(MAX(ITEM_GROUP),0)+1 ITEM_GROUP from IMES.P_WO_BOM where work_order=@wo", new List<SugarParameter> { new SugarParameter("@wo", param[0].WorkOrder) })[0];
+                    sitemgroup = Context.Ado.SqlQuery<string>(@"Select NVL(MAX(ITEM_GROUP),0)+1 ITEM_GROUP FROM SAJET.P_WO_BOM where work_order=@wo", new List<SugarParameter> { new SugarParameter("@wo", param[0].WorkOrder) })[0];
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace ZR.Service.WoManagement
                 else
                 {
                     //备份
-                    Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", item.Id) });
+                    Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", item.Id) });
                     var response = Context.Updateable(item).UpdateColumns(it => new { it.ItemGroup, it.UpdateEmpno, it.UpdateTime }).WhereColumns(a => new { a.Id }).ExecuteCommand();
                 }
             }
@@ -137,7 +137,7 @@ namespace ZR.Service.WoManagement
             if(model.ItemGroup=="0")
             {
                 //备份
-                Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+                Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
                 var response = Context.Deleteable(model).Where(it=>it.Id == model.Id).ExecuteCommand();
                 return response;
             }
@@ -147,17 +147,17 @@ namespace ZR.Service.WoManagement
                 if(result > 2)
                 {
                     //大于2笔自接删除
-                    Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+                    Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
                     var response = Context.Deleteable(model).Where(it => it.Id == model.Id).ExecuteCommand();
                     return response;
                 }
                 else
                 {
                     //等于2笔，剩余的group改为0
-                    Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+                    Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
                     var response = Context.Deleteable(model).Where(it => it.Id == model.Id).ExecuteCommand();
-                    Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where WORK_ORDER = :pwo AND ITEM_GROUP = :pgroup AND SITE = :site", new List<SugarParameter> { new SugarParameter(":pwo", model.WorkOrder), new SugarParameter(":pgroup", model.ItemGroup), new SugarParameter(":site", model.Site) });
-                    Context.Ado.ExecuteCommand("update IMES.P_WO_BOM set ITEM_GROUP = 0 ,UPDATE_TIME = sysdate,UPDATE_EMPNO = :pemp WHERE WORK_ORDER = :pwo AND ITEM_GROUP = :pgroup AND SITE = :site",new List<SugarParameter> { new SugarParameter(":pemp",model.UpdateEmpno),new SugarParameter(":pwo",model.WorkOrder),new SugarParameter(":pgroup", model.ItemGroup),new SugarParameter(":site",model.Site)});
+                    Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where WORK_ORDER = :pwo AND ITEM_GROUP = :pgroup AND SITE = :site", new List<SugarParameter> { new SugarParameter(":pwo", model.WorkOrder), new SugarParameter(":pgroup", model.ItemGroup), new SugarParameter(":site", model.Site) });
+                    Context.Ado.ExecuteCommand("update SAJET.P_WO_BOM set ITEM_GROUP = 0 ,UPDATE_TIME = sysdate,UPDATE_EMPNO = :pemp WHERE WORK_ORDER = :pwo AND ITEM_GROUP = :pgroup AND SITE = :site",new List<SugarParameter> { new SugarParameter(":pemp",model.UpdateEmpno),new SugarParameter(":pwo",model.WorkOrder),new SugarParameter(":pgroup", model.ItemGroup),new SugarParameter(":site",model.Site)});
                     return response;
                 }
             }
@@ -170,7 +170,7 @@ namespace ZR.Service.WoManagement
         public int DeletePWoBom(WoBom model)
         {
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.P_WO_BOM_HT select * from IMES.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BOM_HT select * FROM SAJET.P_WO_BOM where ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.Id) });
             var response = Context.Deleteable(model).ExecuteCommand();
             return response;
         }
@@ -191,8 +191,8 @@ namespace ZR.Service.WoManagement
             }
             string sqlchecwoipn = @"SELECT work_order FROM  IMES.P_WO_BASE A where A.WORK_ORDER=@wo and a.ipn=@ipn and A.SITE= @site";
             string sqlchecitemipn = @"SELECT IPN FROM  IMES.M_PART A where A.ipn=@ipn and A.SITE= @site";
-            string ssqlht = @"INSERT INTO IMES.P_WO_BOM_ht SELECT * FROM IMES.P_WO_BOM WHERE work_order = @wo";
-            string sqlclear = @"DELETE  FROM IMES.P_WO_BOM  WHERE WORK_ORDER= @wo";
+            string ssqlht = @"INSERT INTO SAJET.P_WO_BOM_ht SELECT * FROM SAJET.P_WO_BOM WHERE work_order = @wo";
+            string sqlclear = @"DELETE  FROM SAJET.P_WO_BOM  WHERE WORK_ORDER= @wo";
             string sqlcheckstationtype = @"SELECT STATION_TYPE FROM  IMES.M_STATION_TYPE A where A.STATION_TYPE=@stationtype and A.SITE= @site";
             foreach (var wobom in woboms)
             {

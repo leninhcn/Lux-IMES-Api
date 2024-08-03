@@ -43,7 +43,7 @@ namespace ZR.Service.PordService
             imes.updateTime = DateTime.Now;
             imes.id = Context.Queryable<ImesMpkspec>().Max(it => it.id) + 1;
             int insertMpk = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
-            string insertHt = $"insert into IMES.M_PKSPEC_HT(select * from imes.M_PKSPEC where id= " + imes.id+ " and PKSPEC_NAME='"+ pkspecName + "'";
+            string insertHt = $"insert INTO SAJET.M_PKSPEC_HT(select * FROM SAJET.M_PKSPEC where id= " + imes.id+ " and PKSPEC_NAME='"+ pkspecName + "'";
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -57,7 +57,7 @@ namespace ZR.Service.PordService
             var id = imes.id;
             string site = imes.site;
             string pkspecName = imes.pkspecName;
-            string insertHt = $"insert into IMES.M_PKSPEC_HT(select * from imes.M_PKSPEC where id= " + imes.id + " and PKSPEC_NAME='" + pkspecName + "'";
+            string insertHt = $"insert INTO SAJET.M_PKSPEC_HT(select * FROM SAJET.M_PKSPEC where id= " + imes.id + " and PKSPEC_NAME='" + pkspecName + "'";
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -73,7 +73,7 @@ namespace ZR.Service.PordService
             string site = imes.site;
             string pkspecName = imes.pkspecName;
             imes.updateTime = DateTime.Now;
-            string insertHt = $"insert into IMES.M_PKSPEC_HT(select * from imes.M_PKSPEC where id= " + imes.id + " and PKSPEC_NAME='" + pkspecName + "'";
+            string insertHt = $"insert INTO SAJET.M_PKSPEC_HT(select * FROM SAJET.M_PKSPEC where id= " + imes.id + " and PKSPEC_NAME='" + pkspecName + "'";
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -86,7 +86,7 @@ namespace ZR.Service.PordService
 
         public object MntnPackSpeclistHt(string pkspecName, string id, string site)
         {
-            return Context.Ado.SqlQuery<object>($"select * from imes.M_PKSPEC_HT where PKSPEC_NAME ='" + pkspecName + "' and ID ='" + id + "' and site = '" + site + "'");
+            return Context.Ado.SqlQuery<object>($"select * FROM SAJET.M_PKSPEC_HT where PKSPEC_NAME ='" + pkspecName + "' and ID ='" + id + "' and site = '" + site + "'");
         }
 
     }

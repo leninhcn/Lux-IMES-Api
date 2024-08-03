@@ -94,7 +94,7 @@ namespace ZR.Service
                 param.Id = Guid.NewGuid().ToString("N").ToUpper();
                 int i = Context.Insertable(param).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             //备份
-           // Context.Ado.ExecuteCommand("insert into IMES.M_DUTY_HT select * from IMES.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+           // Context.Ado.ExecuteCommand("insert INTO SAJET.M_DUTY_HT select * FROM SAJET.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
             return i==1?"OK":"插入失败";
             //待增加保存模板功能
             }
@@ -116,7 +116,7 @@ namespace ZR.Service
             //更新其它相关表
             if(result >0)
             {
-                var sql=@"UPDATE IMES.M_STATIONTYPE_LABEL SET LABEL_NAME=@1,LABEL_DESC=@2,LABEL_PARAMS=@3,UPDATE_EMPNO=@4,UPDATE_TIME=SYSDATE WHERE LABEL_TYPE=@5 AND LABEL_NAME=@6 AND IPN=@7";
+                var sql=@"update SAJET.M_STATIONTYPE_LABEL SET LABEL_NAME=@1,LABEL_DESC=@2,LABEL_PARAMS=@3,UPDATE_EMPNO=@4,UPDATE_TIME=SYSDATE WHERE LABEL_TYPE=@5 AND LABEL_NAME=@6 AND IPN=@7";
                 Context.Ado.ExecuteCommand(sql, new List<SugarParameter> { new SugarParameter("@1", param.LabelName), new SugarParameter("@2", param.LabelTypeDesc), new SugarParameter("@3", param.TypeFlag), new SugarParameter("@4", param.UpdateEmpno), new SugarParameter("@5", param.LabelType), new SugarParameter("@6", param.LabelName), new SugarParameter("@7", param.Ipn) });
             }
             return "OK";
@@ -184,7 +184,7 @@ namespace ZR.Service
                 param.Id = Guid.NewGuid().ToString("N").ToUpper();
                 int i = Context.Insertable(param).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份
-                // Context.Ado.ExecuteCommand("insert into IMES.M_DUTY_HT select * from IMES.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+                // Context.Ado.ExecuteCommand("insert INTO SAJET.M_DUTY_HT select * FROM SAJET.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
                 return i == 1 ? "OK" : "插入失败";
                 //待增加保存模板功能
             }
@@ -268,7 +268,7 @@ namespace ZR.Service
                 param.Id = Guid.NewGuid().ToString("N").ToUpper();
                 int i = Context.Insertable(param).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份
-                // Context.Ado.ExecuteCommand("insert into IMES.M_DUTY_HT select * from IMES.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+                // Context.Ado.ExecuteCommand("insert INTO SAJET.M_DUTY_HT select * FROM SAJET.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
                 return i == 1 ? "OK" : "插入失败";
                 //待增加保存模板功能
             }
@@ -350,7 +350,7 @@ namespace ZR.Service
                 param.Id=Guid.NewGuid().ToString("N").ToUpper();
                 int i = Context.Insertable(param).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份
-                // Context.Ado.ExecuteCommand("insert into IMES.M_DUTY_HT select * from IMES.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
+                // Context.Ado.ExecuteCommand("insert INTO SAJET.M_DUTY_HT select * FROM SAJET.M_DUTY where ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.Id ) });
                 return i == 1 ? "OK" : "插入失败";
                 //待增加保存模板功能
             }

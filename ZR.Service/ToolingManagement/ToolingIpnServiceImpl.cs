@@ -29,7 +29,7 @@ namespace ZR.Service.ToolingManagement
             var count = Context.Queryable<MToolingIpn>().Where(it=> it.ToolingId == toolingId).Count();
             if (count > 0)
             {
-                string sqlStr = string.Format(@"INSERT INTO IMES.M_TOOLING_IPN_HT (SELECT * FROM IMES.M_TOOLING_IPN WHERE TOOLING_ID = {0} )", toolingId);
+                string sqlStr = string.Format(@"INSERT INTO SAJET.M_TOOLING_IPN_HT (SELECT * FROM SAJET.M_TOOLING_IPN WHERE TOOLING_ID = {0} )", toolingId);
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -42,7 +42,7 @@ namespace ZR.Service.ToolingManagement
             var count = Context.Queryable<MToolingIpn>().Where(it => it.ToolingId == toolingId).Count();
             if (count > 0)
             {
-                string sqlStr = string.Format(@"DELETE FROM IMES.M_TOOLING_IPN WHERE TOOLING_ID = {0} ", toolingId);
+                string sqlStr = string.Format(@"DELETE FROM SAJET.M_TOOLING_IPN WHERE TOOLING_ID = {0} ", toolingId);
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }

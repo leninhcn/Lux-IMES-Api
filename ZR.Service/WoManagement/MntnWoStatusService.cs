@@ -39,7 +39,7 @@ namespace ZR.Service.WoManagement
         {
             string result = "OK";
             try { 
-            string sql = @"update imes.p_wo_base set wo_status = @status where ( work_order = @wo or M_WO = @wo1 ) and site = @site";
+            string sql = @"update SAJET.p_wo_base set wo_status = @status where ( work_order = @wo or M_WO = @wo1 ) and site = @site";
             await Context.Ado.ExecuteCommandAsync(sql,
                  new SugarParameter[]
              {

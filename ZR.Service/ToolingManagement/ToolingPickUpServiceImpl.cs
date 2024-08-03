@@ -183,7 +183,7 @@ namespace ZR.Service.ToolingManagement
                 .ToList();
             return resList;
 
-            //string strSql = @"SELECT TOOLING_TYPE FROM IMES.M_LINE WHERE SITE = @SITE AND ENABLED = 'Y'";
+            //string strSql = @"SELECT TOOLING_TYPE FROM SAJET.M_LINE WHERE SITE = @SITE AND ENABLED = 'Y'";
             //var TypeList = Context.Ado.SqlQuery<dynamic>(strSql, new SugarParameter("@SITE", site));
             //List<string> resList = new List<string>();
             //foreach (var item in TypeList)

@@ -26,7 +26,7 @@ namespace ZR.Service
 
         public async Task<bool> InsertOBA(string sn, string errorMsg, string line, string stationType, string status, string uid)
         {
-            var sql = @"insert into imes.P_OBA_ERRINFO (serial_number,errcode,line,stationname,trndate,empno,status) values (@1,@2,@3,@4,sysdate,@5,@6)";
+            var sql = @"insert INTO SAJET.P_OBA_ERRINFO (serial_number,errcode,line,stationname,trndate,empno,status) values (@1,@2,@3,@4,sysdate,@5,@6)";
 
             var affected = await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter>
             {

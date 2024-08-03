@@ -227,9 +227,9 @@ namespace ZR.Service
 
         public async Task<List<dynamic>> GetModel(string mainSn)
         {
-            string sql = @"SELECT B.MODEL FROM IMES.P_SN_STATUS A,IMES.M_PART B,(select distinct MODEL from (
+            string sql = @"SELECT B.MODEL FROM SAJET.P_SN_STATUS A,IMES.M_PART B,(select distinct MODEL from (
               select regexp_substr(q.CONFIG_VALUE, '[^,]+', 1, ROWNUM) MODEL, CONFIG_NAME
-              from IMES.M_BLOCK_CONFIG_VALUE q
+              FROM SAJET.M_BLOCK_CONFIG_VALUE q
                connect by ROWNUM <= LENGTH(q.CONFIG_VALUE) - LENGTH(REGEXP_REPLACE(q.CONFIG_VALUE, ',', '')) + 1)
                   WHERE CONFIG_NAME = 'IsCheckSN' order by MODEL) V
                     WHERE A.IPN = B.IPN AND A.SERIAL_NUMBER = @sn
@@ -484,7 +484,7 @@ namespace ZR.Service
                                 AND CC.SERIAL_NUMBER = @sn
                                 AND BB.ITEM_IPN = A.IPN    AND BB.ITEM_COUNT!='0') a
                                 left join (                                
-                                select item_ipn,nvl(count(*),0) count from imes.p_sn_keyparts where serial_number =@sn
+                                select item_ipn,nvl(count(*),0) count FROM SAJET.p_sn_keyparts where serial_number =@sn
                                 group by item_ipn) b on A.item_ipn=b.item_ipn) c
                                 order by status,ITEM_IPN ASC";
             var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> {
@@ -688,7 +688,7 @@ namespace ZR.Service
 
         public async Task<DataTable> GetHDDInfo(string sn)
         {
-            var sql = "SELECT T.ITEM_IPN, T.ITEM_SN, T.ITEM_GROUP, T.MES_SPEC, T.SLOT FROM IMES.P_SN_KEYPARTS T WHERE T.SERIAL_NUMBER = @sn AND REGEXP_LIKE  (T.ITEM_IPN , '80322|8033|TEST' ) ORDER BY ITEM_IPN ";
+            var sql = "SELECT T.ITEM_IPN, T.ITEM_SN, T.ITEM_GROUP, T.MES_SPEC, T.SLOT FROM SAJET.P_SN_KEYPARTS T WHERE T.SERIAL_NUMBER = @sn AND REGEXP_LIKE  (T.ITEM_IPN , '80322|8033|TEST' ) ORDER BY ITEM_IPN ";
             return await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@sn", sn) });
         }
 
@@ -703,10 +703,10 @@ namespace ZR.Service
         {
             try
             {
-                var sql = @"insert into imes.p_sn_keyparts_ht select * from imes.p_sn_keyparts_ht where serial_number = @sn and item_group = 'FIXED_ASSETS'";
+                var sql = @"insert INTO SAJET.p_sn_keyparts_ht select * FROM SAJET.p_sn_keyparts_ht where serial_number = @sn and item_group = 'FIXED_ASSETS'";
                 await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter> { new SugarParameter("@sn", sn) });
 
-                sql = @"delete from imes.p_sn_keyparts where serial_number = @sn and item_group = 'FIXED_ASSETS'";
+                sql = @"delete FROM SAJET.p_sn_keyparts where serial_number = @sn and item_group = 'FIXED_ASSETS'";
 
                 await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter> { new SugarParameter("@sn", sn) });
             }
@@ -720,7 +720,7 @@ namespace ZR.Service
 
         public async Task<DataTable> GetIPNAPNBySN(string sn)
         {
-            var sql = @"select nvl(a.ipn,'null') ipn,nvl(a.apn,'null') apn from imes.m_part a, imes.p_sn_status b
+            var sql = @"select nvl(a.ipn,'null') ipn,nvl(a.apn,'null') apn FROM SAJET.m_part a, imes.p_sn_status b
                         where a.ipn = b.ipn
                         and b.serial_number = @sn";
 
@@ -735,12 +735,12 @@ namespace ZR.Service
 
         public async Task<string> CheckIPN(string sn)
         {
-            var sql = @"select b.config_value from IMES.M_BLOCK_CONFIG_TYPE a,IMES.M_BLOCK_CONFIG_VALUE b where a.config_type_id = b.config_type_id and a.config_type_name = 'AL_FIXED_ASSETS_IPN'";
+            var sql = @"select b.config_value FROM SAJET.M_BLOCK_CONFIG_TYPE a,IMES.M_BLOCK_CONFIG_VALUE b where a.config_type_id = b.config_type_id and a.config_type_name = 'AL_FIXED_ASSETS_IPN'";
             var dt = await Context.Ado.GetDataTableAsync(sql);
 
             if (dt.Rows[0]["config_value"].ToString() != "")
             {
-                sql = @"select * from IMES.P_SN_TRAVEL where serial_number = @sn";
+                sql = @"select * FROM SAJET.P_SN_TRAVEL where serial_number = @sn";
                 string[] arr = dt.Rows[0]["config_value"].ToString().Split(',');
                 string where = "";
                 for (int i = 0; i < arr.Length; i++)
@@ -769,7 +769,7 @@ namespace ZR.Service
         {
             try
             {
-                var sql = @"select * from imes.m_al_fixed_assets where serial_number = @sn";
+                var sql = @"select * FROM SAJET.m_al_fixed_assets where serial_number = @sn";
                 return await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@sn", sn) });
             }
             catch
@@ -782,7 +782,7 @@ namespace ZR.Service
         {
             try
             {
-                var sql = @"select * from (select * from imes.m_al_fixed_assets where is_used = 'N' order by id) where rownum = 1";
+                var sql = @"select * from (select * FROM SAJET.m_al_fixed_assets where is_used = 'N' order by id) where rownum = 1";
                 return await Context.Ado.GetDataTableAsync(sql);
             }
             catch
@@ -795,7 +795,7 @@ namespace ZR.Service
         {
             try
             {
-                var sql = @"update imes.m_al_fixed_assets
+                var sql = @"update SAJET.m_al_fixed_assets
                 set serial_number=@sn, brand=@brand,model=@model,ali_model_code=@code,
                 configuration=@conf,is_used='Y',update_time=sysdate,update_emp=@uid
                 where td_id = @tdId";
@@ -810,7 +810,7 @@ namespace ZR.Service
                     new SugarParameter("@tdId", tdId),
                 });
 
-                sql = @"insert into imes.m_al_fixed_assets_ht select td_id,serial_number,BRAND,MODEL,ALI_MODEL_CODE,CONFIGURATION,OPTION_1,OPTION_2,OPTION_3,sysdate create_time,UPDATE_TIME,UPDATE_EMP,ID from imes.m_al_fixed_assets from imes.m_al_fixed_assets
+                sql = @"insert INTO SAJET.m_al_fixed_assets_ht select td_id,serial_number,BRAND,MODEL,ALI_MODEL_CODE,CONFIGURATION,OPTION_1,OPTION_2,OPTION_3,sysdate create_time,UPDATE_TIME,UPDATE_EMP,ID FROM SAJET.m_al_fixed_assets FROM SAJET.m_al_fixed_assets
                 where td_id = @tdId";
 
                 await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter> {

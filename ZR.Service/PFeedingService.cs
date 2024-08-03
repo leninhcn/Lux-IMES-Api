@@ -87,7 +87,7 @@ namespace ZR.Service.Business
             var MACHINE = Context.Ado.SqlQuerySingle<dynamic>(
                       @"
                        SELECT M.MACHINE_CODE,M.MACHINE_DESC,M.MACHINE_TYPE,
-                       G.STATION_TYPE,M.STAGE,M.LINE FROM IMES.M_MACHINE M
+                       G.STATION_TYPE,M.STAGE,M.LINE FROM SAJET.M_MACHINE M
                        LEFT JOIN IMES.M_MACHINE_GROUP G ON (M.GROUP_ID=G.ID)
                        WHERE ROWNUM= 1 AND M.MACHINE_CODE =@MACHINE_CODE
                        AND M.SITE=@SITE AND M.ENABLED =@ENABLED",
@@ -127,7 +127,7 @@ namespace ZR.Service.Business
             // List<string> woBom = BomList(model);
 
             //通过扫描的批次号查询查询发料记录表
-            //string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  From IMES.P_MATERIAL WHERE 
+            //string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  FROM SAJET.P_MATERIAL WHERE 
             //REEL_NO= '" + Tools.FormatStr(model.Batchno) + "'  AND SITE = '" + model.Site + "' ";
             //var MATERIAL = Context.Ado.SqlQuerySingle<dynamic>(sSQL);
 
@@ -337,7 +337,7 @@ namespace ZR.Service.Business
          var MACHINE = Context.Ado.SqlQuerySingle<dynamic>(
               @"
                        SELECT M.MACHINE_CODE,M.MACHINE_DESC,M.MACHINE_TYPE,
-                       G.STATION_TYPE,M.STAGE,M.LINE FROM IMES.M_MACHINE M
+                       G.STATION_TYPE,M.STAGE,M.LINE FROM SAJET.M_MACHINE M
                        LEFT JOIN IMES.M_MACHINE_GROUP G ON (M.GROUP_ID=G.ID)
                        WHERE ROWNUM= 1 AND M.MACHINE_CODE =@MACHINE_CODE
                        AND M.SITE=@SITE AND M.ENABLED =@ENABLED",
@@ -354,7 +354,7 @@ namespace ZR.Service.Business
 
             //卡控这个设备允许哪些物料上料
             var okIpn = @"SELECT DISTINCT M.IPN,M.ID,M.ITEM_IPN,STATION_TYPE
-            FROM IMES.M_BILL_MATERIAL M
+            FROM SAJET.M_BILL_MATERIAL M
             LEFT JOIN  IMES.P_WO_BASE B ON(M.IPN = B.IPN)
             WHERE M.STATION_TYPE = "+ MACHINE.STATION_TYPE + "";
             // var list = Context.Ado.Queryable<dynamic>(okIpn).ToList();
@@ -367,7 +367,7 @@ namespace ZR.Service.Business
             List<string> woBom = BomList(model);
 
             //通过扫描的批次号查询查询发料记录表
-            string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  From IMES.P_MATERIAL WHERE 
+            string sSQL = @"SELECT REEL_NO,REEL_QTY,KEEP_QTY, IPN,LOT_NO  FROM SAJET.P_MATERIAL WHERE 
             REEL_NO= '" + Tools.FormatStr(model.Batchno) + "'  AND SITE = '" + model.Site + "' ";
             var MATERIAL = Context.Ado.SqlQuerySingle<dynamic>(sSQL);
 
@@ -390,7 +390,7 @@ namespace ZR.Service.Business
         public PWoCutting QueryPFeedingorder()
         {
 
-            string sql = @" SELECT* FROM(SELECT ROWNUM AS RN, ID, WORK_ORDER, IPN, MODEL, TARGET_QTY, MAX_QTY, OUTPUT_QTY FROM IMES.P_WO_CUTTING
+            string sql = @" SELECT* FROM(SELECT ROWNUM AS RN, ID, WORK_ORDER, IPN, MODEL, TARGET_QTY, MAX_QTY, OUTPUT_QTY FROM SAJET.P_WO_CUTTING
 WHERE CLOSED= 'N' AND ENABLED = 'Y' ORDER BY ID) WHERE RN = 1";
 
 

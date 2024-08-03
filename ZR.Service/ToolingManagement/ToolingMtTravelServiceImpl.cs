@@ -39,7 +39,7 @@ namespace ZR.Service.ToolingManagement
                 string sqlStr = @"SELECT TO_CHAR (MAX (A.UPDATE_TIME1), 'yyyy-mm-dd hh24:mi:ss')       update_time,
                                  A.TOOLING_SN,
                                  B.MAINTAIN_TIME
-                            FROM imes.m_TOOLING_SN_ht a
+                            FROM SAJET.m_TOOLING_SN_ht a
                                  LEFT JOIN IMES.M_TOOLING B ON A.TOOLING_ID = B.ID
                            WHERE A.TOOLING_SN = '" + Tooling + @"' AND A.TOOLING_STATUS IN ( 'I','P','D','M')
                         GROUP BY A.TOOLING_SN, B.MAINTAIN_TIME";
@@ -76,7 +76,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sql = "UPDATE IMES.M_TOOLING_SN SET TOOLING_SN_DESC = '超时' WHERE TOOLING_SN ='" + Tooling + "'";
+                string sql = "update SAJET.M_TOOLING_SN SET TOOLING_SN_DESC = '超时' WHERE TOOLING_SN ='" + Tooling + "'";
                 Context.Ado.SqlQuery<string>(sql);
                 exeRes.Status = true;
             }
@@ -93,7 +93,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = @"SELECT TOTAL_USED_COUNT FROM IMES.M_TOOLING_SN WHERE TOOLING_SN = '" + Tooling + "'";
+                string sqlStr = @"SELECT TOTAL_USED_COUNT FROM SAJET.M_TOOLING_SN WHERE TOOLING_SN = '" + Tooling + "'";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }
@@ -111,7 +111,7 @@ namespace ZR.Service.ToolingManagement
             {
                 exeRes = new ExecuteResult();
                 string sqlStr = @"SELECT NVL (B.WARN_UESD_TIMES, 0), NVL (B.MAX_USE_TIMES, 0), NVL (B.MAX_USE_DAY, 0),  NVL (B.WARN_USED_DAY, 0)  
-                                FROM IMES.M_TOOLING_SN A, IMES.M_TOOLING B  WHERE A.TOOLING_SN ='" + Tooling + "'  AND A.TOOLING_ID = B.ID  AND ROWNUM = 1";
+                                FROM SAJET.M_TOOLING_SN A, IMES.M_TOOLING B  WHERE A.TOOLING_SN ='" + Tooling + "'  AND A.TOOLING_ID = B.ID  AND ROWNUM = 1";
                 exeRes.Anything = Context.Ado.GetDataTable(sqlStr);
                 exeRes.Status = true;
             }
@@ -130,11 +130,11 @@ namespace ZR.Service.ToolingManagement
             try
             {
 
-                string sql = "UPDATE IMES.M_TOOLING_LOAD SET STATUS = '" + status + "' , UPDATE_EMPNO = '" + empno + "',UPDATE_TIME = SYSDATE WHERE TOOLING_SN = '" + toolingsn + "' AND SITE = '" + site + "'";
+                string sql = "update SAJET.M_TOOLING_LOAD SET STATUS = '" + status + "' , UPDATE_EMPNO = '" + empno + "',UPDATE_TIME = SYSDATE WHERE TOOLING_SN = '" + toolingsn + "' AND SITE = '" + site + "'";
                 Context.Ado.SqlQuery<string>(sql);
 
 
-                sql = "INSERT INTO IMES.M_HT_TOOLING_LOAD (SELECT * FROM IMES.M_TOOLING_LOAD  WHERE TOOLING_SN = '" + toolingsn + "' AND SITE = '" + site + "')";
+                sql = "INSERT INTO SAJET.M_HT_TOOLING_LOAD (SELECT * FROM SAJET.M_TOOLING_LOAD  WHERE TOOLING_SN = '" + toolingsn + "' AND SITE = '" + site + "')";
                 Context.Ado.SqlQuery<string>(sql);
                 exeRes.Status= true;
             }
@@ -160,7 +160,7 @@ namespace ZR.Service.ToolingManagement
 
             if (updateType > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_TOOLING_SN_HT(SELECT * FROM IMES.M_TOOLING_SN WHERE TOOLING_SN_ID =  " + toolingsn.ToolingSnId + ")";
+                string sqlStr = $"INSERT INTO SAJET.M_TOOLING_SN_HT(SELECT * FROM SAJET.M_TOOLING_SN WHERE TOOLING_SN_ID =  " + toolingsn.ToolingSnId + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -172,7 +172,7 @@ namespace ZR.Service.ToolingManagement
             try
             {
                 exeRes = new ExecuteResult();
-                string sql = @"INSERT INTO IMES.P_TOOLING_MT_TRAVEL (TOOLING_SN,
+                string sql = @"INSERT INTO SAJET.P_TOOLING_MT_TRAVEL (TOOLING_SN,
                                        UPDATE_EMPNO, 
                                        UPDATE_TIME, 
                                        PRIOR_MAINTAIN_TIME,
@@ -199,7 +199,7 @@ namespace ZR.Service.ToolingManagement
                                             '" + dto.Scrape + @"', 
                                             '" + dto.ViewCheck + @"',
                                             '" + dto.Site + @"'
-                                     FROM IMES.M_TOOLING_SN
+                                     FROM SAJET.M_TOOLING_SN
                                     WHERE TOOLING_SN = '" + dto.ToolingSn + "' AND SITE = '"+ dto.Site+ "'";
                 Context.Ado.SqlQuery<string>(sql);
                 exeRes.Status = true;

@@ -65,7 +65,7 @@ namespace ZR.Service.WoManagement
 
         public List<string> getChejian(string site)
         {
-            string sSQL = $"select distinct LINE_SAP from IMES.M_LINE where Enabled='Y' and LINE_SAP is not null and site = '{site}'";
+            string sSQL = $"select distinct LINE_SAP FROM SAJET.M_LINE where Enabled='Y' and LINE_SAP is not null and site = '{site}'";
 
             var temp = Context.Ado.GetDataTable(sSQL);
 
@@ -86,7 +86,7 @@ namespace ZR.Service.WoManagement
 		            ,a.LTNCODE
 		            ,a.OEETYPE
 		            ,a.DEVPACKSIZE 设备规格
-                    From IMES.HJXS_dv_devCard a 
+                    FROM SAJET.HJXS_dv_devCard a 
                     where (a.OeeType like '%{devType}%') order by a.DevCode";
 
             var temp = Context.Ado.GetDataTable(sSQL);
@@ -98,7 +98,7 @@ namespace ZR.Service.WoManagement
         public DataTable CheckEquipmentCodeStatus (string DevCode)
         {
             string sSQL = $@"Select a.Status,b.UseFlag
-                     From IMES.HJXS_dv_devcard a 
+                     FROM SAJET.HJXS_dv_devcard a 
                      Join IMES.HJXS_dv_status b On a.Status=b.Status
                      Where a.DevCode= '{DevCode}' ";
 
@@ -126,7 +126,7 @@ namespace ZR.Service.WoManagement
                            ,'' 客户型号
                            ,A.WO_STATUS 排产状态
                            ,'' 产品描述
-                    from IMES.P_WO_BASE A
+                    FROM SAJET.P_WO_BASE A
                     --join IMES.HJXS_Gp_Pro_ProWorkshopLine B on A.LINE=B.PROLINE 
                     where A.WO_STATUS in('2','4') and A.WORK_SHOP like '%{Chejian}' order by A.WO_SCHEDULE_START_DATE desc";
 
@@ -137,10 +137,10 @@ namespace ZR.Service.WoManagement
 
         public bool ModuleAuth(string moduleName, string pAction, string site, string empno)
         {
-            string sSql = @$"select b.* from imes.m_role_emp a
+            string sSql = @$"select b.* FROM SAJET.m_role_emp a
                         join imes.m_role_action b on a.role_id = b.role_id and b.enabled = 'Y'
                         join (
-                        select b.id action_id from imes.s_program_fun_name a 
+                        select b.id action_id FROM SAJET.s_program_fun_name a 
                         join imes.s_fun_action b on a.id = b.fun_id and b.action_name = '{pAction}' and b.enabled = 'Y' 
                         where a.function = '{moduleName}'
                         ) c
@@ -155,7 +155,7 @@ namespace ZR.Service.WoManagement
 
         public DataTable getTraceAll(string billNum)
         {
-            string sSql = $@"select EMPNO 操作人工号, EMPNAME 操作人姓名, PROCESS_NAME 操作流程, APPROVAL_TYPE 操作类型, CREATE_TIME 操作时间 from IMES.HJXS_Pie_WtEquDispatch_Trace where BILLCODE='{billNum}'";
+            string sSql = $@"select EMPNO 操作人工号, EMPNAME 操作人姓名, PROCESS_NAME 操作流程, APPROVAL_TYPE 操作类型, CREATE_TIME 操作时间 FROM SAJET.HJXS_Pie_WtEquDispatch_Trace where BILLCODE='{billNum}'";
             var temp = Context.Ado.GetDataTable(sSql);
             return temp;
         }
@@ -188,11 +188,11 @@ namespace ZR.Service.WoManagement
                             ,C.APPLICABLEDIEPRESSB B模具编号
                             ,C.LCPSNUM 发行编号
                             ,C.ECNCOUNT
-                    from IMES.P_WO_BASE A 
+                    FROM SAJET.P_WO_BASE A 
                     --join IMES.HJXS_Gp_Pro_ProWorkshopLine B on A.LINE=B.PROLINE 
                     join IMES.HJXS_e_lcps C on C.ITEMCODE=A.IPN 
                     where A.WORK_ORDER='{worknum}' and ECNCOUNT=0 
-                    and C.LCPSNUM not in(select ISSUENUMBER from IMES.HJXS_Pie_WtEquDispatchList_b where PROLOT='{worknum}') 
+                    and C.LCPSNUM not in(select ISSUENUMBER FROM SAJET.HJXS_Pie_WtEquDispatchList_b where PROLOT='{worknum}') 
                     order by C.CUT_CARDNO";
             var temp = Context.Ado.GetDataTable(sSql);
             return temp;
@@ -249,7 +249,7 @@ namespace ZR.Service.WoManagement
         {
             try
             {
-                string sSQL = $@" update IMES.HJXS_PIE_WTEQUDISPATCHLIST_H
+                string sSQL = $@" update SAJET.HJXS_PIE_WTEQUDISPATCHLIST_H
                           set ProDept='{dto.ProDept}',
                               EquCode='{dto.EquCode}',
                               EquType='{dto.EquType}',
@@ -269,7 +269,7 @@ namespace ZR.Service.WoManagement
 
                 Context.Ado.SqlQuery<string>(sSQL);
 
-                string sqlStr = $"INSERT INTO IMES.HJXS_Pie_WtEquDispatchList_h_HT(SELECT * FROM IMES.HJXS_PIE_WTEQUDISPATCHLIST_H WHERE ID = '{dto.Id}' )";
+                string sqlStr = $"INSERT INTO SAJET.HJXS_Pie_WtEquDispatchList_h_HT(SELECT * FROM SAJET.HJXS_PIE_WTEQUDISPATCHLIST_H WHERE ID = '{dto.Id}' )";
                 Context.Ado.SqlQuery<string>(sqlStr);
 
                 if (sUpdateType.Equals("NEXT"))
@@ -293,7 +293,7 @@ namespace ZR.Service.WoManagement
         {
             try
             {
-                string sqlStr = $@"Insert Into IMES.HJXS_Pie_WtEquDispatch_Trace(ID, BILLCODE, EMPNO, PROCESS_NAME, APPROVAL_TYPE)
+                string sqlStr = $@"Insert INTO SAJET.HJXS_Pie_WtEquDispatch_Trace(ID, BILLCODE, EMPNO, PROCESS_NAME, APPROVAL_TYPE)
                          values(rawtohex(sys_guid()),'{billCode}','{empNo}','{process_name}','{approval_type}')";
                 Context.Ado.SqlQuery<string>(sqlStr);
             }
@@ -321,7 +321,7 @@ namespace ZR.Service.WoManagement
         {
             try
             {
-                string sSQL = $@" update IMES.HJXS_Pie_WtEquDispatchList_b
+                string sSQL = $@" update SAJET.HJXS_Pie_WtEquDispatchList_b
                           set StartTime= '{dispatchListB.StartTime}',
                               EndTime='{dispatchListB.EndTime}',
                               Operator='{dispatchListB.Operator}',
@@ -349,7 +349,7 @@ namespace ZR.Service.WoManagement
 
             try
             {
-                string sqlStr = $@" update IMES.HJXS_Pie_WtScanLableData
+                string sqlStr = $@" update SAJET.HJXS_Pie_WtScanLableData
                           set SCANQTY='{hjxsPieWtScanLableData.ScanQty}',
                               LEFTQTY='{hjxsPieWtScanLableData.LeftQty}',
                               NOTE='{hjxsPieWtScanLableData.Note}',

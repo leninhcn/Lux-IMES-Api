@@ -20,13 +20,13 @@ namespace ZR.Service.Repair
     {
         public async Task<DataTable> checkstatus(string sn)
         {
-            string getHold = string.Format(@" SELECT * FROM imes.p_sn_status WHERE serial_number= '{0}'  AND CURRENT_STATUS = '1' ", sn);
+            string getHold = string.Format(@" SELECT * FROM SAJET.p_sn_status WHERE serial_number= '{0}'  AND CURRENT_STATUS = '1' ", sn);
             return await Context.Ado.GetDataTableAsync(getHold);
         }
 
         public async Task<DataTable> getDetail(string snno)
         {
-            string sSQL = @"select a.serial_number, a.work_order, a.version,a.ipn, a.line, a.station_type, a.station_name, a.out_stationtype_time,a.wip_station_type,a.route_name from imes.p_sn_status A
+            string sSQL = @"select a.serial_number, a.work_order, a.version,a.ipn, a.line, a.station_type, a.station_name, a.out_stationtype_time,a.wip_station_type,a.route_name FROM SAJET.p_sn_status A
                              
                              WHERE A.CURRENT_STATUS = '1'
                              and a.serial_number='" + snno + "'";
@@ -38,7 +38,7 @@ namespace ZR.Service.Repair
         {
             string sSQL = "";
             sSQL = @"SELECT A.RECID,A.Location, A.RP_STATUS,NVL(A.DEFECT_CODE||'|'||B.DEFECT_DESC ,'N/A') DEFECT_CODE ,B.DEFECT_CODE DEFECT_CODE1, B.DEFECT_DESC2,a.LINE,a.station_name,a.station_type                               
-                            FROM imes.p_SN_DEFECT A,imes.m_DEFECT   B                                                            
+                            FROM SAJET.p_SN_DEFECT A,imes.m_DEFECT   B                                                            
                            WHERE  A.SERIAL_NUMBER = '" + sNInfo + @"' AND NVL (rp_status, 1) <> '0' AND  A.DEFECT_code = B.DEFECT_code(+)  ORDER BY A.REC_TIME";
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
@@ -48,7 +48,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlstr = "SELECT DEFECT_CODE,DEFECT_DESC FROM IMES.M_DEFECT WHERE DEFECT_CODE='" + errorcode + "' AND ENABLED='Y' AND ROWNUM=1";
+                string sqlstr = "SELECT DEFECT_CODE,DEFECT_DESC FROM SAJET.M_DEFECT WHERE DEFECT_CODE='" + errorcode + "' AND ENABLED='Y' AND ROWNUM=1";
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlstr);
 
                 if (dtTemp.Rows.Count > 0)
@@ -112,7 +112,7 @@ namespace ZR.Service.Repair
         public async Task<bool> AddRapidRepair(RapidRequst rapid,string userNo)
         {
             string ID = await GetMaxID();
-            string sSQL = @"INSERT INTO IMES.P_SPI_REPAIR ( ID,SERIAL_NUMBER,WORK_ORDER, IPN,LINE, STATION_TYPE,STATION_NAME, DEFECT_CODE, REPAIR_EMPNO, REMARK ) 
+            string sSQL = @"INSERT INTO SAJET.P_SPI_REPAIR ( ID,SERIAL_NUMBER,WORK_ORDER, IPN,LINE, STATION_TYPE,STATION_NAME, DEFECT_CODE, REPAIR_EMPNO, REMARK ) 
                            VALUES(@ID,@SERIAL_NUMBER,@WORK_ORDER,@IPN,@LINE,@STATION_TYPE,@STATION_NAME,@DEFECT_CODE,@REPAIR_EMPNO,@REMARK)";
            
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>

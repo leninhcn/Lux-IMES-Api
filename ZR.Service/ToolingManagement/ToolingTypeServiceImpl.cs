@@ -26,7 +26,7 @@ namespace ZR.Service.ToolingManagement
 
             if (insertErp > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_TOOLING_TYPE_HT(SELECT * FROM IMES.M_TOOLING_TYPE  WHERE ID = " + MaxId;
+                string sqlStr = $"INSERT INTO SAJET.M_TOOLING_TYPE_HT(SELECT * FROM SAJET.M_TOOLING_TYPE  WHERE ID = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -46,7 +46,7 @@ namespace ZR.Service.ToolingManagement
 
         public List<string> GetAllTypeList(string site)
         {
-            string strSql = @"SELECT TOOLING_TYPE FROM IMES.M_TOOLING_TYPE WHERE SITE =@SITE AND ENABLED = 'Y'";
+            string strSql = @"SELECT TOOLING_TYPE FROM SAJET.M_TOOLING_TYPE WHERE SITE =@SITE AND ENABLED = 'Y'";
             var TypeList = Context.Ado.SqlQuery<dynamic>(strSql, new SugarParameter("@SITE", site));
             List<string> resList = new List<string>();
             foreach (var item in TypeList)
@@ -94,7 +94,7 @@ namespace ZR.Service.ToolingManagement
 
             if (updateType > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_TOOLING_TYPE_HT(SELECT * FROM IMES.M_TOOLING_TYPE WHERE ID =  " + type.Id + ")";
+                string sqlStr = $"INSERT INTO SAJET.M_TOOLING_TYPE_HT(SELECT * FROM SAJET.M_TOOLING_TYPE WHERE ID =  " + type.Id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }

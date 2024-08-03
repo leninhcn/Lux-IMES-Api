@@ -24,7 +24,7 @@ namespace ZR.Service
     {
         public async Task<DataTable> GetOptionData(string station)
         {
-            var sql = @"SELECT * FROM imes.m_MODULE_PARAM WHERE MODULE_NAME = 'PACKING' and FUNCTION_NAME = 'Work Station Configuration' and PARAME_NAME = @station";
+            var sql = @"SELECT * FROM SAJET.m_MODULE_PARAM WHERE MODULE_NAME = 'PACKING' and FUNCTION_NAME = 'Work Station Configuration' and PARAME_NAME = @station";
             return await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
             {
                 new SugarParameter("@station", station),
@@ -33,7 +33,7 @@ namespace ZR.Service
 
         public async Task<DataTable> GetPackingAction()
         {
-            return await Context.Ado.GetDataTableAsync("select param_value from imes.s_base where param_name = 'Packing Action'");
+            return await Context.Ado.GetDataTableAsync("select param_value FROM SAJET.s_base where param_name = 'Packing Action'");
         }
 
         public async Task<string> GetWorkOrderBySn(string input)
@@ -148,7 +148,7 @@ namespace ZR.Service
 
         public async Task<string> GetUnfinishCarton(string type, string typeValue, string station, string pkSpecName)
         {
-            var sql = "SELECT CARTON_NO FROM imes.p_PACK_CARTON ";
+            var sql = "SELECT CARTON_NO FROM SAJET.p_PACK_CARTON ";
             if (type == "Work Order")
             {
                 sql = sql + " Where WORK_ORDER = '" + typeValue + "' ";
@@ -168,7 +168,7 @@ namespace ZR.Service
 
         public async Task<string> GetUnfinishBox(string type, string typeValue, string station, string pkSpecName)
         {
-            var sql = "SELECT BOX_NO FROM imes.p_PACK_BOX ";
+            var sql = "SELECT BOX_NO FROM SAJET.p_PACK_BOX ";
             if (type == "Work Order")
             {
                 sql = sql + " Where WORK_ORDER = '" + typeValue + "' ";
@@ -190,13 +190,13 @@ namespace ZR.Service
         {
             if (type == "Pallet")
             {
-                var sql = @"SELECT  COUNT(DISTINCT A.CARTON_NO) COUNT FROM imes.p_SN_STATUS A ,imes.p_PACK_CARTON B  WHERE A.PALLET_NO <>'N/A' AND A.PALLET_NO =@PALLET_NO AND A.CARTON_NO = B.CARTON_NO  and B.CLOSE_FLAG='Y'";
+                var sql = @"SELECT  COUNT(DISTINCT A.CARTON_NO) COUNT FROM SAJET.p_SN_STATUS A ,imes.p_PACK_CARTON B  WHERE A.PALLET_NO <>'N/A' AND A.PALLET_NO =@PALLET_NO AND A.CARTON_NO = B.CARTON_NO  and B.CLOSE_FLAG='Y'";
 
                 var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@PALLET_NO", packNo) });
 
                 var packQty = int.Parse(dt.Rows[0][0].ToString());
 
-                sql = @"SELECT count(SERIAL_NUMBER) num　FROM imes.p_SN_STATUS T WHERE T.PALLET_NO= @PALLET_NO AND T.PALLET_NO<>'N/A'";
+                sql = @"SELECT count(SERIAL_NUMBER) num　FROM SAJET.p_SN_STATUS T WHERE T.PALLET_NO= @PALLET_NO AND T.PALLET_NO<>'N/A'";
 
                 dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@PALLET_NO", packNo) });
 
@@ -206,8 +206,8 @@ namespace ZR.Service
             }
             else if (type == "Carton")
             {
-                var sql = string.IsNullOrEmpty(wo) ? @"SELECT COUNT(SERIAL_NUMBER)  FROM imes.p_SN_STATUS  WHERE CARTON_NO<>'N/A' AND CARTON_NO = @CARTON_NO"
-                : @"SELECT count( distinct A.BOX_NO) qty   FROM imes.p_SN_STATUS A ,imes.p_PACK_BOX B  WHERE a.CARTON_NO<>'N/A' AND a.CARTON_NO=@CARTON_NO AND A.BOX_NO = B.BOX_NO  AND B.CLOSE_FLAG = 'Y' AND A.WORK_ORDER=@WORK_ORDER";
+                var sql = string.IsNullOrEmpty(wo) ? @"SELECT COUNT(SERIAL_NUMBER)  FROM SAJET.p_SN_STATUS  WHERE CARTON_NO<>'N/A' AND CARTON_NO = @CARTON_NO"
+                : @"SELECT count( distinct A.BOX_NO) qty   FROM SAJET.p_SN_STATUS A ,imes.p_PACK_BOX B  WHERE a.CARTON_NO<>'N/A' AND a.CARTON_NO=@CARTON_NO AND A.BOX_NO = B.BOX_NO  AND B.CLOSE_FLAG = 'Y' AND A.WORK_ORDER=@WORK_ORDER";
 
                 var qtyParam = new List<SugarParameter> { new SugarParameter("@CARTON_NO", packNo) };
                 if (!string.IsNullOrEmpty(wo))
@@ -219,7 +219,7 @@ namespace ZR.Service
 
                 var packQty = int.Parse(dt.Rows[0][0].ToString());
 
-                sql = @"SELECT COUNT(SERIAL_NUMBER) NUM FROM imes.p_SN_STATUS WHERE  CARTON_NO<>'N/A' AND CARTON_NO = @CARTON_NO";
+                sql = @"SELECT COUNT(SERIAL_NUMBER) NUM FROM SAJET.p_SN_STATUS WHERE  CARTON_NO<>'N/A' AND CARTON_NO = @CARTON_NO";
 
                 dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@CARTON_NO", packNo) });
 
@@ -229,7 +229,7 @@ namespace ZR.Service
             }
             else if (type == "Box")
             {
-                var sql = @"SELECT  COUNT(SERIAL_NUMBER) COUNT FROM imes.p_SN_STATUS WHERE BOX_NO = @box ";
+                var sql = @"SELECT  COUNT(SERIAL_NUMBER) COUNT FROM SAJET.p_SN_STATUS WHERE BOX_NO = @box ";
 
                 var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> { new SugarParameter("@box", packNo) });
 
@@ -243,7 +243,7 @@ namespace ZR.Service
         async Task<DataTable> GetWoParam(string wo, string labelType)
         {
             string sql = @"SELECT C.*
-                FROM IMES.P_WO_BASE A, IMES.M_RULE_SET_DETAIL B, IMES.M_RULE_PARAM C
+                FROM SAJET.P_WO_BASE A, IMES.M_RULE_SET_DETAIL B, IMES.M_RULE_PARAM C
                 WHERE A.RULE_SET_NAME = B.RULE_SET_NAME
                 AND B.RULE_NAME = C.RULE_NAME
                 AND A.WORK_ORDER = @WO
@@ -260,7 +260,7 @@ namespace ZR.Service
         async Task<DataTable> GetWoData(string wo)
         {
             string sql = @"SELECT A.START_STATION_TYPE, A.END_STATION_TYPE, A.*, B.*
-            FROM IMES.P_WO_BASE A
+            FROM SAJET.P_WO_BASE A
             LEFT JOIN IMES.M_PART_SEMI_FG B
             ON A.IPN = B.IPN
             WHERE A.WORK_ORDER = @WO";
@@ -969,28 +969,28 @@ namespace ZR.Service
             {
                 case "Pallet":
                     sField = "Pallet No";
-                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM IMES.P_WO_BASE A
+                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM SAJET.P_WO_BASE A
             INNER JOIN IMES.M_RULE_SET_DETAIL B ON A.RULE_SET_NAME = B.RULE_SET_NAME
             WHERE WORK_ORDER='" + wo + "' " +
                         "AND B.RULE_TYPE = 'PALLET NO'";
                     break;
                 case "Carton":
                     sField = "CARTON NO";
-                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM IMES.P_WO_BASE A
+                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM SAJET.P_WO_BASE A
             INNER JOIN IMES.M_RULE_SET_DETAIL B ON A.RULE_SET_NAME = B.RULE_SET_NAME
             WHERE WORK_ORDER='" + wo + "' " +
                         "AND B.RULE_TYPE = 'CARTON NO'";
                     break;
                 case "Box":
                     sField = "Box No";
-                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM IMES.P_WO_BASE A
+                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM SAJET.P_WO_BASE A
             INNER JOIN IMES.M_RULE_SET_DETAIL B ON A.RULE_SET_NAME = B.RULE_SET_NAME
             WHERE WORK_ORDER='" + wo + "' " +
                         "AND B.RULE_TYPE = 'BOX NO'";
                     break;
                 case "CSN":
                     sField = "CUSTOMER SN";
-                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM IMES.P_WO_BASE A
+                    sql = $@"SELECT B.RULE_NAME,B.RULE_DESC FROM SAJET.P_WO_BASE A
             INNER JOIN IMES.M_RULE_SET_DETAIL B ON A.RULE_SET_NAME = B.RULE_SET_NAME
             WHERE WORK_ORDER='" + wo + "' " +
                         "AND B.RULE_TYPE = 'CUSTOMER SN'";
@@ -1008,7 +1008,7 @@ namespace ZR.Service
             {
                 string sRuleName = dt.Rows[0]["RULE_NAME"].ToString();
                 string sSeqFix = "";
-                sql = "SELECT SEQ_NAME from IMES.M_label where Upper(label_name) ='" + sField.ToUpper() + "'";
+                sql = "SELECT SEQ_NAME FROM SAJET.M_label where Upper(label_name) ='" + sField.ToUpper() + "'";
 
                 dt = await Context.Ado.GetDataTableAsync(sql);
                 if (dt.Rows.Count > 0)
@@ -1033,7 +1033,7 @@ namespace ZR.Service
                     LVFun[i].SubItems.Add(sValue);
                 }
                 string sResetMark = "";
-                sql = "Select PARAME_VALUE From IMES.M_MODULE_PARAM Where UPPER(MODULE_NAME) = '" + sSeqFix.ToUpper() + "' "
+                sql = "Select PARAME_VALUE FROM SAJET.M_MODULE_PARAM Where UPPER(MODULE_NAME) = '" + sSeqFix.ToUpper() + "' "
                       + "and FUNCTION_NAME = '" + sRuleName + "' and PARAME_NAME = 'Reset Sequence Mark' ";
                 dt = await Context.Ado.GetDataTableAsync(sql);
                 if (dt.Rows.Count > 0)
@@ -1046,19 +1046,19 @@ namespace ZR.Service
                 }
 
                 newNo = sInputNo;
-                sql = "Select rowid||'' AS ID From IMES.M_MODULE_PARAM Where UPPER(MODULE_NAME) = '" + sSeqFix.ToUpper() + "' "
+                sql = "Select rowid||'' AS ID FROM SAJET.M_MODULE_PARAM Where UPPER(MODULE_NAME) = '" + sSeqFix.ToUpper() + "' "
                      + "and FUNCTION_NAME = '" + sRuleName + "' and PARAME_NAME = 'Reset Sequence Mark' ";
                 dt = await Context.Ado.GetDataTableAsync(sql);
                 if (dt.Rows.Count == 0)
                 {
-                    sql = " Insert Into IMES.M_MODULE_PARAM (MODULE_NAME,FUNCTION_NAME,PARAME_NAME,PARAME_ITEM,PARAME_VALUE,UPDATE_USERID ) "
+                    sql = " Insert INTO SAJET.M_MODULE_PARAM (MODULE_NAME,FUNCTION_NAME,PARAME_NAME,PARAME_ITEM,PARAME_VALUE,UPDATE_USERID ) "
                           + " Values ('" + sSeqFix.ToUpper() + "','" + sRuleName + "','Reset Sequence Mark','" + sRuleName + "','" + sResetMark + "','" + uid + "')";
                     await Context.Ado.ExecuteCommandAsync(sql);
                 }
                 else
                 {
                     string sRowid = dt.Rows[0]["ID"].ToString();
-                    sql = "update IMES.M_MODULE_PARAM set parame_value = '" + sResetMark + "' where rowid = '" + sRowid + "' ";
+                    sql = "update SAJET.M_MODULE_PARAM set parame_value = '" + sResetMark + "' where rowid = '" + sRowid + "' ";
                     await Context.Ado.ExecuteCommandAsync(sql);
                 }
                 return (true, msg, newNo);
@@ -1305,9 +1305,9 @@ namespace ZR.Service
             var sql = "";
             switch (type)
             {
-                case "Box": sql = "SELECT CLOSE_FLAG FROM imes.p_PACK_Box WHERE  @1<>'N/A' AND BOX_NO = @1"; break;
-                case "Carton": sql = "SELECT CLOSE_FLAG FROM imes.p_PACK_CARTON   WHERE @1<>'N/A' AND CARTON_NO =@1"; break;
-                case "Pallet": sql = "SELECT CLOSE_FLAG FROM imes.p_PACK_PALLET WHERE  @1<>'N/A' AND PALLET_NO = @1"; break;
+                case "Box": sql = "SELECT CLOSE_FLAG FROM SAJET.p_PACK_Box WHERE  @1<>'N/A' AND BOX_NO = @1"; break;
+                case "Carton": sql = "SELECT CLOSE_FLAG FROM SAJET.p_PACK_CARTON   WHERE @1<>'N/A' AND CARTON_NO =@1"; break;
+                case "Pallet": sql = "SELECT CLOSE_FLAG FROM SAJET.p_PACK_PALLET WHERE  @1<>'N/A' AND PALLET_NO = @1"; break;
             }
 
             var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
@@ -1326,7 +1326,7 @@ namespace ZR.Service
         public async Task<(bool, string)> CheckPackInfoByCarton(string pallet, string carton)
         {
             var sql = @"SELECT BOX_NO,CARTON_NO,PALLET_NO
-                 FROM imes.p_SN_STATUS 
+                 FROM SAJET.p_SN_STATUS 
                  Where CARTON_NO = @CARTON_NO and rownum = 1 ";
 
             var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
@@ -1352,7 +1352,7 @@ namespace ZR.Service
         public async Task<(bool, string)> CheckPackInfoByBox(string box, string carton)
         {
             var sql = @"SELECT BOX_NO,CARTON_NO,PALLET_NO
-                 FROM imes.p_SN_STATUS 
+                 FROM SAJET.p_SN_STATUS 
                  Where BOX_NO = @BOX_NO and rownum = 1 ";
 
             var dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
@@ -1410,7 +1410,7 @@ namespace ZR.Service
         public async Task<(string, Dictionary<string, string>)> GetLabelVarsPrintData(string inputData, string labelType)
         {
             var dictionary = new Dictionary<string, string>();
-            string sql = "SELECT  DATA_TYPE,DATA_ORDER,DATA_SQL,INPUT_PARAM,INPUT_FIELD FROM IMES.M_PRINT_DATA   WHERE DATA_TYPE = @DATATYPE AND ENABLED='Y' ORDER BY DATA_ORDER";
+            string sql = "SELECT  DATA_TYPE,DATA_ORDER,DATA_SQL,INPUT_PARAM,INPUT_FIELD FROM SAJET.M_PRINT_DATA   WHERE DATA_TYPE = @DATATYPE AND ENABLED='Y' ORDER BY DATA_ORDER";
 
             var dataTable = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> {
                 new("@DATATYPE", labelType),
@@ -1451,7 +1451,7 @@ namespace ZR.Service
                     }
                 }
 
-                sql = "SELECT VAR_NAME,FIELD_NAME,VAR_TYPE FROM IMES.M_STATIONTYPE_LABEL_PARAMS WHERE LABEL_TYPE=@LABEL_TYPE ";
+                sql = "SELECT VAR_NAME,FIELD_NAME,VAR_TYPE FROM SAJET.M_STATIONTYPE_LABEL_PARAMS WHERE LABEL_TYPE=@LABEL_TYPE ";
 
                 dataTable = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter> {
                     new("@LABEL_TYPE", labelType),
@@ -1504,12 +1504,12 @@ namespace ZR.Service
 
             switch(type)
             {
-                case "Box": sql = "SELECT BOX_NO FROM imes.p_PACK_BOX WHERE BOX_NO = @1";
+                case "Box": sql = "SELECT BOX_NO FROM SAJET.p_PACK_BOX WHERE BOX_NO = @1";
                     break;
-                case "Carton": sql = "SELECT CARTON_NO FROM imes.p_PACK_CARTON WHERE CARTON_NO = @1";
+                case "Carton": sql = "SELECT CARTON_NO FROM SAJET.p_PACK_CARTON WHERE CARTON_NO = @1";
                     break;
                 case "Pallet":
-                    sql = "SELECT PALLET_NO FROM imes.p_PACK_PALLET  WHERE PALLET_NO = @1";
+                    sql = "SELECT PALLET_NO FROM SAJET.p_PACK_PALLET  WHERE PALLET_NO = @1";
                     break;
             }
 
@@ -1527,13 +1527,13 @@ namespace ZR.Service
             switch (type)
             {
                 case "Box":
-                    sql = "DELETE FROM imes.p_PACK_BOX WHERE BOX_NO = @1";
+                    sql = "DELETE FROM SAJET.p_PACK_BOX WHERE BOX_NO = @1";
                     break;
                 case "Carton":
-                    sql = "DELETE FROM imes.p_PACK_CARTON WHERE CARTON_NO = @1";
+                    sql = "DELETE FROM SAJET.p_PACK_CARTON WHERE CARTON_NO = @1";
                     break;
                 case "Pallet":
-                    sql = "DELETE FROM imes.p_PACK_PALLET  WHERE PALLET_NO = @1";
+                    sql = "DELETE FROM SAJET.p_PACK_PALLET  WHERE PALLET_NO = @1";
                     break;
             }
 
@@ -1549,13 +1549,13 @@ namespace ZR.Service
             switch (type)
             {
                 case "Box":
-                    sql = "UPDATE imes.p_PACK_BOX  SET CLOSE_FLAG = 'Y' WHERE BOX_NO = @1";
+                    sql = "update SAJET.p_PACK_BOX  SET CLOSE_FLAG = 'Y' WHERE BOX_NO = @1";
                     break;
                 case "Carton":
-                    sql = "UPDATE imes.p_PACK_CARTON  SET CLOSE_FLAG = 'Y' WHERE CARTON_NO = @1";
+                    sql = "update SAJET.p_PACK_CARTON  SET CLOSE_FLAG = 'Y' WHERE CARTON_NO = @1";
                     break;
                 case "Pallet":
-                    sql = "UPDATE imes.p_PACK_PALLET  SET CLOSE_FLAG = 'Y' WHERE PALLET_NO = @1";
+                    sql = "update SAJET.p_PACK_PALLET  SET CLOSE_FLAG = 'Y' WHERE PALLET_NO = @1";
                     break;
             }
             await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter> {
@@ -1565,7 +1565,7 @@ namespace ZR.Service
 
         public async Task SavePackForceClose(string packNo, string packType, string userNo)
         {
-            var sql = @"INSERT INTO imes.p_PACK_FORCECLOSE (PACK_NO, PACK_TYPE, CREATE_EMPNO,CREATE_TIME) VALUES (@1 ,:2 ,:3 ,SYSDATE) ";
+            var sql = @"INSERT INTO SAJET.p_PACK_FORCECLOSE (PACK_NO, PACK_TYPE, CREATE_EMPNO,CREATE_TIME) VALUES (@1 ,:2 ,:3 ,SYSDATE) ";
             await Context.Ado.ExecuteCommandAsync(sql, new List<SugarParameter> {
                 new("@1", packNo),
                 new("@2", packType),
@@ -1625,7 +1625,7 @@ namespace ZR.Service
 
         async Task DeleteModuleParamInfo(string station)
         {
-            var sql = @"Delete FROM IMES.M_MODULE_PARAM 
+            var sql = @"Delete FROM SAJET.M_MODULE_PARAM 
                  Where MODULE_NAME = 'PACKING' 
                  and FUNCTION_NAME = 'Work Station Configuration'  
                  and PARAME_NAME = @1";

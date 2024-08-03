@@ -72,7 +72,7 @@ namespace ZR.Service
                     DeptName = dept.DeptName,
                     Phonenumber = u2.Phonenumber,
                     Email = u2.Email
-                }); ;
+                });
 
             return query.ToPage(pager);
         }
@@ -135,7 +135,7 @@ namespace ZR.Service
            sysUser.UserId = Queryable().Max(x => x.UserId) + 1;
            Insertable(sysUser).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_EMP_HT SELECT * FROM IMES.M_EMP  WHERE  ID = @ID ",new List<SugarParameter> { new SugarParameter("@ID",sysUser.UserId)});
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_EMP_HT SELECT * FROM SAJET.M_EMP  WHERE  ID = @ID ",new List<SugarParameter> { new SugarParameter("@ID",sysUser.UserId)});
               
             Context.Insertable(new ZrSysUser { 
                 MainId = sysUser.UserId,
@@ -147,7 +147,7 @@ namespace ZR.Service
                 Email = sysUser.Email,
             }).ExecuteReturnIdentity();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_ZR_USER_HT SELECT * FROM IMES.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", sysUser.UserId) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_ZR_USER_HT SELECT * FROM SAJET.M_ZR_USER  WHERE MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", sysUser.UserId) });
             //新增用户角色信息
             UserRoleService.InsertUserRole(sysUser);
             //新增用户岗位信息
@@ -217,9 +217,9 @@ namespace ZR.Service
                 }
             });
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_EMP_HT SELECT * FROM IMES.M_EMP  WHERE  ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", user.UserId) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_EMP_HT SELECT * FROM SAJET.M_EMP  WHERE  ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", user.UserId) });
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_ZR_USER_HT SELECT * FROM IMES.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", user.UserId) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_ZR_USER_HT SELECT * FROM SAJET.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", user.UserId) });
             return ret;
         }
 
@@ -267,7 +267,7 @@ namespace ZR.Service
                 .Where(x => x.UserId == userid)
                 .ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_EMP_HT SELECT * FROM IMES.M_EMP  WHERE  ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_EMP_HT SELECT * FROM SAJET.M_EMP  WHERE  ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
             //删除
             var i =  Context.Ado.ExecuteCommand("delete IMES.M_EMP  WHERE  ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
            //更新
@@ -278,7 +278,7 @@ namespace ZR.Service
                 .Where(x => x.MainId == userid)
                 .ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.M_ZR_USER_HT SELECT * FROM IMES.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.M_ZR_USER_HT SELECT * FROM SAJET.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
             //备份
             Context.Ado.ExecuteCommand("delete IMES.M_ZR_USER  WHERE  MAIN_ID = @ID ", new List<SugarParameter> { new SugarParameter("@ID", userid) });
             return i;

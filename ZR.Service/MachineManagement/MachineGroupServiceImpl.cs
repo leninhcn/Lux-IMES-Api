@@ -20,7 +20,7 @@ namespace ZR.Service.MachineManagement
 
             if (insertErp > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_MACHINE_GROUP_HT(SELECT * FROM IMES.M_MACHINE_GROUP WHERE ID = " + MaxId;
+                string sqlStr = $"INSERT INTO SAJET.M_MACHINE_GROUP_HT(SELECT * FROM SAJET.M_MACHINE_GROUP WHERE ID = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -78,7 +78,7 @@ namespace ZR.Service.MachineManagement
 
             if (updateMachineType > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_MACHINE_GROUP_HT(SELECT * FROM IMES.M_MACHINE_GROUP WHERE ID =  " + group.Id + ")";
+                string sqlStr = $"INSERT INTO SAJET.M_MACHINE_GROUP_HT(SELECT * FROM SAJET.M_MACHINE_GROUP WHERE ID =  " + group.Id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }

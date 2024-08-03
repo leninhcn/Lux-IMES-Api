@@ -98,7 +98,7 @@ namespace ZR.Service.PordService
 
         public object StandardTimelistHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_STANDARDTIME_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_STANDARDTIME_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -110,7 +110,7 @@ namespace ZR.Service.PordService
         {
             int id = imes.id;
             string site = imes.site;
-            string insertHt = $"Insert into IMES.M_STANDARDTIME_HT (Select * from IMES.M_STANDARDTIME where id = " + id;
+            string insertHt = $"Insert INTO SAJET.M_STANDARDTIME_HT (Select * FROM SAJET.M_STANDARDTIME where id = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -127,7 +127,7 @@ namespace ZR.Service.PordService
             imes.updateTime = DateTime.Now;
             Context.Updateable(imes).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
 
-            string insertHt = $"Insert into IMES.M_STANDARDTIME_HT (Select * from IMES.M_STANDARDTIME where id = " + id;
+            string insertHt = $"Insert INTO SAJET.M_STANDARDTIME_HT (Select * FROM SAJET.M_STANDARDTIME where id = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -151,7 +151,7 @@ namespace ZR.Service.PordService
                 int id = Context.Queryable<imesMstandardtime>().Max(it => it.id) + 1;
                 mstandardtime.id = id;
                 int insertCount = Context.Insertable(mstandardtime).ExecuteCommand();
-                string insertHt = $"Insert into IMES.M_STANDARDTIME_HT (Select * from IMES.M_STANDARDTIME where id = " + id;
+                string insertHt = $"Insert INTO SAJET.M_STANDARDTIME_HT (Select * FROM SAJET.M_STANDARDTIME where id = " + id;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -188,7 +188,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imesMsn).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                string insertHt = $"insert into IMES.M_STANDARDTIME_HT(select * from IMES.M_STANDARDTIME  where ID = " + MaxId;
+                string insertHt = $"insert INTO SAJET.M_STANDARDTIME_HT(select * FROM SAJET.M_STANDARDTIME  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -202,7 +202,7 @@ namespace ZR.Service.PordService
 
         public object FactoryStandardTimelist(string ipn, string site)
         {
-            string sSQL = $"Select IPN,SPEC2 from IMES.M_PART Where enabled = 'Y' ";
+            string sSQL = $"Select IPN,SPEC2 FROM SAJET.M_PART Where enabled = 'Y' ";
             if (ipn != null && ipn != "") 
             {
                 sSQL = sSQL + "and IPN like '" + ipn + "%'";
@@ -217,7 +217,7 @@ namespace ZR.Service.PordService
 
         public object ModelStandardTimelist(string model, string site)
         {
-            string sSQL = $"Select MODEL,MODEL_CUSTOMER,MODEL_DESC from IMES.M_MODEL Where enabled = 'Y'  ";
+            string sSQL = $"Select MODEL,MODEL_CUSTOMER,MODEL_DESC FROM SAJET.M_MODEL Where enabled = 'Y'  ";
             if (model != null && model != "")
             {
                 sSQL = sSQL + "and MODEL like  '" + model + "%'";
@@ -231,7 +231,7 @@ namespace ZR.Service.PordService
 
         public object StationtypeStandardTimelist(string stationtype,string line, string site)
         {
-            string sSQL = $"Select station_name,station_type,line,stage from IMES.M_STATION Where enabled = 'Y'  ";
+            string sSQL = $"Select station_name,station_type,line,stage FROM SAJET.M_STATION Where enabled = 'Y'  ";
             if (stationtype != null && stationtype != "")
             {
                 sSQL = sSQL + " and station_type like  '" + stationtype + "%'";
@@ -249,7 +249,7 @@ namespace ZR.Service.PordService
 
         public object LineStandardTimelist(string site)
         {
-            string sSQL = $"SELECT LINE FROM IMES.M_LINE WHERE ENABLED = 'Y'";
+            string sSQL = $"SELECT LINE FROM SAJET.M_LINE WHERE ENABLED = 'Y'";
             if (site != null && site != "")
             {
                 sSQL = sSQL + " and site =  '" + site + "'";

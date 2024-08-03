@@ -120,7 +120,7 @@ namespace ZR.Service.Repair
             {
                 exeRes = new ExecuteResult();
                 string sqlText = @"    SELECT COUNT (T.SERIAL_NUMBER)
-                                      FROM IMES.P_REPAIR_IN T
+                                      FROM SAJET.P_REPAIR_IN T
                                      WHERE T.SERIAL_NUMBER = @SN AND T.REPAIR_FLAG = 'N'";
                
                DataTable dtTemp =  await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
@@ -151,7 +151,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlText = @"  SELECT A.EMP_NAME,A.EMP_NO,A.LAB ,A.PHONE_NO FROM IMES.M_REPAIR_FAE_TRANSFER_USERS A
+                string sqlText = @"  SELECT A.EMP_NAME,A.EMP_NO,A.LAB ,A.PHONE_NO FROM SAJET.M_REPAIR_FAE_TRANSFER_USERS A
                                      WHERE A.EMP_NO =@EMP_NO AND A.ENABLED='Y'";
 
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
@@ -172,7 +172,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlText = @" select count(*) from IMES.P_POST_EMP_CARD a WHERE EMP_CODE=@EMP_CODE";
+                string sqlText = @" select count(*) FROM SAJET.P_POST_EMP_CARD a WHERE EMP_CODE=@EMP_CODE";
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
                     {   new SugarParameter("@EMP_CODE", empno) });
                 exeRes.Anything = dtTemp;
@@ -201,7 +201,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlText = @" SELECT * FROM IMES.P_REPAIR_FAE_TRANSFERINOUT WHERE STATUS<>1 AND SN=@SN ";
+                string sqlText = @" SELECT * FROM SAJET.P_REPAIR_FAE_TRANSFERINOUT WHERE STATUS<>1 AND SN=@SN ";
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
                     {   new SugarParameter("@SN", sn) });
                 exeRes.Anything = dtTemp;
@@ -220,7 +220,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlText = @" SELECT * FROM IMES.P_REPAIR_FAE_TRANSFERINOUT WHERE STATUS<>1 AND SN=@SN ";
+                string sqlText = @" SELECT * FROM SAJET.P_REPAIR_FAE_TRANSFERINOUT WHERE STATUS<>1 AND SN=@SN ";
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
                     {   new SugarParameter("@SN", sn) });
                 exeRes.Anything = dtTemp;
@@ -239,7 +239,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @"UPDATE IMES.P_REPAIR_FAE_TRANSFERINOUT SET      
+                string sqlStr = @"update SAJET.P_REPAIR_FAE_TRANSFERINOUT SET      
                                     BACKDATE=SYSDATE,
                                     BACKFROMUSERID=@BACKFROMUSERID,       
                                     BACKTOUSERID=@BACKTOUSERID,
@@ -272,7 +272,7 @@ namespace ZR.Service.Repair
             try
             {
                 string sqlText = @"    SELECT RECID
-                                      FROM IMES.P_REPAIR_IN T
+                                      FROM SAJET.P_REPAIR_IN T
                                      WHERE T.SERIAL_NUMBER = @SN AND T.REPAIR_FLAG = 'N'";
                 DataTable dtTemp = await Context.Ado.GetDataTableAsync(sqlText, new List<SugarParameter>
                     {   new SugarParameter("@SN", sn) });
@@ -299,7 +299,7 @@ namespace ZR.Service.Repair
                 }
                 string maxID =(string)exeRes.Anything;
 
-                string sqlText = @"INSERT INTO IMES.P_REPAIR_FAE_TRANSFERINOUT(
+                string sqlText = @"INSERT INTO SAJET.P_REPAIR_FAE_TRANSFERINOUT(
                                     ID,
                                     SN,
                                     MODEL, 

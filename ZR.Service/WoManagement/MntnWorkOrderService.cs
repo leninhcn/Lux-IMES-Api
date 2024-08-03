@@ -59,7 +59,7 @@ namespace ZR.Service.WoManagement
                    IMES.FN_WOSTATUS_RESULT (A.WO_STATUS) WOSTATUS,
                    A.MEMO REMARK,
                    A.UPDATE_EMPNO
-              FROM IMES.P_WO_STATUS A where A.WORK_ORDER= @wo AND A.SITE=@site order by A.UPDATE_TIME";
+              FROM SAJET.P_WO_STATUS A where A.WORK_ORDER= @wo AND A.SITE=@site order by A.UPDATE_TIME";
             var response = Context.Ado.SqlQuery<dynamic>(sql, new List<SugarParameter> { new SugarParameter("@wo", parm.WorkOrder), new SugarParameter("@site", parm.Site) });
             return response;
         }
@@ -90,7 +90,7 @@ namespace ZR.Service.WoManagement
                 //插入资料
                 int i = Context.Insertable(parm).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份备份代码取消,数据库trigger
-                //Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_TYPE_HT select * from IMES.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigTypeId ) });
+                //Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_TYPE_HT select * FROM SAJET.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigTypeId ) });
                 return i == 1 ? "OK" : "插入失败";
             }
             catch (Exception ex)
@@ -106,9 +106,9 @@ namespace ZR.Service.WoManagement
         public int UpdatePWoBase(WoBase param)
         {
             ////动态切换数据库
-            //var db0 = Context.AsTenant().GetConnection("0").Ado.SqlQuery<dynamic>("select * from imes.M_SITE");
+            //var db0 = Context.AsTenant().GetConnection("0").Ado.SqlQuery<dynamic>("select * FROM SAJET.M_SITE");
             ////动态切换数据库
-            //var db1= Context.AsTenant().GetConnection("1").Ado.SqlQuery<dynamic>("select * from imes.M_SITE");
+            //var db1= Context.AsTenant().GetConnection("1").Ado.SqlQuery<dynamic>("select * FROM SAJET.M_SITE");
             //获取机种
             string sql = @"SELECT model FROM  IMES.M_PART where IPN=@ipn AND SITE=@site";
             var response1 = Context.Ado.SqlQuery<string>(sql,
@@ -124,7 +124,7 @@ namespace ZR.Service.WoManagement
             param.UpdateTime = DateTime.Now;
             //int result = Context.Updateable(param).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.P_WO_BASE_HT select * from IMES.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", param.WorkOrder), new SugarParameter("@site", param.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BASE_HT select * FROM SAJET.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", param.WorkOrder), new SugarParameter("@site", param.Site) });
             var response = Context.Updateable(param).UpdateColumns(it => new { it.Ipn, it.Model, it.Version, it.WoType, it.TargetQty, it.WoScheduleStartDate, it.WoScheduleCloseDate, it.WoPurpose, it.WoBuild, it.WoConfig, it.WoPhsae, it.WoVersion, it.Remark, it.WarehouseNo, it.WarehouseLocation, it.Line, it.RouteName, it.StartStationType, it.EndStationType, it.PkspecName, it.RuleSetName, it.DeptName, it.RmaCustomer, it.RmaAccountValue, it.RmaNo, it.UpdateEmpno, it.UpdateTime }).WhereColumns(it => new { it.WorkOrder, it.Site }).ExecuteCommand();
             return response;
 
@@ -140,7 +140,7 @@ namespace ZR.Service.WoManagement
             param.UpdateTime = DateTime.Now;
             //int result = Context.Updateable(param).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.P_WO_BASE_HT select * from IMES.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", param.WorkOrder), new SugarParameter("@site", param.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BASE_HT select * FROM SAJET.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", param.WorkOrder), new SugarParameter("@site", param.Site) });
             var response = Context.Updateable(param).UpdateColumns(it => new { it.EquipmentCode,it.CompanyName, it.UpdateEmpno, it.UpdateTime }).WhereColumns(it => new { it.WorkOrder, it.Site }).ExecuteCommand();
             return response;
 
@@ -149,7 +149,7 @@ namespace ZR.Service.WoManagement
         public List<WoBase> GetWoBaseListPda(PWoBaseQueryDto parm)
         {
 
-            StringBuilder sql = new StringBuilder(@"SELECT DISTINCT B.* FROM IMES.P_WO_BASE B LEFT JOIN 
+            StringBuilder sql = new StringBuilder(@"SELECT DISTINCT B.* FROM SAJET.P_WO_BASE B LEFT JOIN 
             IMES. P_WO_CUTTING G ON (B.WORK_ORDER=G.WORK_ORDER)
             WHERE  (B.WO_STATUS =2 OR  (B.WO_STATUS =3 AND G.CLOSED='N'))");
 
@@ -180,7 +180,7 @@ namespace ZR.Service.WoManagement
         {
             int result = Context.Updateable(model).ExecuteCommand();
             //备份
-            Context.Ado.ExecuteCommand("insert into IMES.P_WO_BASE_HT select * from IMES.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", model.WorkOrder), new SugarParameter("@site", model.Site) });
+            Context.Ado.ExecuteCommand("insert INTO SAJET.P_WO_BASE_HT select * FROM SAJET.P_WO_BASE where WORK_ORDER = @workorder AND SITE=@site", new List<SugarParameter> { new SugarParameter("@workorder", model.WorkOrder), new SugarParameter("@site", model.Site) });
             var response = Context.Updateable(model).UpdateColumns(it => new { it.Ipn, it.Model, it.Version, it.WoType, it.TargetQty, it.WoScheduleStartDate, it.WoScheduleCloseDate, it.WoPurpose, it.WoBuild, it.WoConfig, it.WoPhsae, it.WoVersion, it.Remark, it.WarehouseNo, it.WarehouseLocation, it.Line, it.RouteName, it.StartStationType, it.EndStationType, it.PkspecName, it.RuleSetName, it.DeptName, it.RmaCustomer, it.RmaAccountValue, it.RmaNo, it.UpdateEmpno, it.UpdateTime }).WhereColumns(it => new { it.WorkOrder, it.Site }).ExecuteCommand();
             return response;
 

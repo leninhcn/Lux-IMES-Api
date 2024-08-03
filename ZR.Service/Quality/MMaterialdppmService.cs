@@ -112,7 +112,7 @@ namespace ZR.Service.Quality
 
         public DataTable GetModels()
         {
-            var sql = "SELECT DISTINCT MODEL FROM IMES.M_MODEL";
+            var sql = "SELECT DISTINCT MODEL FROM SAJET.M_MODEL";
             return SqlQuery(sql);
         }
     }

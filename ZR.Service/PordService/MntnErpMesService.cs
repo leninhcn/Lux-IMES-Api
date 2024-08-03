@@ -29,7 +29,7 @@ namespace ZR.Service.PordService
 
         public PagedInfo<ImesMpartSpecErpMesMapping> ErpMeslist(string enaBled, string optionData, string textData, int pageNum, int pageSize, string site)
         {
-            /*String sqlStr = $" select * from IMES.M_PART_SPEC_ERP_MES_MAPPING  where 1=1";
+            /*String sqlStr = $" select * FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING  where 1=1";
             if (textData != "" && optionData != null && textData != null)
             {
                 sqlStr = sqlStr + " and " + optionData + " LIKE '%" + textData + "%' ";
@@ -113,7 +113,7 @@ namespace ZR.Service.PordService
 
         public object ErpMeslModellist(string site)
         {
-            String sqlStr = $" SELECT distinct MODEL  FROM IMES.M_MODEL where 1=1 ";
+            String sqlStr = $" SELECT distinct MODEL  FROM SAJET.M_MODEL where 1=1 ";
 
             if (site != null && site != "") 
             {
@@ -126,7 +126,7 @@ namespace ZR.Service.PordService
 
         public object ErpMeslStageNamelist(string site)
         {
-            String sqlStr = $" select distinct stage from imes.m_stage where ENABLED='Y' ";
+            String sqlStr = $" select distinct stage FROM SAJET.m_stage where ENABLED='Y' ";
             if (site != null && site != "")
             {
                 sqlStr = sqlStr + " and site = '" + site + "'";
@@ -151,7 +151,7 @@ namespace ZR.Service.PordService
                 int MaxId = Context.Queryable<ImesMpartSpecErpMesMapping>().Max(it => it.id);
                 imesMpart.id = MaxId + 1;
                 int insertErp = Context.Insertable(imesMpart).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
-                string insertHt = $"Insert into IMES.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * from IMES.M_PART_SPEC_ERP_MES_MAPPING where id = " + id ;
+                string insertHt = $"Insert INTO SAJET.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING where id = " + id ;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -166,7 +166,7 @@ namespace ZR.Service.PordService
         {
             int id= imesMpart.id;
             string site = imesMpart.site;
-            string insertHt = $"Insert into IMES.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * from IMES.M_PART_SPEC_ERP_MES_MAPPING where id = " + id ;
+            string insertHt = $"Insert INTO SAJET.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING where id = " + id ;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -182,7 +182,7 @@ namespace ZR.Service.PordService
             string site = imesMpart.site;
             imesMpart.updateTime= DateTime.Now;
             Context.Updateable(imesMpart).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
-            string insertHt = $"Insert into IMES.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * from IMES.M_PART_SPEC_ERP_MES_MAPPING where id = " + id;
+            string insertHt = $"Insert INTO SAJET.M_PART_SPEC_ERP_MES_MAPPING_HT (Select * FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING where id = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -194,7 +194,7 @@ namespace ZR.Service.PordService
 
         public object ErpMeslistHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_PART_SPEC_ERP_MES_MAPPING_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -207,7 +207,7 @@ namespace ZR.Service.PordService
 
         public PagedInfo<ImesMstationTypePartSpec> Stationlist(string enaBled, string optionData, string textData, string site, int pageNum, int pageSize)
         {
-            /*String sqlStr = @"SELECT MODEL,STATION_TYPE,STATION_DESC,KP_SPEC,KP_SPEC_DESC,UPDATE_EMPNO,UPDATE_TIME,CREATE_TIME,ENABLED,ID FROM IMES.M_STATIONTYPE_PARTSPEC WHERE 1=1";
+            /*String sqlStr = @"SELECT MODEL,STATION_TYPE,STATION_DESC,KP_SPEC,KP_SPEC_DESC,UPDATE_EMPNO,UPDATE_TIME,CREATE_TIME,ENABLED,ID FROM SAJET.M_STATIONTYPE_PARTSPEC WHERE 1=1";
 
             if (textData != "" && optionData != null && textData != null)
             {
@@ -249,7 +249,7 @@ namespace ZR.Service.PordService
 
         public object StationStagelist(string site)
         {
-            String sqlStr = @" SELECT DISTINCT STAGE FROM IMES.M_STAGE WHERE ENABLED = 'Y' ";
+            String sqlStr = @" SELECT DISTINCT STAGE FROM SAJET.M_STAGE WHERE ENABLED = 'Y' ";
             if (site != null && site != "")
             {
                 sqlStr = sqlStr + " and site = '" + site + "'";
@@ -306,7 +306,7 @@ namespace ZR.Service.PordService
 
         public object StationTypelist(string stage, string stationType, string site)
         {
-            string sql = string.Format(@"SELECT STATION_TYPE,STAGE,STATION_TYPE_SEQ,OPERATE_TYPE,STATION_TYPE_DESC FROM IMES.M_STATION_TYPE WHERE ENABLED = 'Y' AND  SITE = '" + site + "' and STAGE = '" + stage + "'");
+            string sql = string.Format(@"SELECT STATION_TYPE,STAGE,STATION_TYPE_SEQ,OPERATE_TYPE,STATION_TYPE_DESC FROM SAJET.M_STATION_TYPE WHERE ENABLED = 'Y' AND  SITE = '" + site + "' and STAGE = '" + stage + "'");
             if (!string.IsNullOrWhiteSpace(stationType))
                 sql = sql + " AND STATION_TYPE LIKE '%" + stationType + "%'";
             return Context.Ado.SqlQuery<Object>(sql);
@@ -314,7 +314,7 @@ namespace ZR.Service.PordService
 
         public object StationModellist(string site)
         {
-            String sqlStr = @" SELECT DISTINCT MODEL FROM IMES.M_MODEL WHERE ENABLED = 'Y' ";
+            String sqlStr = @" SELECT DISTINCT MODEL FROM SAJET.M_MODEL WHERE ENABLED = 'Y' ";
             if (site != null && site != "")
             {
                 sqlStr = sqlStr + " and site = '" + site + "'";
@@ -324,7 +324,7 @@ namespace ZR.Service.PordService
 
         public object StationBrandlist(string mesSpec, string stage, string site)
         {
-            string sql = string.Format(@"SELECT MES_SPEC,ERP_SPEC,MODEL,CATEGORY,STAGE FROM IMES.M_PART_SPEC_ERP_MES_MAPPING WHERE ENABLED ='Y' and  SITE = '" + site + "'");
+            string sql = string.Format(@"SELECT MES_SPEC,ERP_SPEC,MODEL,CATEGORY,STAGE FROM SAJET.M_PART_SPEC_ERP_MES_MAPPING WHERE ENABLED ='Y' and  SITE = '" + site + "'");
             if (!string.IsNullOrWhiteSpace(stage))
                 sql += string.Format(" AND stage = '"+ stage+"'");
             if (!string.IsNullOrWhiteSpace(mesSpec))
@@ -347,7 +347,7 @@ namespace ZR.Service.PordService
                 imesMpart.id = id;
                 imesMpart.createTime= DateTime.Now;
                 int insert = Context.Insertable(imesMpart).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
-                string insertHt = $"Insert into IMES.M_STATIONTYPE_PARTSPEC_HT (Select * from IMES.M_STATIONTYPE_PARTSPEC where id = " + id;
+                string insertHt = $"Insert INTO SAJET.M_STATIONTYPE_PARTSPEC_HT (Select * FROM SAJET.M_STATIONTYPE_PARTSPEC where id = " + id;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -363,7 +363,7 @@ namespace ZR.Service.PordService
             int id = imesMpart.id;
             string site = imesMpart.site;
             imesMpart.updateTime = DateTime.Now;
-            string insertHt = $"Insert into IMES.M_STATIONTYPE_PARTSPEC_HT (Select * from IMES.M_STATIONTYPE_PARTSPEC where id = " + id;
+            string insertHt = $"Insert INTO SAJET.M_STATIONTYPE_PARTSPEC_HT (Select * FROM SAJET.M_STATIONTYPE_PARTSPEC where id = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -381,7 +381,7 @@ namespace ZR.Service.PordService
             imesMpart.updateTime= DateTime.Now;
             Context.Updateable(imesMpart).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
 
-            string insertHt = $"Insert into IMES.M_STATIONTYPE_PARTSPEC_HT (Select * from IMES.M_STATIONTYPE_PARTSPEC where id = " + id;
+            string insertHt = $"Insert INTO SAJET.M_STATIONTYPE_PARTSPEC_HT (Select * FROM SAJET.M_STATIONTYPE_PARTSPEC where id = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -407,7 +407,7 @@ namespace ZR.Service.PordService
                 int id = Context.Queryable<ImesMstationTypePartSpec>().Max(it => it.id) + 1;
                 imesMpart.id = id;
                 int insertCount = Context.Insertable(imesMpart).ExecuteCommand();
-                string insertHt = $"Insert into IMES.M_STATIONTYPE_PARTSPEC_HT (Select * from IMES.M_STATIONTYPE_PARTSPEC where id = " + id;
+                string insertHt = $"Insert INTO SAJET.M_STATIONTYPE_PARTSPEC_HT (Select * FROM SAJET.M_STATIONTYPE_PARTSPEC where id = " + id;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -421,7 +421,7 @@ namespace ZR.Service.PordService
 
         public object StationtlistHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_STATIONTYPE_PARTSPEC_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_STATIONTYPE_PARTSPEC_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -432,7 +432,7 @@ namespace ZR.Service.PordService
         
         public object StationtlistStage(string stationType, string site)
         {
-            string listHt = $"select STAGE,STATION_TYPE_DESC FROM IMES.M_STATION_TYPE WHERE ENABLED = 'Y' AND STATION_TYPE = '" + stationType + "'";
+            string listHt = $"select STAGE,STATION_TYPE_DESC FROM SAJET.M_STATION_TYPE WHERE ENABLED = 'Y' AND STATION_TYPE = '" + stationType + "'";
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";

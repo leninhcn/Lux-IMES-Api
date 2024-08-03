@@ -39,7 +39,7 @@ namespace ZR.Service.Repair
             {
                 exeRes = new ExecuteResult();
                 DataTable dt = new DataTable();
-                string sql = @"SELECT ITEM_GROUP FROM IMES.P_WO_BOM where WORK_ORDER =@WO  and  ITEM_IPN =@IPN ";
+                string sql = @"SELECT ITEM_GROUP FROM SAJET.P_WO_BOM where WORK_ORDER =@WO  and  ITEM_IPN =@IPN ";
                
                 dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
                 { new SugarParameter("@WO", wo), new SugarParameter("@IPN", ipn)});
@@ -67,7 +67,7 @@ namespace ZR.Service.Repair
             {
                 exeRes = new ExecuteResult();
                 DataTable dt = new DataTable();
-                string sql = @"SELECT ITEM_GROUP FROM IMES.P_WO_BOM where WORK_ORDER =@WO  and  ITEM_IPN =@IPN ";
+                string sql = @"SELECT ITEM_GROUP FROM SAJET.P_WO_BOM where WORK_ORDER =@WO  and  ITEM_IPN =@IPN ";
 
                 dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
                 { new SugarParameter("@WO", wo),
@@ -94,9 +94,9 @@ namespace ZR.Service.Repair
                 }
 
                 sql = @"SELECT item_group  
-                        FROM IMES.P_WO_BOM 
+                        FROM SAJET.P_WO_BOM 
                         where work_order = @WO and ITEM_IPN = @newIPN  and  item_group != '0' and item_group in 
-                        (SELECT distinct item_group FROM IMES.P_WO_BOM where work_order =@WO and ITEM_IPN = @oldIPN  and  item_group != '0')";
+                        (SELECT distinct item_group FROM SAJET.P_WO_BOM where work_order =@WO and ITEM_IPN = @oldIPN  and  item_group != '0')";
                
                 dt = await Context.Ado.GetDataTableAsync(sql, new List<SugarParameter>
                 { new SugarParameter("@WO", wo),
@@ -126,7 +126,7 @@ namespace ZR.Service.Repair
             {
                 exeRes = new ExecuteResult();
 
-                string sql = @"select ipn, datecode, vendor, lot  from IMES.P_MATERIAL where reel_no= '" + reelno + "'  ";
+                string sql = @"select ipn, datecode, vendor, lot  FROM SAJET.P_MATERIAL where reel_no= '" + reelno + "'  ";
                 exeRes.Anything = await Context.Ado.GetDataTableAsync(sql);
                 exeRes.Status = true;
             }
@@ -145,7 +145,7 @@ namespace ZR.Service.Repair
                 exeRes = new ExecuteResult();
                 foreach (RepairDetail repairDetail in repairInfo.RepairDetails)
                 {
-                    string sqlStr = @"insert into IMES.P_SN_REPAIR_REPLACE_REEL RECID,SERIAL_NUMBER,REPLACE_EMPNO,REPLACE_TIME,OLD_REEL_IPN,
+                    string sqlStr = @"insert INTO SAJET.P_SN_REPAIR_REPLACE_REEL RECID,SERIAL_NUMBER,REPLACE_EMPNO,REPLACE_TIME,OLD_REEL_IPN,
 OLD_REEL_NO,OLD_REEL_SN,OLD_REEL_DATECODE,OLD_REEL_LOTCODE,NEW_REEL_IPN,NEW_REEL_NO,NEW_REEL_SN,NEW_REEL_DATECODE,NEW_REEL_LOTCODE,
 option1,option2,option3) 
                 VALUES(@RECID,@SERIAL_NUMBER,@REPLACE_EMPNO,@REPLACE_TIME,@OLD_REEL_IPN,@OLD_REEL_NO,@OLD_REEL_SN,@OLD_REEL_DATECODE,@OLD_REEL_LOTCODE,

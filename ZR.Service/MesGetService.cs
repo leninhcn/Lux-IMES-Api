@@ -173,7 +173,7 @@ namespace ZR.Service
         /// <returns></returns>
         public List<dynamic> GetListWoType(string parm, string site)
         {
-            string sql = @"SELECT CASE WO_TYPE  WHEN 'ZBTS' THEN 'ZBTS(一般工单)'  WHEN 'ZMPR' THEN 'ZMPR(重工工单)'   WHEN 'ZPRR' THEN 'ZPRR(重工工单)'         WHEN 'ZENG' THEN 'ZENG(NPI工单)'   WHEN '8' THEN '8(重工委外工单)'   WHEN '11' THEN '11(拆件式工单)'  WHEN '13' THEN '13(预测工单)'    WHEN '15' THEN '15(试产工单)'   ELSE WO_TYPE || '(其他工单类型)'  END WO_TYPE FROM IMES.P_WO_BASE  WHERE WO_TYPE IS NOT NULL  GROUP BY WO_TYPE";
+            string sql = @"SELECT CASE WO_TYPE  WHEN 'ZBTS' THEN 'ZBTS(一般工单)'  WHEN 'ZMPR' THEN 'ZMPR(重工工单)'   WHEN 'ZPRR' THEN 'ZPRR(重工工单)'         WHEN 'ZENG' THEN 'ZENG(NPI工单)'   WHEN '8' THEN '8(重工委外工单)'   WHEN '11' THEN '11(拆件式工单)'  WHEN '13' THEN '13(预测工单)'    WHEN '15' THEN '15(试产工单)'   ELSE WO_TYPE || '(其他工单类型)'  END WO_TYPE FROM SAJET.P_WO_BASE  WHERE WO_TYPE IS NOT NULL  GROUP BY WO_TYPE";
             var response = Context.Ado.SqlQuery<dynamic>(sql);
             return response;
         }
@@ -246,7 +246,7 @@ namespace ZR.Service
         public List<dynamic> GetStationTypeTree( string site)
         {
             string sql = @"SELECT B.STAGE,B.STATION_TYPE, B.STATION_TYPE||' '||B.STATION_TYPE_DESC STATION_TYPE_DESC, B.CLIENT_TYPE
-                                      FROM IMES.M_STAGE A, IMES.M_STATION_TYPE B
+                                      FROM SAJET.M_STAGE A, IMES.M_STATION_TYPE B
                                      WHERE A.STAGE = B.STAGE
                                        AND A.ENABLED = 'Y'
                                        AND B.ENABLED = 'Y' AND B.SITE=@site ORDER BY B.STAGE, B.STATION_TYPE";
@@ -266,7 +266,7 @@ namespace ZR.Service
         public List<dynamic> GetStationTree( string site)
         {
             string sql = @"SELECT B.SITE, B.LINE, C.STAGE,D.STATION_TYPE, D.STATION_TYPE||' '||D.STATION_TYPE_DESC STATION_TYPE_DESC, A.STATION_NAME
-                                      FROM IMES.M_STATION      A,
+                                      FROM SAJET.M_STATION      A,
                                            IMES.M_LINE         B,
                                            IMES.M_STAGE        C,
                                            IMES.M_STATION_TYPE D,
@@ -402,7 +402,7 @@ namespace ZR.Service
                    TO_CHAR (A.IN_LINE_TIME, 'yyyy/mm/dd hh24:mi:ss')  In_PDLine_Time,
                    TO_CHAR (A.OUT_LINE_TIME, 'yyyy/mm/dd hh24:mi:ss') Out_PDLine_Time,
                    A.Box_No,A.CARTON_NO,A.PALLET_NO, A.QC_NO,A.QC_RESULT,A.Rework_No,A.SN_VERSION
-              FROM IMES.P_SN_STATUS a where 1=1 ";
+              FROM SAJET.P_SN_STATUS a where 1=1 ";
             List<SugarParameter> ls=new List<SugarParameter>();
             if(!parm.WorkOrder.IsNullOrEmpty())
             {
@@ -446,7 +446,7 @@ namespace ZR.Service
         {
             var sql = @"SELECT a.WORK_ORDER,a.IPN, A.PANEL_NO, a.CLOSE_FLAG, a.STATUS,
                    TO_CHAR (A.CREATE_TIME, 'yyyy/mm/dd hh24:mi:ss') CREATE_TIME
-              FROM IMES.P_WO_PANEL a where 1=1 ";
+              FROM SAJET.P_WO_PANEL a where 1=1 ";
             List<SugarParameter> ls = new List<SugarParameter>();
             if (!parm.WorkOrder.IsNullOrEmpty())
             {

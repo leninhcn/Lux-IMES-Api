@@ -30,13 +30,13 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getEmpName(string empNo)
         {
-            string sqlstr = @"SELECT EMP_NO,EMP_NAME FROM imes.m_emp where EMP_NO='" + empNo + "'  AND ENABLED ='Y' AND ROWNUM=1";
+            string sqlstr = @"SELECT EMP_NO,EMP_NAME FROM SAJET.m_emp where EMP_NO='" + empNo + "'  AND ENABLED ='Y' AND ROWNUM=1";
             return await Context.Ado.GetDataTableAsync(sqlstr);
         }
         
         public async Task<DataTable> checkstatus(string snno)
         {
-            string getHold = string.Format(@" SELECT  *  FROM imes.p_sn_status WHERE serial_number= '{0}' ", snno);
+            string getHold = string.Format(@" SELECT  *  FROM SAJET.p_sn_status WHERE serial_number= '{0}' ", snno);
             return await Context.Ado.GetDataTableAsync(getHold);
         }
 
@@ -117,7 +117,7 @@ namespace ZR.Service.Repair
                        a.route_name,
                        A.IPN,
                        A.STATION_TYPE
-                  FROM imes.p_SN_STATUS A WHERE A.SERIAL_NUMBER = '" + sNInfo + "' AND ROWNUM = 1";
+                  FROM SAJET.p_SN_STATUS A WHERE A.SERIAL_NUMBER = '" + sNInfo + "' AND ROWNUM = 1";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
@@ -125,7 +125,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getStep(repairExe baseInfo)
         {
-            string sSQL = @"SELECT STEP FROM IMES.M_ROUTE_DETAIL  WHERE ROUTE_NAME='" + baseInfo.routName + "' AND STATION_TYPE='" + baseInfo.CurrentStationType + "' AND NEXT_STATION_TYPE='" + baseInfo.stationType + "' AND ROWNUM=1";
+            string sSQL = @"SELECT STEP FROM SAJET.M_ROUTE_DETAIL  WHERE ROUTE_NAME='" + baseInfo.routName + "' AND STATION_TYPE='" + baseInfo.CurrentStationType + "' AND NEXT_STATION_TYPE='" + baseInfo.stationType + "' AND ROWNUM=1";
            
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
@@ -143,7 +143,7 @@ namespace ZR.Service.Repair
                                  a.station_name,
                                  a.station_type,
                                  NVL (G.REASON_CODE, 'N/A') REASON_CODE
-                            FROM imes.p_SN_DEFECT A,
+                            FROM SAJET.p_SN_DEFECT A,
                                  imes.m_DEFECT   B,
                                  imes.p_SN_REPAIR F,
                                  imes.m_REASON   G
@@ -162,14 +162,14 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getDefectReasonType()
         {
-            string sSQL = @"SELECT DISTINCT A.REASON_TYPE FROM IMES.M_REASON A WHERE  A.ENABLED = 'Y' ";
+            string sSQL = @"SELECT DISTINCT A.REASON_TYPE FROM SAJET.M_REASON A WHERE  A.ENABLED = 'Y' ";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
 
         public async Task<DataTable> getDefectReason(string resonType)
         {
-            string sSQL = @"SELECT DISTINCT A.REASON_TYPE, A.REASON_CODE, A.REASON_DESC, A.REASON_DESC2   FROM IMES.M_REASON A Where A.enabled = 'Y'  ";
+            string sSQL = @"SELECT DISTINCT A.REASON_TYPE, A.REASON_CODE, A.REASON_DESC, A.REASON_DESC2   FROM SAJET.M_REASON A Where A.enabled = 'Y'  ";
             if (!string.IsNullOrEmpty(resonType))
             {
                 sSQL = sSQL + "and A.REASON_TYPE like '" + resonType + "%'";
@@ -188,20 +188,20 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> GetKPReplaceInfo(string recid, string sn)
         {
-            string sSQL = string.Format(@" SELECT ITEM_IPN,OLD_IPN_SN,NEW_IPN_SN,NEW_IPN, REPLACE_EMPNO,REPLACE_TIME FROM imes.P_SN_REPAIR_REPLACE_KP WHERE RECID= '{0}' AND serial_number= '{1}' AND REMARK is null ", recid, sn);
+            string sSQL = string.Format(@" SELECT ITEM_IPN,OLD_IPN_SN,NEW_IPN_SN,NEW_IPN, REPLACE_EMPNO,REPLACE_TIME FROM SAJET.P_SN_REPAIR_REPLACE_KP WHERE RECID= '{0}' AND serial_number= '{1}' AND REMARK is null ", recid, sn);
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
 
         public async Task<DataTable> Checkoldsn(string sn, string oldsn)
         {
-            string sSQL = @" SELECT C.item_sn  FROM IMES.P_SN_KEYPARTS C WHERE  C.SERIAL_NUMBER = '" + sn + "'" +
+            string sSQL = @" SELECT C.item_sn  FROM SAJET.P_SN_KEYPARTS C WHERE  C.SERIAL_NUMBER = '" + sn + "'" +
                  "AND C.ITEM_SN = '" + oldsn + "' ";
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
 
         public async Task<DataTable> Checkparttype(string sn, string oldsn)
         {
-            string sSQL = @" SELECT b.part_type  FROM IMES.P_WO_BOM A,IMES.M_SN_FEATURE B,IMES.P_SN_KEYPARTS C
+            string sSQL = @" SELECT b.part_type  FROM SAJET.P_WO_BOM A,IMES.M_SN_FEATURE B,IMES.P_SN_KEYPARTS C
                  WHERE A.ITEM_IPN = B.IPN AND A.WORK_ORDER = C.WORK_ORDER AND A.ITEM_IPN = C.ITEM_IPN AND C.SERIAL_NUMBER = '" + sn + "'" +
                  "AND C.ITEM_SN = '" + oldsn + "' AND B.ENABLED='Y' ";
             return await Context.Ado.GetDataTableAsync(sSQL);
@@ -253,7 +253,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sSQL = @"select ipn, datecode, vendor, lot  from IMES.P_MATERIAL where reel_no= '" + reelno + "'  ";
+                string sSQL = @"select ipn, datecode, vendor, lot  FROM SAJET.P_MATERIAL where reel_no= '" + reelno + "'  ";
                 exeRes.Anything = await Context.Ado.GetDataTableAsync(sSQL);
                 exeRes.Status = true;
             }
@@ -267,7 +267,7 @@ namespace ZR.Service.Repair
 
         public async Task<bool> InsertReelNo(string ReelNo, string editPartNo, string editDateCode, string txtUnitQty, string editVendor, string editLot,string userNo)
         {
-            string sSQL = @"Insert Into IMES.P_MATERIAL (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK)
+            string sSQL = @"Insert INTO SAJET.P_MATERIAL (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK)
               Values (@IPN,@DATECODE,@MATERIAL_NO,@REEL_NO,@REEL_QTY,@VENDOR,@LOT,@UPDATE_USERID,@UPDATE_TIME,@RT_RECEIVE_TIME,@REEL_MEMO,@EXP_DATE,@REMARK)   ";
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
             {
@@ -291,7 +291,7 @@ namespace ZR.Service.Repair
 
         public async Task<bool> InsertReelNo_HT(string ReelNo, string editPartNo, string editDateCode, string txtUnitQty, string editVendor, string editLot,string userNo)
         {
-            string sSQL = @"Insert Into IMES.P_MATERIAL_HT (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK) Values 
+            string sSQL = @"Insert INTO SAJET.P_MATERIAL_HT (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK) Values 
                    (@IPN,@DATECODE,@MATERIAL_NO,@REEL_NO,@REEL_QTY,@VENDOR,@LOT,@UPDATE_USERID,@UPDATE_TIME,@RT_RECEIVE_TIME,@REEL_MEMO,@EXP_DATE,@REMARK) ";
 
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
@@ -357,7 +357,7 @@ namespace ZR.Service.Repair
 
         public async Task<bool> InsertReelNo1(string ReelNo, string editPartNo, string editDateCode, string txtUnitQty, string editVendor, string editLot, string msd,string userNo)
         {
-            string sSQL = @"Insert Into IMES.P_MATERIAL (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK)
+            string sSQL = @"Insert INTO SAJET.P_MATERIAL (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK)
                       Values (@IPN,@DATECODE,@MATERIAL_NO,@REEL_NO,@REEL_QTY,@VENDOR,@LOT,@UPDATE_USERID,@UPDATE_TIME,@RT_RECEIVE_TIME,@REEL_MEMO,@EXP_DATE,@REMARK) ";
           
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
@@ -382,7 +382,7 @@ namespace ZR.Service.Repair
        
        public  async Task<bool> InsertReelNo1_HT(string ReelNo, string editPartNo, string editDateCode, string txtUnitQty, string editVendor, string editLot, string msd,string userNo)
        {
-           string sSQL = @"Insert Into IMES.P_MATERIAL_HT (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK) 
+           string sSQL = @"Insert INTO SAJET.P_MATERIAL_HT (IPN,DATECODE,MATERIAL_NO,REEL_NO,REEL_QTY,VENDOR,LOT,UPDATE_USERID,UPDATE_TIME,RT_RECEIVE_TIME,REEL_MEMO,EXP_DATE,REMARK) 
                    Values (@IPN,@DATECODE,@MATERIAL_NO,@REEL_NO,@REEL_QTY,@VENDOR,@LOT,@UPDATE_USERID,@UPDATE_TIME,@RT_RECEIVE_TIME,@REEL_MEMO,@EXP_DATE,@REMARK) ";
           
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
@@ -505,7 +505,7 @@ namespace ZR.Service.Repair
             {
                 foreach (RepairDetail repairDetail in repairInfo.RepairDetails)
                 {
-                    string sqlStr = @"insert into IMES.P_SN_REPAIR_DETAIL(RECID, SERIAL_NUMBER, CASETYPE, STATION, REMARK, DEFECTSSYM, OLD_CSN, NEW_CSN, OLD_CPN, NEW_CPN, LOCATION, VENDOR, DATECODE, LOTCODE, REMARK1,OPTION1,OPTION2,OPTION3,OPTION4,OPTION5,OPTION6,OPTION7,OPTION8,OPTION9, UPDATE_EMPNO, CREATE_EMPNO) 
+                    string sqlStr = @"insert INTO SAJET.P_SN_REPAIR_DETAIL(RECID, SERIAL_NUMBER, CASETYPE, STATION, REMARK, DEFECTSSYM, OLD_CSN, NEW_CSN, OLD_CPN, NEW_CPN, LOCATION, VENDOR, DATECODE, LOTCODE, REMARK1,OPTION1,OPTION2,OPTION3,OPTION4,OPTION5,OPTION6,OPTION7,OPTION8,OPTION9, UPDATE_EMPNO, CREATE_EMPNO) 
                 VALUES(@RECID, @SERIAL_NUMBER, @CASETYPE, @STATION, @REMARK, @DEFECTSSYM, @OLD_CSN, @NEW_CSN, @OLD_CPN, @NEW_CPN, @LOCATION, @VENDOR, @DATECODE, @LOTCODE,
                          @REMARK1,@OPTION1,@OPTION2,@OPTION3,@OPTION4,@OPTION5,@OPTION6,@OPTION7,@OPTION8,@OPTION9,@UPDATE_EMPNO, @CREATE_EMPNO)";
 
@@ -556,7 +556,7 @@ namespace ZR.Service.Repair
             {
                 foreach (RepairDetail repairDetail in repairInfo.RepairDetails)
                 {
-                    string sqlStr = @"insert into IMES.P_SN_REPAIR_DETAIL(RECID, SERIAL_NUMBER, CASETYPE, STATION, REMARK, DEFECTSSYM, OLD_CSN, NEW_CSN, OLD_CPN, NEW_CPN, LOCATION, VENDOR, DATECODE, LOTCODE, REMARK1,OPTION1,OPTION2,OPTION3,OPTION4,OPTION5,OPTION6,OPTION7,OPTION8,OPTION9, UPDATE_EMPNO, CREATE_EMPNO) 
+                    string sqlStr = @"insert INTO SAJET.P_SN_REPAIR_DETAIL(RECID, SERIAL_NUMBER, CASETYPE, STATION, REMARK, DEFECTSSYM, OLD_CSN, NEW_CSN, OLD_CPN, NEW_CPN, LOCATION, VENDOR, DATECODE, LOTCODE, REMARK1,OPTION1,OPTION2,OPTION3,OPTION4,OPTION5,OPTION6,OPTION7,OPTION8,OPTION9, UPDATE_EMPNO, CREATE_EMPNO) 
                 VALUES(@RECID, @SERIAL_NUMBER, @CASETYPE, @STATION, @REMARK, @DEFECTSSYM, @OLD_CSN, @NEW_CSN, @OLD_CPN, @NEW_CPN, @LOCATION, @VENDOR, @DATECODE, @LOTCODE, @REMARK1,@OPTION1,@OPTION2,@OPTION3,@OPTION4,@OPTION5,@OPTION6,@OPTION7,@OPTION8,@OPTION9,@UPDATE_EMPNO, @CREATE_EMPNO)";
                    
                     await Context.Ado.ExecuteCommandAsync(sqlStr, new List<SugarParameter>
@@ -601,7 +601,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> GetDefectCodeInfo(string sDefectCode)
         {
-            string sSQL = @"select a.DEFECT_DESC,a.DEFECT_DESC2 from IMES.M_DEFECT a where a.DEFECT_CODE = @DEFECT_CODE and a.ENABLED = 'Y'";
+            string sSQL = @"select a.DEFECT_DESC,a.DEFECT_DESC2 FROM SAJET.M_DEFECT a where a.DEFECT_CODE = @DEFECT_CODE and a.ENABLED = 'Y'";
 
             return await Context.Ado.GetDataTableAsync(sSQL, new List<SugarParameter>
                     { new SugarParameter("@DEFECT_CODE", sDefectCode) });
@@ -613,7 +613,7 @@ namespace ZR.Service.Repair
             string sID = "0";
 
             string sSQL = @" SELECT RPAD(NVL(PARAM_VALUE, '1'), 2, '0') || TO_CHAR(SYSDATE, 'YYMMDD') || LPAD(IMES.S_DEF_CODE.NEXTVAL, 5, '0') SNID
-                    FROM IMES.S_BASE
+                    FROM SAJET.S_BASE
                    WHERE PARAM_NAME = 'DBID' ";
             DataTable dtTemp = await Context.Ado.GetDataTableAsync(sSQL);
             sID = dtTemp.Rows[0][0].ToString();
@@ -622,7 +622,7 @@ namespace ZR.Service.Repair
 
         public async Task<bool> AddDefectInfo(string sRecID, string userNo, repairDef repDef)
         {
-            string sSQL = @"INSERT INTO IMES.P_SN_DEFECT 
+            string sSQL = @"INSERT INTO SAJET.P_SN_DEFECT 
 (RECID, SERIAL_NUMBER, WORK_ORDER, IPN, REC_TIME, DEFECT_CODE, LOCATION, STATION_NAME, STATION_TYPE, STAGE, LINE, RECEIVE_EMPNO,TEST_EMPNO,RP_STATUS) 
 VALUES(@RECID,@SN,@WO,@IPN,sysdate,@DEFCODE,@LOCATION,@STATION_NAME,@STATION_TYPE,@STAGE,@LINE,@REC_EMPNO,@TEST_EMPNO,'1')";
            
@@ -660,9 +660,9 @@ VALUES(@RECID,@SN,@WO,@IPN,sysdate,@DEFCODE,@LOCATION,@STATION_NAME,@STATION_TYP
         public async Task<DataTable> GetReturnStation(string sn, string process)
         {
             string sSQL = string.Format(@"SELECT D.NEXT_STATION_TYPE 
-                                        FROM IMES.P_SN_STATUS C, IMES.M_ROUTE_DETAIL D ,
+                                        FROM SAJET.P_SN_STATUS C, IMES.M_ROUTE_DETAIL D ,
                                              (SELECT B.STEP ,B.SEQ
-                                                FROM IMES.P_SN_STATUS A, IMES.M_ROUTE_DETAIL B
+                                                FROM SAJET.P_SN_STATUS A, IMES.M_ROUTE_DETAIL B
                                                 WHERE A.SERIAL_NUMBER = '{0}' 
                                                 AND A.ROUTE_NAME = B.ROUTE_NAME
                                                 AND A.STATION_TYPE = B.STATION_TYPE
@@ -718,7 +718,7 @@ VALUES(@RECID,@SN,@WO,@IPN,sysdate,@DEFCODE,@LOCATION,@STATION_NAME,@STATION_TYP
 
         public async Task<bool> AddScrapInfo(ScrapDto scrapDto,string userNo)
         {
-            string sSQL = @"INSERT INTO IMES.P_SN_SCRAP 
+            string sSQL = @"INSERT INTO SAJET.P_SN_SCRAP 
 ( WORK_ORDER, IPN,VERSION,SERIAL_NUMBER, STATION_NAME, SCRAP_MEMO, SCRAP_TYPE, UPDATE_EMPNO,UPDATE_TIME,CREATE_TIME, LINE, STATION_TYPE,ENABLED,OPTION1) 
 VALUES(@wo,@IPN,@VERSION,@SERIAL_NUMBER,@STATION_NAME,@SCRAP_MEMO,'S',@UPDATE_EMPNO,sysdate,sysdate,@LINE,@STATION_TYPE,'Y',@OPTION1)";
            
@@ -741,7 +741,7 @@ VALUES(@wo,@IPN,@VERSION,@SERIAL_NUMBER,@STATION_NAME,@SCRAP_MEMO,'S',@UPDATE_EM
 
         public async Task<bool> UpdateSnStatus(string sn,string userNo)
         {
-            string sSQL = @"UPDATE IMES.P_SN_STATUS SET CURRENT_STATUS='S',WORK_FLAG=1 ,WIP_STATION_TYPE='SCRAP',NEXT_STATION_TYPE='SCRAP',OUT_STATIONTYPE_TIME=sysdate,EMP_NO=@EMP_NO 
+            string sSQL = @"update SAJET.P_SN_STATUS SET CURRENT_STATUS='S',WORK_FLAG=1 ,WIP_STATION_TYPE='SCRAP',NEXT_STATION_TYPE='SCRAP',OUT_STATIONTYPE_TIME=sysdate,EMP_NO=@EMP_NO 
                             WHERE SERIAL_NUMBER=@SN";
            
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
@@ -755,7 +755,7 @@ VALUES(@wo,@IPN,@VERSION,@SERIAL_NUMBER,@STATION_NAME,@SCRAP_MEMO,'S',@UPDATE_EM
 
         public async Task<bool> AddSnTravel(string sn)
         {
-            string sSQL = @"INSERT INTO IMES.P_SN_TRAVEL SELECT * FROM IMES.P_SN_STATUS WHERE SERIAL_NUMBER=@SN";
+            string sSQL = @"INSERT INTO SAJET.P_SN_TRAVEL SELECT * FROM SAJET.P_SN_STATUS WHERE SERIAL_NUMBER=@SN";
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL, new List<SugarParameter>
             {
                 new SugarParameter("@SN", sn)
@@ -777,7 +777,7 @@ VALUES(@wo,@IPN,@VERSION,@SERIAL_NUMBER,@STATION_NAME,@SCRAP_MEMO,'S',@UPDATE_EM
                              D.REASON_DESC2, E.LOCATION, a.defect_code,
                              DECODE(C.SUGGEST_SCRAPE, 'Y', '是', 'N', '否', SUGGEST_SCRAPE) SUGGEST_SCRAPE,
                              C.REMARK, ROW_NUMBER() OVER(PARTITION BY D.REASON_CODE, E.LOCATION, A.DEFECT_CODE  ORDER BY E.CREATE_TIME DESC) SEQ
-                        FROM IMES.P_SN_DEFECT A,
+                        FROM SAJET.P_SN_DEFECT A,
                              IMES.M_DEFECT   B,
                              IMES.P_SN_REPAIR C,
                              IMES.M_REASON   D, IMES.P_SN_REPAIR_DETAIL E

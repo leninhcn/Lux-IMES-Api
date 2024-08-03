@@ -73,7 +73,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getDefect(string defect)
         {
-            string sSQL = @"select defect_code,defect_desc,id from IMES.M_DEFECT where defect_code='" + defect + "' and enabled='Y'";
+            string sSQL = @"select defect_code,defect_desc,id FROM SAJET.M_DEFECT where defect_code='" + defect + "' and enabled='Y'";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
 
@@ -133,7 +133,7 @@ namespace ZR.Service.Repair
 
         public async Task<bool> InsertReplaceKP(string recid, string station, string sn, string oldkpsn, string oldpartno, string newkpsn, string newpartno, string remark, string EMPNO, string lotcode, string datecode, string rid)
         {
-            string sSQL = @"INSERT INTO IMES.P_SN_REPAIR_REPLACE_KP (recid,serial_number,REPLACE_EMPNO,replace_time,ITEM_IPN,OLD_IPN_SN,NEW_IPN_SN,NEW_IPN,remark,flag,lot_Code,date_Code,rid)
+            string sSQL = @"INSERT INTO SAJET.P_SN_REPAIR_REPLACE_KP (recid,serial_number,REPLACE_EMPNO,replace_time,ITEM_IPN,OLD_IPN_SN,NEW_IPN_SN,NEW_IPN,remark,flag,lot_Code,date_Code,rid)
               VALUES ('" + recid + "','" + sn + "','" + EMPNO + "',SYSDATE,'" + oldpartno + "','" + oldkpsn + "','" + newkpsn + "','" + station + "','" + remark + "','Y','" + lotcode + "','" + datecode + "','" + rid + "') ";
             
             var affected = await Context.Ado.ExecuteCommandAsync(sSQL);

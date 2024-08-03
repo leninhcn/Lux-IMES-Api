@@ -100,7 +100,7 @@ namespace ZR.Service
         public List<dynamic> GetJobGroupLinkDetail(MActionGroupBaseQueryDto param)
         {
             var sql = @"SELECT C.TYPE_NAME,'['||C.PROC_PARAM||']' PROC_PARAM,A.GROUP_SEQ,B.JOB_NAME,A.VALUE_KIND,A.VALUE_TRANSFORMATION,A.LOOP_COUNT,A.GROUP_ID,B.JOB_ID
-                                   FROM IMES.M_ACTION_GROUP_LINK A,IMES.M_ACTION_JOB_BASE B,IMES.M_ACTION_JOB_TYPE_BASE C 
+                                   FROM SAJET.M_ACTION_GROUP_LINK A,IMES.M_ACTION_JOB_BASE B,IMES.M_ACTION_JOB_TYPE_BASE C 
                                    WHERE A.JOB_ID = B.JOB_ID AND B.TYPE_ID = C.TYPE_ID
                                     AND A.GROUP_ID=@groupid ORDER BY A.GROUP_SEQ";
             var response = Context.Ado.SqlQuery<dynamic>(sql, new List<SugarParameter> { new SugarParameter("@groupid", param.GroupId) });
@@ -113,7 +113,7 @@ namespace ZR.Service
         /// <returns></returns>
         public List<dynamic> GetJobTypelist(string site)
         {
-            var sql = @"SELECT  TYPE_ID, LPAD(TYPE_ID, 3, '0') || ': ' || TYPE_NAME || '(' || TYPE_DESC || ')' TYPE_DESC FROM IMES.M_ACTION_JOB_TYPE_BASE WHERE 1=1 AND ENABLED='Y' AND SITE=@site ORDER BY TYPE_NAME";
+            var sql = @"SELECT  TYPE_ID, LPAD(TYPE_ID, 3, '0') || ': ' || TYPE_NAME || '(' || TYPE_DESC || ')' TYPE_DESC FROM SAJET.M_ACTION_JOB_TYPE_BASE WHERE 1=1 AND ENABLED='Y' AND SITE=@site ORDER BY TYPE_NAME";
             var response = Context.Ado.SqlQuery<dynamic>(sql,new List<SugarParameter> { new SugarParameter("@site", site) });
             return response;
         }
@@ -274,7 +274,7 @@ namespace ZR.Service
             try
             {
                 //获取最大jobseq
-                var sql = "select nvl(max(job_seq),0)+1 from imes.M_ACTION_JOB_LINK  where job_id= @jobid ";
+                var sql = "select nvl(max(job_seq),0)+1 FROM SAJET.M_ACTION_JOB_LINK  where job_id= @jobid ";
                 DataTable dt= Context.Ado.GetDataTable(sql, new List<SugarParameter> { new SugarParameter("@jobid", param.JobId) });
                 param.JobSeq = Convert.ToInt32(dt.Rows[0][0].ToString());
                 //检查是否有重复
@@ -313,7 +313,7 @@ namespace ZR.Service
             {
                 var resut = UseTran(() =>
             {
-                var u1sql = "update IMES.M_ACTION_JOB_LINK set JOB_SEQ=JOB_SEQ-1   where JOB_ID=@jobid  and JOB_SEQ >=@jobseq";
+                var u1sql = "update SAJET.M_ACTION_JOB_LINK set JOB_SEQ=JOB_SEQ-1   where JOB_ID=@jobid  and JOB_SEQ >=@jobseq";
                 int result = Context.Deleteable<MActionJobLink>().Where(it => it.JobSeq == param.JobSeq && it.JobId == param.JobId && it.Site == param.Site).ExecuteCommand();
                 Context.Ado.ExecuteCommand(u1sql, new List<SugarParameter> { new SugarParameter("@jobid", param.JobId), new SugarParameter("@jobseq", param.JobSeq) });
             });
@@ -431,8 +431,8 @@ namespace ZR.Service
         {
          var resut=   UseTran2(() =>
             {
-                var u1sql = "update IMES.M_ACTION_GROUP_LINK set GROUP_SEQ=GROUP_SEQ+1   where GROUP_ID=@groupid  and GROUP_SEQ >=@groupseq";
-                var u2sql = "update IMES.M_ACTION_GROUP_BASE  set UPDATE_EMPNO=@userno ,UPDATE_TIME = sysdate  where GROUP_ID=@groupid and rownum=1";
+                var u1sql = "update SAJET.M_ACTION_GROUP_LINK set GROUP_SEQ=GROUP_SEQ+1   where GROUP_ID=@groupid  and GROUP_SEQ >=@groupseq";
+                var u2sql = "update SAJET.M_ACTION_GROUP_BASE  set UPDATE_EMPNO=@userno ,UPDATE_TIME = sysdate  where GROUP_ID=@groupid and rownum=1";
                 Context.Ado.ExecuteCommand(u1sql, new List<SugarParameter> { new SugarParameter("@groupid", param.GroupId), new SugarParameter("@groupseq", param.GroupSeq) });
                 Context.Insertable(param).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 Context.Ado.ExecuteCommand(u2sql, new List<SugarParameter> { new SugarParameter("@userno", param.CreateEmpno), new SugarParameter("@groupid", param.GroupId) });
@@ -448,8 +448,8 @@ namespace ZR.Service
         {
             var resut = UseTran2(() =>
             {
-                var u1sql = "update IMES.M_ACTION_GROUP_LINK set GROUP_SEQ=GROUP_SEQ-1   where GROUP_ID=@groupid  and GROUP_SEQ > @groupseq";
-                var u2sql = "update IMES.M_ACTION_GROUP_BASE  set UPDATE_EMPNO=@userno ,UPDATE_TIME = sysdate  where GROUP_ID=@groupid and rownum=1";
+                var u1sql = "update SAJET.M_ACTION_GROUP_LINK set GROUP_SEQ=GROUP_SEQ-1   where GROUP_ID=@groupid  and GROUP_SEQ > @groupseq";
+                var u2sql = "update SAJET.M_ACTION_GROUP_BASE  set UPDATE_EMPNO=@userno ,UPDATE_TIME = sysdate  where GROUP_ID=@groupid and rownum=1";
                 int result = Context.Deleteable<MActionGroupLink>().Where(it => it.GroupId == param.GroupId && it.GroupSeq == param.GroupSeq).ExecuteCommand();
                 Context.Ado.ExecuteCommand(u1sql, new List<SugarParameter> { new SugarParameter("@groupid", param.GroupId), new SugarParameter("@groupseq", param.GroupSeq) });
                 Context.Ado.ExecuteCommand(u2sql, new List<SugarParameter> { new SugarParameter("@userno", param.UpdateEmpno), new SugarParameter("@groupid", param.GroupId) });

@@ -96,9 +96,9 @@ namespace ZR.Service.Business
             {
                 Console.WriteLine($"Group: {group.GroupField}, Total Count: {group.TotalCount}");
                 var qtySql = @"SELECT QTY-NGQTY AS QTY FROM 
-                 (SELECT NVL(MAX(QTY),0) AS QTY FROM IMES.P_STATION_LOAD_MATERIAL_HT 
+                 (SELECT NVL(MAX(QTY),0) AS QTY FROM SAJET.P_STATION_LOAD_MATERIAL_HT 
                   WHERE WORK_ORDER=@WORK_ORDER AND MACHINE_CODE=@MACHINE_CODE) t1,
-                 (SELECT NVL(SUM(SAMPLING_INSPECTION_NG),0) AS NGQTY FROM IMES.P_NG_DETAIL 
+                 (SELECT NVL(SUM(SAMPLING_INSPECTION_NG),0) AS NGQTY FROM SAJET.P_NG_DETAIL 
                      WHERE WORK_ORDER=@WORK_ORDER AND MACHINE_CODE=@MACHINE_CODE AND ENABLED='Y') t2";
                 //机台投入数量
                 decimal qty = Context.Ado.SqlQuery<decimal>(qtySql,
@@ -194,7 +194,7 @@ namespace ZR.Service.Business
             return Context.Ado.SqlQuery<dynamic>(
                   @"
                    SELECT M.ID,M.MACHINE_CODE,M.MACHINE_DESC,M.MACHINE_TYPE,
-                   G.STATION_TYPE,M.STAGE,M.LINE FROM IMES.M_MACHINE M
+                   G.STATION_TYPE,M.STAGE,M.LINE FROM SAJET.M_MACHINE M
                    LEFT JOIN IMES.M_MACHINE_GROUP G ON (M.GROUP_ID=G.ID)
                    WHERE 
                    M.SITE=@SITE AND M.ENABLED =@ENABLED",
@@ -209,7 +209,7 @@ namespace ZR.Service.Business
             string sql = @"SELECT * FROM (
             SELECT IPN,WORK_ORDER, TARGETQTY, STATION_TYPE, SUM(SAMPLING_INSPECTION) AS OK, SUM(SAMPLING_INSPECTION_NG) AS NG,
             ROW_NUMBER() OVER (ORDER BY WORK_ORDER) AS RN
-            FROM IMES.P_NG_DETAIL
+            FROM SAJET.P_NG_DETAIL
             GROUP BY WORK_ORDER, TARGETQTY, STATION_TYPE,IPN )
             WHERE 1=1 AND RN BETWEEN @start1 AND @end1 ";
 
@@ -256,7 +256,7 @@ namespace ZR.Service.Business
 
         public List<dynamic> QuerySnTravel(string workOrder)
         {
-            string sql = @"SELECT DISTINCT STATION_TYPE  FROM IMES.P_SN_TRAVEL 
+            string sql = @"SELECT DISTINCT STATION_TYPE  FROM SAJET.P_SN_TRAVEL 
                 WHERE WORK_ORDER =@workOrder";
             return Context.Ado.SqlQuery<dynamic>(sql, new SugarParameter("@workOrder", workOrder));
         }
@@ -264,7 +264,7 @@ namespace ZR.Service.Business
 
         public List<dynamic> SnTravelMacine(string Macine)
         {
-            string sql = @"SELECT DISTINCT MACHINE_NO FROM IMES.P_SN_TRAVEL
+            string sql = @"SELECT DISTINCT MACHINE_NO FROM SAJET.P_SN_TRAVEL
                 WHERE STATION_TYPE=@Macine";
             return Context.Ado.SqlQuery<dynamic>(sql, new SugarParameter("@Macine", Macine));
         }

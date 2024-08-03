@@ -46,7 +46,7 @@ namespace ZR.Service.PordService
         }
         public int InsertTestItemType(ImesMTestItemType imesMTestItemType, string site, string updateEmp)
         {
-            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM IMES.M_WEIGHT_FAI";
+            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM SAJET.M_WEIGHT_FAI";
             int MaxId = Context.Queryable<ImesMTestItemType>().Max(it => it.itemTypeid) + 1;
             imesMTestItemType.itemTypeid = MaxId;
             imesMTestItemType.site = site;
@@ -56,7 +56,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(imesMTestItemType).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.m_TEST_ITEM_TYPE_HT(select * from imes.m_TEST_ITEM_TYPE where item_type_id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.m_TEST_ITEM_TYPE_HT(select * FROM SAJET.m_TEST_ITEM_TYPE where item_type_id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -64,7 +64,7 @@ namespace ZR.Service.PordService
         }
         public int InsertTestItem(ImesMTestItem imesMTestItem, string site, string updateEmp)
         {
-            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM IMES.M_WEIGHT_FAI";
+            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM SAJET.M_WEIGHT_FAI";
             int MaxId = Context.Queryable<ImesMTestItem>().Max(it => it.itemId) + 1;
             imesMTestItem.itemId = MaxId;
             imesMTestItem.site = site;
@@ -74,7 +74,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(imesMTestItem).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.M_TEST_ITEM_HT(select * from imes.M_TEST_ITEM where item_type_id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.M_TEST_ITEM_HT(select * FROM SAJET.M_TEST_ITEM where item_type_id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -85,7 +85,7 @@ namespace ZR.Service.PordService
             int updateTestItemType = Context.Updateable(imesMTestItemType).UpdateColumns(it => new { it.itemTypecode, it.itemTypename,it.itemTypedesc,it.itemTypedesc2,it.minInspqty }).WhereColumns(it => new { it.itemTypeid, site }).ExecuteCommand();
             if (updateTestItemType > 0)
             {
-                string sqlStr = $"insert into IMES.m_TEST_ITEM_TYPE_HT(select * from IMES.m_TEST_ITEM_TYPE  where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
+                string sqlStr = $"insert INTO SAJET.m_TEST_ITEM_TYPE_HT(select * FROM SAJET.m_TEST_ITEM_TYPE  where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -96,7 +96,7 @@ namespace ZR.Service.PordService
             int updateTestItemType = Context.Updateable(imesMTestItem).UpdateColumns(it => new { it.itemCode, it.itemName, it.itemDesc, it.itemDesc2, it.hasValue }).WhereColumns(it => new { it.itemId, site }).ExecuteCommand();
             if (updateTestItemType > 0)
             {
-                string sqlStr = $"insert into IMES.M_TEST_ITEM_HT(select * from IMES.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemTypeid + "')";
+                string sqlStr = $"insert INTO SAJET.M_TEST_ITEM_HT(select * FROM SAJET.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemTypeid + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -109,7 +109,7 @@ namespace ZR.Service.PordService
                 int updateTestItemType = Context.Updateable(imesMTestItemType).UpdateColumns(it => it.enaBled == "N").WhereColumns(it => it.itemTypeid).ExecuteCommand();
                 if (updateTestItemType > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_TEST_ITEM_TYPE_HT(select * from IMES.m_TEST_ITEM_TYPE  where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
+                    string sqlStr = $"insert INTO SAJET.m_TEST_ITEM_TYPE_HT(select * FROM SAJET.m_TEST_ITEM_TYPE  where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -119,7 +119,7 @@ namespace ZR.Service.PordService
                 int updateTestItemType = Context.Updateable(imesMTestItemType).UpdateColumns(it => it.enaBled == "Y").WhereColumns(it => it.itemTypeid).ExecuteCommand();
                 if (updateTestItemType > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_TEST_ITEM_TYPE_HT(select * from IMES.m_TEST_ITEM_TYPE   where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
+                    string sqlStr = $"insert INTO SAJET.m_TEST_ITEM_TYPE_HT(select * FROM SAJET.m_TEST_ITEM_TYPE   where item_type_id = '" + imesMTestItemType.itemTypeid + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -130,7 +130,7 @@ namespace ZR.Service.PordService
         {
             int id = imesMTestItemType.itemTypeid;
             string site = imesMTestItemType.site;
-            string insertHt = $"insert into IMES.m_TEST_ITEM_TYPE_HT(select * from IMES.m_TEST_ITEM_TYPE  where item_type_id = " + id + " and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.m_TEST_ITEM_TYPE_HT(select * FROM SAJET.m_TEST_ITEM_TYPE  where item_type_id = " + id + " and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMTestItemType>().Where(it => it.itemTypeid == id && it.site == site).ExecuteCommand();
         }
@@ -138,7 +138,7 @@ namespace ZR.Service.PordService
         {
             int id = ImesMTestItem.itemId;
             string site = ImesMTestItem.site;
-            string insertHt = $"insert into IMES.M_TEST_ITEM_HT(select * from IMES.M_TEST_ITEM  where item_id = " + id + " and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.M_TEST_ITEM_HT(select * FROM SAJET.M_TEST_ITEM  where item_id = " + id + " and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMTestItem>().Where(it => it.itemId == id && it.site == site).ExecuteCommand();
         }
@@ -170,7 +170,7 @@ namespace ZR.Service.PordService
                 int updateTestItemType = Context.Updateable(imesMTestItem).UpdateColumns(it => it.enaBled == "N").WhereColumns(it => it.itemId).ExecuteCommand();
                 if (updateTestItemType > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_TEST_ITEM_HT(select * from IMES.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemId + "')";
+                    string sqlStr = $"insert INTO SAJET.M_TEST_ITEM_HT(select * FROM SAJET.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemId + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -180,7 +180,7 @@ namespace ZR.Service.PordService
                 int updateTestItemType = Context.Updateable(imesMTestItem).UpdateColumns(it => it.enaBled == "Y").WhereColumns(it => it.itemTypeid).ExecuteCommand();
                 if (updateTestItemType > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_TEST_ITEM_HT(select * from IMES.IMES.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemId + "')";
+                    string sqlStr = $"insert INTO SAJET.M_TEST_ITEM_HT(select * FROM SAJET.IMES.M_TEST_ITEM  where item_type_id = '" + imesMTestItem.itemId + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }

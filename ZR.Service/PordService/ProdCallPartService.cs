@@ -59,12 +59,12 @@ namespace ZR.Service.PordService
         }
         public object History(string id, string site)
         {
-            string sql = string.Format(@"select * from imes.M_CallPart where id = '" + id + "'and site ='"+ site + "'");
+            string sql = string.Format(@"select * FROM SAJET.M_CallPart where id = '" + id + "'and site ='"+ site + "'");
             return Context.Ado.SqlQuery<Object>(sql);
         }
         public object LineList(string site)
         {
-            string sql = string.Format(@"SELECT LINE FROM IMES.M_LINE WHERE ENABLED='Y'and site = '"+site+"'");
+            string sql = string.Format(@"SELECT LINE FROM SAJET.M_LINE WHERE ENABLED='Y'and site = '"+site+"'");
             return Context.Ado.SqlQuery<Object>(sql);
         }
         //public object Ipnlist(string type, string site)
@@ -146,7 +146,7 @@ namespace ZR.Service.PordService
                 int updateCallPart = Context.Updateable(imesMCallPart).UpdateColumns(it => it.enabled == "N").WhereColumns(it => it.Id).ExecuteCommand();
                 if (updateCallPart > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_CallPart_HT(select * from IMES.M_CallPart  where id = '" + imesMCallPart.Id+ "')";
+                    string sqlStr = $"insert INTO SAJET.M_CallPart_HT(select * FROM SAJET.M_CallPart  where id = '" + imesMCallPart.Id+ "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -156,7 +156,7 @@ namespace ZR.Service.PordService
                 int updateCallPart = Context.Updateable(imesMCallPart).UpdateColumns(it => it.enabled == "Y").WhereColumns(it => it.Id).ExecuteCommand();
                 if (updateCallPart > 0)
                 {
-                    string sqlStr = $"insert into IMES.M_CallPart_HT(select * from IMES.M_CallPart   where id = '" + imesMCallPart.Id + "')";
+                    string sqlStr = $"insert INTO SAJET.M_CallPart_HT(select * FROM SAJET.M_CallPart   where id = '" + imesMCallPart.Id + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -173,7 +173,7 @@ namespace ZR.Service.PordService
             Context.Ado.SqlQuery<string>(sql);
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.M_CallPart_HT(select * from imes.M_CallPart where option1 = '"+ imesMCallPart.option1+"'";
+                string sqlStr1 = $"insert INTO SAJET.M_CallPart_HT(select * FROM SAJET.M_CallPart where option1 = '"+ imesMCallPart.option1+"'";
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -182,7 +182,7 @@ namespace ZR.Service.PordService
         }
         public int UpdateCallPart(ImesMCallPart imesMCallPart, string site)
         {
-            string sql = string.Format(@"select option2 from imes.M_CallPart where id = '" + imesMCallPart.Id + "'");
+            string sql = string.Format(@"select option2 FROM SAJET.M_CallPart where id = '" + imesMCallPart.Id + "'");
             string option2 = Context.Ado.SqlQuery<Object>(sql).ToString();
             if(option2 =="Y")
             {
@@ -191,7 +191,7 @@ namespace ZR.Service.PordService
             int updateCallPart = Context.Updateable(imesMCallPart).UpdateColumns(it => new { it.ipn, it.qty, it.line, it.partType, it.shiftType, it.option1, it.option3 }).WhereColumns(it => new { it.Id, site }).ExecuteCommand();
             if (updateCallPart > 0)
             {
-                string sqlStr = $"insert into IMES.M_CallPart_HT(select * from IMES.M_CallPart  where id = '" + imesMCallPart.Id + "')";
+                string sqlStr = $"insert INTO SAJET.M_CallPart_HT(select * FROM SAJET.M_CallPart  where id = '" + imesMCallPart.Id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -199,7 +199,7 @@ namespace ZR.Service.PordService
         }
         public int DeleteCallPart(ImesMCallPart imesMCallPart, string site)
         {
-            string sql = string.Format(@"select option2 from imes.M_CallPart where id = '" + imesMCallPart.Id + "'");
+            string sql = string.Format(@"select option2 FROM SAJET.M_CallPart where id = '" + imesMCallPart.Id + "'");
             string option2 = Context.Ado.SqlQuery<Object>(sql).ToString();
             if (option2 == "Y")
             {
@@ -207,7 +207,7 @@ namespace ZR.Service.PordService
             }
             string id = imesMCallPart.Id;
             site = imesMCallPart.site;
-            string insertHt = $"insert into IMES.M_CallPart_HT(select * from IMES.M_CallPart  where id = '" + id + "' and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.M_CallPart_HT(select * FROM SAJET.M_CallPart  where id = '" + id + "' and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMCallPart>().Where(it => it.Id == id && it.site == site).ExecuteCommand();
         }

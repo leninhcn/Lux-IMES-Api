@@ -21,7 +21,7 @@ namespace ZR.Service.Repair
             try
             {
                 exeRes = new ExecuteResult();
-                string sqlStr = @"  SELECT * FROM IMES.p_sn_status A WHERE A.serial_number = @sn ";
+                string sqlStr = @"  SELECT * FROM SAJET.p_sn_status A WHERE A.serial_number = @sn ";
 
                 DataTable dt = await Context.Ado.GetDataTableAsync(sqlStr, new List<SugarParameter>
                     { new SugarParameter("@sn", sn)
@@ -50,7 +50,7 @@ namespace ZR.Service.Repair
             ExecuteResult exeRes = new ExecuteResult();
             try
             {
-                string sqlStr = @"  SELECT * FROM IMES.P_SN_PRINT_LOG A WHERE A.serial_number = @sn and A.LABEL_TYPE = @labeltype";
+                string sqlStr = @"  SELECT * FROM SAJET.P_SN_PRINT_LOG A WHERE A.serial_number = @sn and A.LABEL_TYPE = @labeltype";
 
                 DataTable dt = await Context.Ado.GetDataTableAsync(sqlStr, new List<SugarParameter>
                  {
@@ -82,7 +82,7 @@ namespace ZR.Service.Repair
             try
             {
                 string sqlStr = @"  SELECT *
-                                      FROM IMES.P_REPAIR_IN A
+                                      FROM SAJET.P_REPAIR_IN A
                                      WHERE A.SERIAL_NUMBER = @sn
                                      ORDER BY A.CREATE_TIME DESC ";
 
@@ -117,7 +117,7 @@ namespace ZR.Service.Repair
         public async Task<ExecuteResult> chekprintrole(string empno,string pwd)
         {
             ExecuteResult exeRes = new ExecuteResult();
-            string sSQL = $@"Select ID,trim(imes.password.decrypt(PASSWD)) PWD from imes.M_EMP  
+            string sSQL = $@"Select ID,trim(imes.password.decrypt(PASSWD)) PWD FROM SAJET.M_EMP  
                           where emp_no = '{empno}' ";
             DataTable dt = await Context.Ado.GetDataTableAsync(sSQL);
             if (dt.Rows.Count == 0)
@@ -143,7 +143,7 @@ namespace ZR.Service.Repair
             try
             {
                 string sqlStr = @"  SELECT a.IPN,B.LABEL_TYPE, B.LABEL_NAME, B.LABEL_SRV_IP, B.LABEL_DL_URL
-                                      FROM IMES.P_SN_STATUS A, IMES.M_STATIONTYPE_LABEL B
+                                      FROM SAJET.P_SN_STATUS A, IMES.M_STATIONTYPE_LABEL B
                                      WHERE A.IPN = B.IPN
                                        AND A.SERIAL_NUMBER = @SN
                                        AND B.STATION_TYPE =@StationType ";
@@ -172,7 +172,7 @@ namespace ZR.Service.Repair
             try
             {
                 string sqlStr = @"  SELECT A.IPN, A.LABEL_TYPE, A.LABEL_NAME, A.LABEL_SRV_IP, A.LABEL_DL_URL
-                                      FROM IMES.M_STATIONTYPE_LABEL A
+                                      FROM SAJET.M_STATIONTYPE_LABEL A
                                      WHERE A.STATION_TYPE = @StationType
                                        AND A.ENABLED = 'Y'
                                        AND A.IPN = '*' ";

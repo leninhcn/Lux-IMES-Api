@@ -222,7 +222,7 @@ namespace ZR.Service
                 model.ConfigTypeId=Guid.NewGuid().ToString("D");
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份备份代码取消,数据库trigger
-                //Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_TYPE_HT select * from IMES.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigTypeId ) });
+                //Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_TYPE_HT select * FROM SAJET.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigTypeId ) });
             return i==1?"OK":"插入失败";
             }
             catch(Exception ex)
@@ -244,7 +244,7 @@ namespace ZR.Service
                 model.ConfigId = Guid.NewGuid().ToString();
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份备份代码取消,数据库trigger
-                // Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_VALUE_HT select * from IMES.M_BLOCK_CONFIG_VALUE where CONFIG_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigId ) });
+                // Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_VALUE_HT select * FROM SAJET.M_BLOCK_CONFIG_VALUE where CONFIG_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigId ) });
                 return i == 1 ? "OK" : "插入失败";
             }
             catch (Exception ex)
@@ -266,7 +266,7 @@ namespace ZR.Service
                 model.ConfigId = Guid.NewGuid().ToString();
                 int i = Context.Insertable(model).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
                 //备份备份代码取消,数据库trigger
-                //Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_PROSQL_HT select * from IMES.M_BLOCK_CONFIG_PROSQL where CONFIG_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigId ) });
+                //Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_PROSQL_HT select * FROM SAJET.M_BLOCK_CONFIG_PROSQL where CONFIG_ID = @ID", new List<SugarParameter>{ new SugarParameter("@ID", model.ConfigId ) });
                 return i == 1 ? "OK" : "插入失败";
             }
             catch (Exception ex)
@@ -284,7 +284,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).ExecuteCommand();
             //备份备份代码取消,数据库trigger
-            //Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_TYPE_HT select * from IMES.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigTypeId) });
+            //Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_TYPE_HT select * FROM SAJET.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigTypeId) });
             return "OK";
         }
         /// <summary>
@@ -297,7 +297,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).ExecuteCommand();
             //备份备份代码取消,数据库trigger
-            //Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_VALUE_HT select * from IMES.M_BLOCK_CONFIG_VALUE where CONFIG_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigId) });
+            //Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_VALUE_HT select * FROM SAJET.M_BLOCK_CONFIG_VALUE where CONFIG_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigId) });
             return "OK";
         }
         /// <summary>
@@ -310,7 +310,7 @@ namespace ZR.Service
             model.UpdateTime = DateTime.Now;
             int result = Context.Updateable(model).ExecuteCommand();
             //备份代码取消,数据库trigger
-           // Context.Ado.ExecuteCommand("insert into IMES.M_BLOCK_CONFIG_PROSQL_HT select * from IMES.M_BLOCK_CONFIG_PROSQL where CONFIG_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigId) });
+           // Context.Ado.ExecuteCommand("insert INTO SAJET.M_BLOCK_CONFIG_PROSQL_HT select * FROM SAJET.M_BLOCK_CONFIG_PROSQL where CONFIG_ID = @ID", new List<SugarParameter> { new SugarParameter("@ID", model.ConfigId) });
             return "OK";
         }
         /// <summary>
@@ -334,9 +334,9 @@ namespace ZR.Service
             }         
             ids = "(" + sqlparm.TrimEnd(',') + ")";
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_BLOCK_CONFIG_TYPE set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_TYPE_ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO", model.UpdateEmpno) });
+            Context.Ado.ExecuteCommand($" update SAJET.M_BLOCK_CONFIG_TYPE set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_TYPE_ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO", model.UpdateEmpno) });
             //备份代码取消,数据库trigger
-            //Context.Ado.ExecuteCommand($"insert into IMES.M_BLOCK_CONFIG_TYPE_HT select * from IMES.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID in {ids}");
+            //Context.Ado.ExecuteCommand($"insert INTO SAJET.M_BLOCK_CONFIG_TYPE_HT select * FROM SAJET.M_BLOCK_CONFIG_TYPE where CONFIG_TYPE_ID in {ids}");
             return "OK";
         }
         /// <summary>
@@ -360,9 +360,9 @@ namespace ZR.Service
             }
             ids = "(" + sqlparm.TrimEnd(',') + ")";
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_BLOCK_CONFIG_VALUE set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_ID in {ids}", new List<SugarParameter> {  new SugarParameter("@EMPNO",model.UpdateEmpno)} );
+            Context.Ado.ExecuteCommand($" update SAJET.M_BLOCK_CONFIG_VALUE set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_ID in {ids}", new List<SugarParameter> {  new SugarParameter("@EMPNO",model.UpdateEmpno)} );
             //备份代码取消,数据库trigger
-            //Context.Ado.ExecuteCommand($"insert into IMES.M_BLOCK_CONFIG_VALUE_HT select * from IMES.M_BLOCK_CONFIG_VALUE where CONFIG_ID in {ids}");
+            //Context.Ado.ExecuteCommand($"insert INTO SAJET.M_BLOCK_CONFIG_VALUE_HT select * FROM SAJET.M_BLOCK_CONFIG_VALUE where CONFIG_ID in {ids}");
             return "OK";
         }
         /// <summary>
@@ -385,9 +385,9 @@ namespace ZR.Service
             }
             ids = "(" + sqlparm.TrimEnd(',') + ")";
             //int result = Context.Updateable(defect).ExecuteCommand();
-            Context.Ado.ExecuteCommand($" update imes.M_BLOCK_CONFIG_PROSQL set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO", model.UpdateEmpno) });
+            Context.Ado.ExecuteCommand($" update SAJET.M_BLOCK_CONFIG_PROSQL set ENABLED='N',UPDATE_TIME=SYSDATE,UPDATE_EMPNO=@EMPNO WHERE CONFIG_ID in {ids}", new List<SugarParameter> { new SugarParameter("@EMPNO", model.UpdateEmpno) });
             //备份代码取消,数据库trigger
-            //Context.Ado.ExecuteCommand($"insert into IMES.M_BLOCK_CONFIG_VALUE_HT select * from IMES.M_BLOCK_CONFIG_VALUE where CONFIG_ID in {ids}");
+            //Context.Ado.ExecuteCommand($"insert INTO SAJET.M_BLOCK_CONFIG_VALUE_HT select * FROM SAJET.M_BLOCK_CONFIG_VALUE where CONFIG_ID in {ids}");
             return "OK";
         }
     }

@@ -84,7 +84,7 @@ namespace ZR.Service.PordService
         //}
         public int InsertSamplingPlan(ImesMqcSamplingPlan imesMqcSamplingPlan, string site, string updateEmp)
         {
-            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM IMES.M_WEIGHT_FAI";
+            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM SAJET.M_WEIGHT_FAI";
             int MaxId = Context.Queryable<ImesMqcSamplingPlan>().Max(it =>Convert.ToInt32(it.samplingId)) + 1;
             imesMqcSamplingPlan.samplingId = MaxId.ToString();
             imesMqcSamplingPlan.site = site;
@@ -94,7 +94,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(imesMqcSamplingPlan).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.m_QC_SAMPLING_PLAN_HT(select * from imes.m_QC_SAMPLING_PLAN where sampling_id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN where sampling_id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -102,7 +102,7 @@ namespace ZR.Service.PordService
         }
         public int InsertSamplingDefault(ImesMqcSamplingPlanDefault imesMqcSamplingPlanDefault, string site, string updateEmp)
         {
-            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM IMES.M_WEIGHT_FAI";
+            //string sqlStr = $"SELECT MAX(ID) AS MaxID FROM SAJET.M_WEIGHT_FAI";
             int MaxId = Context.Queryable<ImesMqcSamplingPlanDefault>().Max(it => it.Id) + 1;
             imesMqcSamplingPlanDefault.Id = MaxId;
             imesMqcSamplingPlanDefault.site = site;
@@ -112,7 +112,7 @@ namespace ZR.Service.PordService
             int insertErp = Context.Insertable(imesMqcSamplingPlanDefault).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertErp > 0)
             {
-                string sqlStr1 = $"insert into imes.m_QC_SAMPLING_PLAN_DETAIL_HT(select * from imes.m_QC_SAMPLING_PLAN_DETAIL where id = " + MaxId;
+                string sqlStr1 = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN_DETAIL where id = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr1 + ")");
                 return 1;
             }
@@ -123,7 +123,7 @@ namespace ZR.Service.PordService
             int updateSamplingDefault = Context.Updateable(imesMqcSamplingPlanDefault).UpdateColumns(it => new { it.minLotsize, it.maxLotsize,it.sampleSize,it.criticalRejectqty,it.majorRejectqty,it.minorRejectqty,it.samplingUnit }).WhereColumns(it => new { it.Id, site }).ExecuteCommand();
             if (updateSamplingDefault > 0)
             {
-                string sqlStr = $"insert into IMES.m_QC_SAMPLING_PLAN_DETAIL_HT(select * from IMES.m_QC_SAMPLING_PLAN_DETAIL  where id = '" + imesMqcSamplingPlanDefault.Id + "')";
+                string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN_DETAIL  where id = '" + imesMqcSamplingPlanDefault.Id + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -134,7 +134,7 @@ namespace ZR.Service.PordService
             int updateSamplingPlan = Context.Updateable(imesMqcSamplingPlan).UpdateColumns(it => new { it.samplingType, it.samplingDesc }).WhereColumns(it => new { it.samplingId, site }).ExecuteCommand();
             if (updateSamplingPlan > 0)
             {
-                string sqlStr = $"insert into IMES.m_QC_SAMPLING_PLAN_HT(select * from IMES.m_QC_SAMPLING_PLAN  where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
+                string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN  where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }
@@ -147,7 +147,7 @@ namespace ZR.Service.PordService
                 int updateSamplingPlan = Context.Updateable(imesMqcSamplingPlan).UpdateColumns(it => it.enabled == "N").WhereColumns(it => it.samplingId).ExecuteCommand();
                 if (updateSamplingPlan > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_QC_SAMPLING_PLAN_HT(select * from IMES.m_QC_SAMPLING_PLAN  where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
+                    string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN  where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -157,7 +157,7 @@ namespace ZR.Service.PordService
                 int updateSamplingPlan = Context.Updateable(imesMqcSamplingPlan).UpdateColumns(it => it.enabled == "Y").WhereColumns(it => it.samplingId).ExecuteCommand();
                 if (updateSamplingPlan > 0)
                 {
-                    string sqlStr = $"insert into IMES.m_QC_SAMPLING_PLAN_HT(select * from IMES.m_QC_SAMPLING_PLAN   where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
+                    string sqlStr = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN   where sampling_id = '" + imesMqcSamplingPlan.samplingId + "')";
                     Context.Ado.SqlQuery<string>(sqlStr);
                     return 1;
                 }
@@ -168,7 +168,7 @@ namespace ZR.Service.PordService
         {
             int id = imesMqcSamplingPlanDefault.Id;
             string site = imesMqcSamplingPlanDefault.site;
-            string insertHt = $"insert into IMES.m_QC_SAMPLING_PLAN_DETAIL_HT(select * from IMES.m_QC_SAMPLING_PLAN_DETAIL  where id = " + id + " and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_DETAIL_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN_DETAIL  where id = " + id + " and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMqcSamplingPlanDefault>().Where(it => it.Id == id && it.site == site).ExecuteCommand();
         }
@@ -176,7 +176,7 @@ namespace ZR.Service.PordService
         {
             string id =  imesMqcSamplingPlan.samplingId;
             string site = imesMqcSamplingPlan.site;
-            string insertHt = $"insert into IMES.m_QC_SAMPLING_PLAN_HT(select * from IMES.m_QC_SAMPLING_PLAN  where sampling_id = " + id + " and site = '" + site + "'";
+            string insertHt = $"insert INTO SAJET.m_QC_SAMPLING_PLAN_HT(select * FROM SAJET.m_QC_SAMPLING_PLAN  where sampling_id = " + id + " and site = '" + site + "'";
             Context.Ado.SqlQuery<Object>(insertHt + ")");
             return Context.Deleteable<ImesMqcSamplingPlan>().Where(it => it.samplingId == id && it.site == site).ExecuteCommand();
         }

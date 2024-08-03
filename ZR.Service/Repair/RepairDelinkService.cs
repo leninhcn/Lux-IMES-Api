@@ -174,7 +174,7 @@ namespace ZR.Service.Repair
                        a.route_name,
                        A.IPN,
                        A.STATION_TYPE
-                  FROM imes.p_SN_STATUS A WHERE A.SERIAL_NUMBER = '" + sn + "' AND ROWNUM = 1";
+                  FROM SAJET.p_SN_STATUS A WHERE A.SERIAL_NUMBER = '" + sn + "' AND ROWNUM = 1";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
         }
@@ -191,7 +191,7 @@ namespace ZR.Service.Repair
                                  a.station_name,
                                  a.station_type,
                                  NVL (G.REASON_CODE, 'N/A') REASON_CODE
-                            FROM imes.p_SN_DEFECT A,
+                            FROM SAJET.p_SN_DEFECT A,
                                  imes.m_DEFECT   B,
                                  imes.p_SN_REPAIR F,
                                  imes.m_REASON   G
@@ -209,7 +209,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getPostUrl()
         {
-            string sSQL = @" select param_value from IMES.S_BASE where param_name='BLUESTICKER' and program='DELINKKEYPARTS'";
+            string sSQL = @" select param_value FROM SAJET.S_BASE where param_name='BLUESTICKER' and program='DELINKKEYPARTS'";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
 
@@ -217,7 +217,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getKpsnInfo(string ipn)
         {
-            string sSQL = @" select A.IPN,A.PLANT,A.SPEC1 from IMES.M_PART A WHERE A.IPN='" + ipn + "' ";
+            string sSQL = @" select A.IPN,A.PLANT,A.SPEC1 FROM SAJET.M_PART A WHERE A.IPN='" + ipn + "' ";
 
             return await Context.Ado.GetDataTableAsync(sSQL);
 

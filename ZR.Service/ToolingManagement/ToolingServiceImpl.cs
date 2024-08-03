@@ -26,7 +26,7 @@ namespace ZR.Service.ToolingManagement
 
             if (insertErp > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_TOOLING_HT(SELECT * FROM IMES.M_TOOLING WHERE ID = " + MaxId;
+                string sqlStr = $"INSERT INTO SAJET.M_TOOLING_HT(SELECT * FROM SAJET.M_TOOLING WHERE ID = " + MaxId;
                 Context.Ado.SqlQuery<string>(sqlStr + ")");
                 return 1;
             }
@@ -82,7 +82,7 @@ namespace ZR.Service.ToolingManagement
 
             if (updateType > 0)
             {
-                string sqlStr = $"INSERT INTO IMES.M_TOOLING_HT(SELECT * FROM IMES.M_TOOLING WHERE ID =  " + tooling.Id + ")";
+                string sqlStr = $"INSERT INTO SAJET.M_TOOLING_HT(SELECT * FROM SAJET.M_TOOLING WHERE ID =  " + tooling.Id + ")";
                 Context.Ado.SqlQuery<string>(sqlStr);
                 return 1;
             }

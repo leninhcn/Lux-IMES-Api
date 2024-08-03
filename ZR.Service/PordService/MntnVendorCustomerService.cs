@@ -90,7 +90,7 @@ namespace ZR.Service.PordService
         {
             string site = imes.site;
             int id = imes.id;
-            string insertHt = $"insert into IMES.M_VENDOR_HT(select * from IMES.M_VENDOR  where ID = " + id;
+            string insertHt = $"insert INTO SAJET.M_VENDOR_HT(select * FROM SAJET.M_VENDOR  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -111,7 +111,7 @@ namespace ZR.Service.PordService
             string site = imes.site;
             imes.updateTime = new DateTime();
             Context.Updateable(imes).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
-            string insertHt = $"insert into IMES.M_VENDOR_HT(select * from IMES.M_VENDOR  where ID = " + id;
+            string insertHt = $"insert INTO SAJET.M_VENDOR_HT(select * FROM SAJET.M_VENDOR  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -124,7 +124,7 @@ namespace ZR.Service.PordService
 
         public object VendorListHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_VENDOR_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_VENDOR_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -152,7 +152,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                string insertHt = $"insert into IMES.M_VENDOR_HT(select * from IMES.M_VENDOR  where ID = " + MaxId;
+                string insertHt = $"insert INTO SAJET.M_VENDOR_HT(select * FROM SAJET.M_VENDOR  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -199,7 +199,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                /*string insertHt = $"insert into IMES.M_CUSTOMER_HT(select * from IMES.M_CUSTOMER  where ID = " + MaxId;
+                /*string insertHt = $"insert INTO SAJET.M_CUSTOMER_HT(select * FROM SAJET.M_CUSTOMER  where ID = " + MaxId;
                 if (site != null && site != "")
                 {
                     insertHt = insertHt + " and site = '" + site + "'";
@@ -216,7 +216,7 @@ namespace ZR.Service.PordService
         {
             string site = imes.site;
             int id = imes.id;
-            /*string insertHt = $"insert into IMES.M_CUSTOMER_HT(select * from IMES.M_CUSTOMER  where ID = " + id;
+            /*string insertHt = $"insert INTO SAJET.M_CUSTOMER_HT(select * FROM SAJET.M_CUSTOMER  where ID = " + id;
             if (site != null && site != "")
             {
                 insertHt = insertHt + " and site = '" + site + "'";
@@ -253,7 +253,7 @@ namespace ZR.Service.PordService
 
         public object MdeptListHt(int Id, string site)
         {
-            string listHt = $"select * from IMES.M_DEPT_HT  where ID = " + Id;
+            string listHt = $"select * FROM SAJET.M_DEPT_HT  where ID = " + Id;
             if (site != null && site != "")
             {
                 listHt = listHt + " and site = '" + site + "'";
@@ -266,7 +266,7 @@ namespace ZR.Service.PordService
         {
             string site = imes.site;
             int id = imes.id;
-            string insertHt = $"insert into IMES.M_DEPT_HT(select * from IMES.M_DEPT  where ID = " + id + " and site = '" + site + "')";
+            string insertHt = $"insert INTO SAJET.M_DEPT_HT(select * FROM SAJET.M_DEPT  where ID = " + id + " and site = '" + site + "')";
             Context.Ado.SqlQuery<Object>(insertHt);
             imes.updateTime = DateTime.Now;
             int Updateable = Context.Updateable(imes).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
@@ -284,7 +284,7 @@ namespace ZR.Service.PordService
             string site = imes.site;
             imes.updateTime = new DateTime();
             Context.Updateable(imes).IgnoreColumns(ignoreAllNullColumns: true).WhereColumns(it => new { it.id, it.site }).ExecuteCommand();
-            string insertHt = $"insert into IMES.M_DEPT_HT(select * from IMES.M_DEPT  where ID = " + id + " and site = '" + site + "')";
+            string insertHt = $"insert INTO SAJET.M_DEPT_HT(select * FROM SAJET.M_DEPT  where ID = " + id + " and site = '" + site + "')";
             Context.Ado.SqlQuery<Object>(insertHt );
             return Context.Deleteable<ImesMdept>().Where(it => it.id == id && it.site == site).ExecuteCommand();
         }
@@ -310,7 +310,7 @@ namespace ZR.Service.PordService
             int insertMaterial = Context.Insertable(imes).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
             if (insertMaterial > 0)
             {
-                string insertHt = $"insert into IMES.M_DEPT_HT(select * from IMES.M_DEPT  where ID = " + MaxId+ " and site = '" + site + "')";
+                string insertHt = $"insert INTO SAJET.M_DEPT_HT(select * FROM SAJET.M_DEPT  where ID = " + MaxId+ " and site = '" + site + "')";
                 Context.Ado.SqlQuery<Object>(insertHt);
                 return "新增成功";
             }
@@ -323,7 +323,7 @@ namespace ZR.Service.PordService
 
         public Object MdeptListFactory()
         {
-            string insertHt = $"SELECT ID,SITE FROM IMES.M_SITE WHERE ENABLED='Y'";
+            string insertHt = $"SELECT ID,SITE FROM SAJET.M_SITE WHERE ENABLED='Y'";
             return Context.Ado.SqlQuery<Object>(insertHt);
         }
 

@@ -173,7 +173,7 @@ namespace ZR.Service.Repair
                              a.station_name,
                              a.station_type,h.wo_type,
                              NVL (G.REASON_CODE, 'N/A') REASON_CODE
-                        FROM imes.p_SN_DEFECT A,
+                        FROM SAJET.p_SN_DEFECT A,
                              imes.m_DEFECT   B,
                              imes.p_SN_REPAIR F,
                              imes.m_REASON   G,
@@ -186,14 +186,14 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> getRepaired(string sn)
         {
-            string getRepaired = string.Format(@"SELECT NVL(MAX(COUNT(*)),0) COUNT FROM  (SELECT T.REC_TIME,T.STATION_TYPE    FROM IMES.P_SN_DEFECT T  WHERE T.SERIAL_NUMBER = '{0}' AND T.RP_STATUS = '0' GROUP BY T.REC_TIME,T.STATION_TYPE) AA  GROUP BY AA.STATION_TYPE", sn);
+            string getRepaired = string.Format(@"SELECT NVL(MAX(COUNT(*)),0) COUNT FROM  (SELECT T.REC_TIME,T.STATION_TYPE    FROM SAJET.P_SN_DEFECT T  WHERE T.SERIAL_NUMBER = '{0}' AND T.RP_STATUS = '0' GROUP BY T.REC_TIME,T.STATION_TYPE) AA  GROUP BY AA.STATION_TYPE", sn);
 
             return await Context.Ado.GetDataTableAsync(getRepaired);
         }
 
         public async Task<DataTable> getHold(string sn)
         {
-            string getHold = string.Format(@"SELECT * FROM imes.p_hold_sn A WHERE A.SN = '{0}' and a.station_type='*' and a.enabled = 'Y' and a.unhold_empno is null", sn);
+            string getHold = string.Format(@"SELECT * FROM SAJET.p_hold_sn A WHERE A.SN = '{0}' and a.station_type='*' and a.enabled = 'Y' and a.unhold_empno is null", sn);
             return await Context.Ado.GetDataTableAsync(getHold);
         }
 
@@ -247,7 +247,7 @@ namespace ZR.Service.Repair
 
         public async Task<DataTable> checkstatus(string sn)
         {
-            string getHold = string.Format(@" SELECT  *  FROM imes.p_sn_status WHERE serial_number= '{0}' ", sn);
+            string getHold = string.Format(@" SELECT  *  FROM SAJET.p_sn_status WHERE serial_number= '{0}' ", sn);
             return await Context.Ado.GetDataTableAsync(getHold);
         }
 
