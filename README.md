@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <h2 align="center"> ZR.Admin.NET后台管理系统</h2>
 <h4 align="center">基于.Net7 + vue2.x/vue3.x/uniapp前后端分离的.net快速开发框架</h4>
 
@@ -220,6 +221,8 @@ Luxshare IMES Project
 
 
 
+=======
+>>>>>>> 9d9e865 (thay doi sang gitlab)
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
